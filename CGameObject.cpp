@@ -65,7 +65,7 @@ void CGameObject::Draw()
 		XMMatrixTranspose(useCamera->GetMatrixView() * cb.matrixProj) : XMMatrixTranspose(cb.matrixProj);
 
 	//ˆÚ“®s—ñ
-	XMMATRIX matrixMove = XMMatrixTranslation(transform.position.x, transform.position.x, transform.position.x);
+	XMMATRIX matrixMove = XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
 	//Šg‘åk¬s—ñ
 	XMMATRIX matrixScale = XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z);
 	//‰ñ“]s—ñ
