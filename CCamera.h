@@ -21,6 +21,8 @@ class CCamera
 private:
 	/* ƒƒ“ƒo•Ï” */
 
+	//‚±‚±•Ï‚¦‚½
+	
 	//ƒJƒƒ‰ˆÊ’u
 	DirectX::XMFLOAT2 cameraPos;
 
