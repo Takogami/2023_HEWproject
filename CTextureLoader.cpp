@@ -43,7 +43,7 @@ void CTextureLoader::LoadTexture()
 	for (std::list<TEX_INFO>::iterator it = texList.begin(); it != texList.end(); ++it)
 	{
 		//テクスチャ読み込み
-		D3D_LoadTexture(it->path, &it->tex);
+		D3D_LoadTexture(it->path, & it->tex);
 	}
 }
 
