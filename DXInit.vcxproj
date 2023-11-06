@@ -24,7 +24,7 @@
     <ProjectGuid>{0abe416d-f03f-490a-a55f-100c2b00235a}</ProjectGuid>
     <RootNamespace>DXInit</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>DirectX_shot</ProjectName>
+    <ProjectName>2023_HEWproject</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
