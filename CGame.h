@@ -6,8 +6,6 @@
 //既存の型名を別名でも使えるようにする
 typedef ID3D11ShaderResourceView* D3DTEXTURE;
 
-//ここに追加
-
 //ゲーム全体を表すクラス
 class CGame
 {
