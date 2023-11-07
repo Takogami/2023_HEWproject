@@ -6,6 +6,8 @@
 //既存の型名を別名でも使えるようにする
 typedef ID3D11ShaderResourceView* D3DTEXTURE;
 
+//ここに追加
+
 //ゲーム全体を表すクラス
 class CGame
 {
@@ -53,5 +55,6 @@ public:
 	void SetScene(SCENE_STATE nextScene);	//シーン変更関数
 	~CGame();								//終了処理(デストラクタ)
 };
+//ここを削除
 
 extern CGame* gGame;
