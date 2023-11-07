@@ -1,5 +1,6 @@
 #include "CGame.h"
 #include "CInput.h"
+//ここ追加した
 
 //コンストラクタ
 CGame::CGame()
