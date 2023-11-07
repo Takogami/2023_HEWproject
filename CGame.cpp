@@ -1,8 +1,6 @@
 #include "CGame.h"
 #include "CInput.h"
 
-//ブランチテスト(辻)
-
 //コンストラクタ
 CGame::CGame()
 {
