@@ -1,3 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: 中間ディレクトリ (x64\Debug\) に別のプロジェクト (DirectX_anim.vcxproj, DirectX_shot.vcxproj, DXInit.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
-  CSceneManager.cpp
-  DXInit.vcxproj -> C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\x64\Debug\2023_HEWproject.exe
+  CGame.cpp
+C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\DXInit\CGame.cpp(29,22): warning C4244: '引数': 'ULONGLONG' から 'unsigned int' への変換です。データが失われる可能性があります。
+  main.cpp
+C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\DXInit\main.cpp(172,27): warning C4244: '引数': 'WPARAM' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\DXInit\main.cpp(176,25): warning C4244: '引数': 'WPARAM' から 'int' への変換です。データが失われる可能性があります。
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\x64\Debug\2023_HEWproject.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  DXInit.vcxproj -> C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\x64\Debug\2023_HEWproject.exe
