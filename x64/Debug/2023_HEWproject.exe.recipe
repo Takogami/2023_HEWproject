@@ -2,15 +2,15 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\x64\Debug\2023_HEWproject.exe</FullPath>
+      <FullPath>C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\x64\Debug\2023_HEWproject.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\x64\Debug\PixelShader.cso</FullPath>
+      <FullPath>C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\x64\Debug\PixelShader.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\2023_HEWproject\x64\Debug\VertexShader.cso</FullPath>
+      <FullPath>C:\Users\藤原壮吾\OneDrive\デスクトップ\2023_HEWproject\x64\Debug\VertexShader.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

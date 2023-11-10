@@ -144,10 +144,14 @@
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
+    <ClCompile Include="CScene.cpp" />
+    <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CTextureLoader.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,10 +159,14 @@
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />
+    <ClInclude Include="CScene.h" />
+    <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CTextureLoader.h" />
     <ClInclude Include="CTransform.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="PixelShader.h" />
+    <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
@@ -169,7 +177,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PixelShader.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </HeaderFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
@@ -178,7 +187,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
-      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VertexShader.h</HeaderFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </HeaderFileOutput>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
