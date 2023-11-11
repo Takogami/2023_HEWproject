@@ -1,5 +1,7 @@
 #include "CGame.h"
 #include "CInput.h"
+#include "CTerrainLoader.h"
+#include <vector>
 
 //コンストラクタ
 CGame::CGame()
@@ -12,6 +14,13 @@ CGame::CGame()
 	//カメラの作成
 	Cam = new CCamera;
 
+	//CTerrainLoaderのシングルトンの作成
+	CTerrainLoader* stageTerrainData = CTerrainLoader::GetInstance();
+	//任意の地形データの読み込み
+	stageTerrainData->LoadTerrainData(TERRAIN_ID::STAGE_1);
+	//読み込んだ地形データの取得
+	auto Terraindata = stageTerrainData->GetTerrainData();
+
 	//プレイヤーの実体化と初期化
 	player = new CGameObject(vertexBufferCharacter, TexLoader->GetTex(TEX_ID::CHAR1),{0.33f ,0.25f});
 	//自身の投影に使うカメラの設定
@@ -22,8 +31,8 @@ CGame::CGame()
 	player2 = new CGameObject(vertexBufferCharacter, TexLoader->GetTex(TEX_ID::TAKO));
 	//自身の投影にカメラを使用しない
 	//player2->SetUseingCamera(Cam);
-	player2->transform * 0.5f;
-	player2->transform.position = { -0.5f, -0.5f };
+	player2->transform * 0.15f;
+	player2->transform.position = { -1.924f, 1.051f };
 
 	//乱数の初期化(注意：srand関数呼び出しはアプリケーション開始時に1回だけ)
 	srand(GetTickCount64());

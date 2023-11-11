@@ -144,6 +144,7 @@
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
+    <ClCompile Include="CTerrainLoader.cpp" />
     <ClCompile Include="CTextureLoader.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="direct3d.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />
+    <ClInclude Include="CTerrainLoader.h" />
     <ClInclude Include="CTextureLoader.h" />
     <ClInclude Include="CTransform.h" />
     <ClInclude Include="direct3d.h" />
