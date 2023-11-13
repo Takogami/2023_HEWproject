@@ -9,8 +9,8 @@ public:
 	ResultScene();
 	~ResultScene();
 
-	/* CSceneの関数のオーバーライド------ */
-	virtual void Update() override;
-	virtual void Draw() override;
+	/* ------CSceneの関数のオーバーライド------ */
+	void Update() override;
+	void Draw() override;
 };
 

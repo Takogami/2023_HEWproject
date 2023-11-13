@@ -14,7 +14,7 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
-	D3D_ClearScreen(1);
+	D3D_ClearScreen();
 	//‰æ–ÊXV
 	D3D_UpdateScreen();
 }
