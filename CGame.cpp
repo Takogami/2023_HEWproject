@@ -1,7 +1,6 @@
 #include "CGame.h"
 #include "CInput.h"
 #include "CTerrainLoader.h"
-#include <vector>
 
 //コンストラクタ
 CGame::CGame()
@@ -13,13 +12,6 @@ CGame::CGame()
 
 	//カメラの作成
 	Cam = new CCamera;
-
-	//CTerrainLoaderのシングルトンの作成
-	CTerrainLoader* stageTerrainData = CTerrainLoader::GetInstance();
-	//任意の地形データの読み込み
-	stageTerrainData->LoadTerrainData(TERRAIN_ID::STAGE_1);
-	//読み込んだ地形データの取得
-	auto Terraindata = stageTerrainData->GetTerrainData();
 
 	//プレイヤーの実体化と初期化
 	player = new CGameObject(vertexBufferCharacter, TexLoader->GetTex(TEX_ID::CHAR1),{0.33f ,0.25f});
