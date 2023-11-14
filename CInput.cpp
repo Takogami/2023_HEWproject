@@ -1,5 +1,22 @@
 #include "CInput.h"
+#include <Windows.h>  // ZeroMemoryŠÖ”‚È‚Ç‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é
+#include <WinError.h>  // ERROR_SUCCESS‚È‚Ç‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é
+#include <XInput.h>	
 #include <memory.h>
+
+
+bool CInput::IsControllerButtonPressed(WORD button)
+{
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
+	{
+		return (state.Gamepad.wButtons & button) != 0;
+	}
+
+	return false;
+}
 
 void CInput::SetKeyDownState(int key)
 {

@@ -1,5 +1,6 @@
 #include "CGame.h"
 #include "CInput.h"
+#include <XInput.h>
 
 //コンストラクタ
 CGame::CGame()
@@ -30,10 +31,21 @@ CGame::CGame()
 
 	//初期シーン設定
 	SetScene(TITLE);
+
+	// CSceneManagerの初期化
+	sceneManager = new CSceneManager();
 }
 
 void CGame::Update()
 {
+	// Aボタンが押されたかどうかをチェックしてシーンを切り替える
+	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_A)) {
+		// TITLEとRESULTの間をトグル
+		SetScene((scene == TITLE) ? RESULT : TITLE);
+	}
+
+	// 現在のシーンを更新
+	sceneManager->Update();
 
 	//シーンごとのUpdate関数を実行
 	switch (scene)
@@ -88,6 +100,9 @@ CGame::~CGame()
 	delete Cam;
 
 	SAFE_RELEASE(vertexBufferCharacter);
+
+	// CSceneManagerの解放
+	delete sceneManager;
 }
 
 void CGame::UpdateTitle()
@@ -112,6 +127,32 @@ void CGame::UpdateTitle()
 	//プレイヤー２の更新(カメラ不使用)
 	player2->Update();
 	player2->Draw();
+
+	//画面更新
+	D3D_UpdateScreen();
+}
+
+//検証用
+void CGame::UpdateResult()
+{
+	//画面塗りつぶしと設定
+	D3D_ClearScreen();
+
+	//以下とりあえずカメラ移動のテスト用
+	static float camPos_x = 0.0f;
+	static float camPos_y = 0.0f;
+	camPos_x += 0.001f;
+	camPos_y += 0.001f;
+	Cam->SetCameraPosition(camPos_x, camPos_y);
+
+	//カメラの更新
+	Cam->Update();
+
+	//プレイヤー１の更新
+	player->Update();
+	player->Draw();
+
+	
 
 	//画面更新
 	D3D_UpdateScreen();
