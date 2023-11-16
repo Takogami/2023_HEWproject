@@ -1,25 +1,29 @@
 #pragma once
+
+/* インクルード */
 #include"CScene.h"
 
+// CTitleSceneクラス
 class TitleScene : public CScene
 {
 private:
-	
+	// タイトルシーンのカメラ
+	CCamera* Cam;
+
+	CGameObject* player;
+	CGameObject* player2;
+
+	ID3D11Buffer* vertexBufferCharacter;
 
 public:
+	// コンストラクタ
 	TitleScene();
-	~TitleScene();
-	//CSceneの関数のオーバーライド------//
-	virtual void Update() override {
-		//実体化
-	}
-	virtual void Draw() override {
-		//実体化
-		D3D_ClearScreen();
-		//画面更新
-		D3D_UpdateScreen();
+	// デストラクタ
+	~TitleScene() override;
 
-	}
+	/* ------CSceneの関数のオーバーライド------ */
+	void Update() override;
+	void Draw() override;
 };
 
 

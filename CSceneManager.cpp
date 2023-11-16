@@ -1,39 +1,43 @@
 #include "CSceneManager.h"
 
+// コンストラクタ
 CSceneManager::CSceneManager()
 {
-	//コンストラクタ
-	titleS = new TitleScene();
-	resultS = new ResultScene();
-	NowScene = SceneList:: TITLE;
+	title = new TitleScene();	//タイトルシーンのnew
+	result = new ResultScene();	//リザルトシーンのnew
+
+	// 初期シーン設定
+	ChangeScene(SCENE_ID::TITLE);
 }
 
+// デストラクタ
 CSceneManager::~CSceneManager()
 {
-	//デスストラクタ
-
+	delete title;
+	delete result;
 }
 
+// Update & Draw
 void CSceneManager::Update()
 {
-
+	// シーンごとのUpdate,Drawを実行
 	switch (NowScene)
 	{
-	case SceneList::TITLE:
-		titleS->Draw();
+	// タイトル
+	case SCENE_ID::TITLE:
+		title->Update();
+		title->Draw();
 		break;
-	case SceneList::RESULT:
-		resultS->Draw();
+
+	// リザルト
+	case SCENE_ID::RESULT:
+		result->Update();
+		result->Draw();
 		break;
 	}
 }
 
-void CSceneManager::ChangeScene(SceneList _inScene)
+void CSceneManager::ChangeScene(SCENE_ID _inScene)
 {
 	NowScene = _inScene;
-}
-
-void CSceneManager::Exit()
-{
-	//終了処理
 }

@@ -1,36 +1,31 @@
-#pragma 
-#include"TitleScene.h"
-#include"ResultScene.h"
+#pragma once
+
+#include "TitleScene.h"
+#include "ResultScene.h"
 
 //	シーンの種類（列挙型）
-
-enum class SceneList
+enum class SCENE_ID
 {
 	TITLE,
 	STAGE_01,
-	RESULT
+	RESULT,
 };
 
 class CSceneManager
 {
 private:
-	
 
-	SceneList NowScene;	//現在のシーンの状態
+	TitleScene* title;						//タイトルシーンクラス
+	ResultScene* result;					//リザルトシーンクラス
 
-	TitleScene* titleS;
-	ResultScene* resultS;
-
-	bool exit = false;				//終了フラグ
+	SCENE_ID NowScene = SCENE_ID::RESULT;	//現在のシーンの状態
 
 public:
 
 	CSceneManager();
 	~CSceneManager();
 
-	void Update();				//シーンの管理
-	void ChangeScene(SceneList _inScene);	//シーンの変更
-	void Exit();
-
+	void Update();							//シーンの管理
+	void ChangeScene(SCENE_ID _inScene);	//シーンの変更
 };
 
