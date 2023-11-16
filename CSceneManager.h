@@ -1,10 +1,10 @@
 #pragma once
-#include "CTerrainLoader.h"
+
 #include "TitleScene.h"
 #include "ResultScene.h"
 
 //	シーンの種類（列挙型）
-enum class SCENE_LIST
+enum class SCENE_ID
 {
 	TITLE,
 	STAGE_01,
@@ -18,7 +18,7 @@ private:
 	TitleScene* title;						//タイトルシーンクラス
 	ResultScene* result;					//リザルトシーンクラス
 
-	SCENE_LIST NowScene = SCENE_LIST::RESULT;	//現在のシーンの状態
+	SCENE_ID NowScene = SCENE_ID::RESULT;	//現在のシーンの状態
 
 public:
 
@@ -26,6 +26,6 @@ public:
 	~CSceneManager();
 
 	void Update();							//シーンの管理
-	void ChangeScene(SCENE_LIST _inScene);	//シーンの変更
+	void ChangeScene(SCENE_ID _inScene);	//シーンの変更
 };
 

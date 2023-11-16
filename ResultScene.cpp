@@ -6,6 +6,8 @@ ResultScene::ResultScene()
 
 ResultScene::~ResultScene()
 {
+	// 親クラスのデストラクタを明示的に呼び出す
+	CScene::~CScene();
 }
 
 void ResultScene::Update()
