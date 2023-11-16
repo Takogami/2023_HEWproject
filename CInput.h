@@ -3,7 +3,14 @@
 //キー入力を判定するクラス
 //仕組み：WndProc関数でキーが押された/離されたイベント時にそれを記録していく。
 //        キーの状態を判定する関数が呼ばれたら、その状態を返す。
-#include <Windows.h>  // WORD型が含まれているヘッダーファイル
+
+/* インクルード */
+#include <Windows.h>	// WORD型が含まれているヘッダーファイル
+#include <XInput.h>		// コントローラーの入力関連のヘッダーファイル
+
+//XInputライブラリのリンク設定
+#pragma comment (lib,"XInput.lib")
+
 class CInput
 {
 	//メンバ変数

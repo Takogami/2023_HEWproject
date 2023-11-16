@@ -1,8 +1,7 @@
+/* インクルード */
 #include "CInput.h"
-#include <Windows.h>  // ZeroMemory関数などが含まれている
-#include <WinError.h>  // ERROR_SUCCESSなどが含まれている
-#include <XInput.h>	
-#include <memory.h>
+#include <WinError.h>	// ERROR_SUCCESSなどが含まれている
+#include <memory.h>		
 
 
 bool CInput::IsControllerButtonPressed(WORD button)

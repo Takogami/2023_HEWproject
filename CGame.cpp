@@ -17,37 +17,17 @@ CGame::CGame()
 
 void CGame::Update()
 {
+	// 仮の入力処理 (ボタン入力が可能になった)
+	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_A))
+	{
+		SceneManager->ChangeScene(SCENE_ID::RESULT);
+	}
+	else if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_B))
+	{
+		SceneManager->ChangeScene(SCENE_ID::TITLE);
+	}
+
 	SceneManager->Update();
-}
-
-
-void CGame::SetScene(SCENE_STATE nextScene)
-{
-	//画面遷移開始時
-	if (newScene != nextScene)
-	{
-		newScene = nextScene;	//遷移先画面を保存
-		fadeState = FADE_OUT;	//フェードアウトを開始
-	}
-	//フェードアウト終了で実際にシーンを切り替える
-	else
-	{
-		scene = nextScene;	//画面の切り替え
-		fadeState = FADE_IN;//切り替えたのでフェードインの開始
-
-		//シーンごとのBGM再生
-		switch (scene)
-		{
-		case CGame::TITLE:
-			break;
-
-		case CGame::STAGE:
-			break;
-
-		case CGame::RESULT:
-			break;
-		}
-	}
 }
 
 CGame::~CGame()
@@ -55,14 +35,5 @@ CGame::~CGame()
 	delete SceneManager;
 
 	TextureLoader->UnloadTexture();
-}
-
-void CGame::UpdateTitle()
-{
-	//画面塗りつぶしと設定
-	D3D_ClearScreen();
-
-	//画面更新
-	D3D_UpdateScreen();
 }
 
