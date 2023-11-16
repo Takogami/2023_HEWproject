@@ -10,6 +10,10 @@ private:
 	// タイトルシーンのカメラ
 	CCamera* Cam;
 
+	// 使うオブジェクトのリスト
+	// まとめてUpdateとDrawを行うために使用
+	std::list<CGameObject*>Objects;
+
 	CGameObject* player;
 	CGameObject* player2;
 

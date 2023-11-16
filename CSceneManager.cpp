@@ -1,5 +1,8 @@
 #include "CSceneManager.h"
 
+// CTextureLoaderクラスのstaticメンバ変数の初期化
+CSceneManager* CSceneManager::instance = nullptr;
+
 // コンストラクタ
 CSceneManager::CSceneManager()
 {
@@ -15,6 +18,30 @@ CSceneManager::~CSceneManager()
 {
 	delete title;
 	delete result;
+}
+
+void CSceneManager::CleanupSingleton()
+{
+	//インスタンスがあるなら解放する
+	if (instance)
+	{
+		delete instance;
+		instance = nullptr;
+	}
+}
+
+CSceneManager* CSceneManager::GetInstance()
+{
+	// シングルトンが存在していないなら生成する
+	if (!instance)
+	{
+		// シングルトンの生成
+		instance = new CSceneManager();
+		//コールバックとして登録
+		std::atexit(CleanupSingleton);
+	}
+	//唯一のインスタンスを返す
+	return instance;
 }
 
 // Update & Draw

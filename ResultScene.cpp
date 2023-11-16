@@ -1,4 +1,6 @@
+/* インクルード */
 #include "ResultScene.h"
+#include "CSceneManager.h"	// シーン切り替えのためにインクルード
 
 ResultScene::ResultScene()
 {
@@ -12,6 +14,10 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
+	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_B))
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
+	}
 }
 
 void ResultScene::Draw()

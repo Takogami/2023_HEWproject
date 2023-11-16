@@ -1,15 +1,18 @@
 #pragma once
 
+/* インクルード */
+#include <list>
 #include "CGameObject.h"
 #include "CCamera.h"
+#include "CTerrainLoader.h"
+#include "CTextureLoader.h"
+#include "CInput.h"
 
 class CScene
 {
 private:
 
-
 public:
-
 	/* メソッド */
 
 	// コンストラクタ

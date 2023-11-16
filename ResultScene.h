@@ -1,4 +1,6 @@
 #pragma once
+
+/* インクルード */
 #include"CScene.h"
 
 class ResultScene : public CScene

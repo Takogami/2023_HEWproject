@@ -1,5 +1,5 @@
+/* インクルード */
 #include "CGame.h"
-#include "CInput.h"
 
 //コンストラクタ
 CGame::CGame()
@@ -11,29 +11,17 @@ CGame::CGame()
 	// TerrainLoaderの唯一のインスタンスを生成
 	TerrainLoader = CTerrainLoader::GetInstance();
 
-	// シーンマネージャーの実体化
-	SceneManager = new CSceneManager;
+	// SceneManagerの唯一のインスタンスを生成
+	SceneManager = CSceneManager::GetInstance();
 }
 
 void CGame::Update()
 {
-	// 仮の入力処理 (ボタン入力が可能になった)
-	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_A))
-	{
-		SceneManager->ChangeScene(SCENE_ID::RESULT);
-	}
-	else if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_B))
-	{
-		SceneManager->ChangeScene(SCENE_ID::TITLE);
-	}
-
 	SceneManager->Update();
 }
 
 CGame::~CGame()
 {
-	delete SceneManager;
-
 	TextureLoader->UnloadTexture();
 }
 

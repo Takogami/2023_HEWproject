@@ -1,21 +1,20 @@
 #pragma once
+
+/* インクルード */
 #include "CSceneManager.h"
-#include "CTextureLoader.h"
-#include "CTerrainLoader.h"
 
 //ゲーム全体を表すクラス
 class CGame
 {
-public:
-	DirectX::XMFLOAT2 cameraPos = { 0, 0 };	//カメラ位置
-
 private:
 	
 	/* メンバ変数 */
-	CSceneManager* SceneManager;
 
-	CTextureLoader* TextureLoader;
-	CTerrainLoader* TerrainLoader;
+	// ゲームの根幹システム群
+	// シングルトン設計であるため、システム内のデータを使用するときはGetInstanceすること
+	CSceneManager* SceneManager;	// シーンマネージャ
+	CTextureLoader* TextureLoader;	// テクスチャローダー
+	CTerrainLoader* TerrainLoader;	// 地形データローダー
 
 public:
 
