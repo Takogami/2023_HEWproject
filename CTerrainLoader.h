@@ -4,6 +4,14 @@
 #include <vector>
 #include <string>
 
+// マップを構成するオブジェクトのサイズ
+#define TILE_WIDTH		(0.15f)
+#define TILE_HEIGHT		(0.15f)
+
+// 画面左上の座標
+#define ORIGIN_TILE_POS_X	(-1.924f)
+#define ORIGIN_TILE_POS_Y	(1.051f)
+
 // 地形データの識別子
 enum class TERRAIN_ID
 {
@@ -18,8 +26,6 @@ private:
 
 	// 唯一のインスタンスを格納するためのポインタ
 	static CTerrainLoader* instance;
-	// １ブロックのサイズ
-	const float tile_size = 0.15f;
 	// ステージデータのファイル名
 	std::vector<std::string> file_name = 
 	{
