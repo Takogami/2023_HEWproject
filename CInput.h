@@ -14,7 +14,7 @@
 class CInput
 {
 	//メンバ変数
-
+	int Presstime = 0;
 	XINPUT_STATE oldState;  // 新しく追加
 	//キー状態の記録領域
 	bool keyState[256] = { false };
@@ -45,6 +45,9 @@ public:
 
 	// Xboxコントローラーのボタンの状態を取得するメソッド
 	bool IsControllerButtonTrigger(WORD button);
+
+	// Xboxコントローラーのボタンの状態を取得するメソッド
+	bool IsControllerButtonRepeat(WORD button);
 };
 
 //唯一の実体変数のextern宣言

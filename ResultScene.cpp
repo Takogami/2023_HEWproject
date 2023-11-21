@@ -14,7 +14,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
