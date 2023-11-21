@@ -14,8 +14,8 @@
 class CInput
 {
 	//メンバ変数
-	
 
+	XINPUT_STATE oldState;  // 新しく追加
 	//キー状態の記録領域
 	bool keyState[256] = { false };
 	//１フレーム前のキー入力状態の記憶領域
@@ -23,6 +23,7 @@ class CInput
 
 public:
 	//メンバ関数
+	CInput();  // コンストラクタを追加
 
 	//キーが押されたのを記録する関数
 	void SetKeyDownState(int key);
@@ -41,6 +42,9 @@ public:
 
 	// Xboxコントローラーのボタンの状態を取得するメソッド
 	bool IsControllerButtonPressed(WORD button);
+
+	// Xboxコントローラーのボタンの状態を取得するメソッド
+	bool IsControllerButtonTrigger(WORD button);
 };
 
 //唯一の実体変数のextern宣言

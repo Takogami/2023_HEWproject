@@ -3,6 +3,10 @@
 #include <WinError.h>	// ERROR_SUCCESSなどが含まれている
 #include <memory.h>		
 
+CInput::CInput()
+{
+	ZeroMemory(&oldState, sizeof(XINPUT_STATE));
+}
 
 bool CInput::IsControllerButtonPressed(WORD button)
 {
@@ -12,6 +16,28 @@ bool CInput::IsControllerButtonPressed(WORD button)
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		return (state.Gamepad.wButtons & button) != 0;
+	}
+
+	return false;
+}
+
+bool CInput::IsControllerButtonTrigger(WORD button)
+{
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
+	{
+		bool wasPressed = oldState.Gamepad.wButtons & button;
+		bool isPressed = state.Gamepad.wButtons & button;
+
+		// 前回は押されておらず、今回は押された場合に true を返す
+		bool isTriggered = !wasPressed && isPressed;
+
+		// 更新処理で今の状態を保存
+		oldState = state;
+
+		return isTriggered;
 	}
 
 	return false;
