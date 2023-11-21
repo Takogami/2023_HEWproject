@@ -1,5 +1,8 @@
 #include "CScene.h"
 
+std::vector<std::vector<int>> CScene::map_data;
+std::list<CGameObject*> map_object;
+
 CScene::CScene()
 {
 }
