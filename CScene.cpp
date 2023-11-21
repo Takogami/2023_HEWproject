@@ -11,14 +11,12 @@ CScene::CScene()
 
 CScene::~CScene()
 {
-	// マップが生成されているならステージの後片付けを行う
-	DestroyStage();
 }
 
-void CScene::CreateStage(TERRAIN_ID id, CCamera* _useCamera)
+void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 {
 	// マップデータのcsvファイルの読み込み
-	CTerrainLoader::GetInstance()->LoadTerrainData(id);
+	CTerrainLoader::GetInstance()->LoadTerrainData(_id);
 	map_data = CTerrainLoader::GetInstance()->GetTerrainData();
 	
 	// 画面左上を原点とした、始めのタイルの位置を設定
@@ -69,6 +67,7 @@ void CScene::DestroyStage()
 		{
 			delete(*it);
 		}
+		// オブジェクトのリストをクリアする
 		map_object.clear();
 	}
 
@@ -82,7 +81,7 @@ void CScene::Update()
 
 void CScene::Draw()
 {
-	// リストに登録されたオブジェクトの解放
+	// リストに登録されたオブジェクトの描画
 	for (auto it = map_object.begin(); it != map_object.end(); it++)
 	{
 		(*it)->Draw();

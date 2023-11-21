@@ -13,9 +13,10 @@ ResultScene::ResultScene()
 
 ResultScene::~ResultScene()
 {
+	// カメラオブジェクトの削除
 	delete Cam;
-	// 親クラスのデストラクタを明示的に呼び出す
-	CScene::~CScene();
+	// ステージの後片付け
+	CScene::DestroyStage();
 }
 
 void ResultScene::Update()
@@ -26,7 +27,7 @@ void ResultScene::Update()
 	Cam->SetCameraPosition(test_x, 0);
 	Cam->Update();
 
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
@@ -36,8 +37,9 @@ void ResultScene::Draw()
 {
 	D3D_ClearScreen();
 
+	// CSceneのDrawを明示的に呼び出す(地形の描画)
 	CScene::Draw();
 
-	//画面更新
+	// 画面更新
 	D3D_UpdateScreen();
 }

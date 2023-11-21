@@ -12,7 +12,7 @@ class CScene
 {
 private:
 	// マップデータに関連する変数群
-	// 全てのシーンで共有するため、static
+	// 全てのシーンで共有するため、staticを使用する
 	// マップデータを受け取る2次元可変長配列
 	static std::vector<std::vector<int>> map_data;
 	// マップオブジェクト用のリスト
@@ -29,7 +29,7 @@ public:
 	virtual ~CScene();
 
 	// 読み込んだ地形情報でステージを生成する
-	void CreateStage(TERRAIN_ID id, CCamera* _useCamera);
+	void CreateStage(TERRAIN_ID _id, CCamera* _useCamera);
 
 	// ステージの後片付け(各オブジェクトの解放など)
 	void DestroyStage();

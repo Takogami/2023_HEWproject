@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 
-// マップを構成するオブジェクトのサイズ
+/* マクロ定義 */
+
+// マップを構成するオブジェクト(タイル)のサイズ
 #define TILE_WIDTH		(0.15f)
 #define TILE_HEIGHT		(0.15f)
 
