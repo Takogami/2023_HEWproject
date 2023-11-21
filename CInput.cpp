@@ -43,6 +43,27 @@ bool CInput::IsControllerButtonTrigger(WORD button)
 	return false;
 }
 
+bool CInput::IsControllerButtonRepeat(WORD button)
+{
+	//押してるカウントを計る
+	Presstime++;
+	//最初にトリガー処理を行う
+	if (IsControllerButtonTrigger(button))
+	{
+		Presstime = 0;//Presstimeの初期化
+		return true;
+	}
+	else if (Presstime > 100)//100カウント押したら
+	{
+		//Press処理に移行する
+		IsControllerButtonPressed(button);
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void CInput::SetKeyDownState(int key)
 {
 	keyState[key] = true;
