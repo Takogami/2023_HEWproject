@@ -6,6 +6,7 @@
 class ResultScene : public CScene
 {
 private:
+	CCamera* Cam;
 
 public:
 	ResultScene();
