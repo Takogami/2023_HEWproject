@@ -50,6 +50,8 @@ void TitleScene::Update()
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}
 
+
+
 	// カメラのアップデート
 	Cam->Update();
 

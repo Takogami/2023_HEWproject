@@ -21,9 +21,6 @@ class CCamera
 private:
 	/* メンバ変数 */
 
-	//カメラ位置
-	DirectX::XMFLOAT2 cameraPos;
-
 	DirectX::XMVECTOR eye;		// 目の位置
 	DirectX::XMVECTOR focus;	// どこを見ているか
 	DirectX::XMVECTOR up;		// カメラの上方向
@@ -32,14 +29,17 @@ private:
 	DirectX::XMMATRIX matrixView;
 
 public:
+	/* メンバ変数 */
+
+	//カメラ位置
+	DirectX::XMFLOAT2 cameraPos;
+
 	/* メソッド */
 
 	// コンストラクタ
 	CCamera();
 	// デストラクタ
 	~CCamera();
-	// カメラ位置の設定
-	void SetCameraPosition(float pos_x = 0.0f, float pos_y = 0.0f);
 	// View変換行列の取得
 	DirectX::XMMATRIX GetMatrixView();
 

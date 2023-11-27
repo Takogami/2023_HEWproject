@@ -44,8 +44,14 @@ CGameObject::~CGameObject()
 //Update
 void CGameObject::Update()
 {
+	//全てのオブジェクト共通のUpdate処理
+
+	//オブジェクトの位置とコライダーの中心を合わせる
+	this->Bcol.centerX = this->transform.position.x;
+	this->Bcol.centerY = this->transform.position.y;
+
 	//ここにUpdate処理を記述する
-	//基本は継承先にoverrideして記述すること
+	//共通処理以外は継承先にoverrideして記述すること
 }
 
 //Draw

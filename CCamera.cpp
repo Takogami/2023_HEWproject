@@ -6,7 +6,6 @@
 // 概要:カメラを作成できるクラス
 //      このファイルではメソッドの本体を記述している
 //      Updateメソッドで常に行列を作成し、GetMatrixViewメソッドで行列を渡す
-//      SetCameraPositionメソッドで位置を指定することが可能
 // 
 // 最終更新日時:2023/10/27
 //--------------------------------------------------------------------------
@@ -32,13 +31,6 @@ CCamera::CCamera()
 // デストラクタ
 CCamera::~CCamera()
 {
-}
-
-// カメラ位置を設定
-void CCamera::SetCameraPosition(float pos_x, float pos_y)
-{
-	//カメラポジションのセット
-	cameraPos = { pos_x, pos_y };
 }
 
 // View変換行列の更新
