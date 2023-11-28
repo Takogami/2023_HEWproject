@@ -54,9 +54,11 @@ void ResultScene::Update()
 	dirY = 0.0f;
 
 	// 移動入力
+	//	コントローラー用の入力
 	if (gInput->GetLeftStickY() > 0.0f || gInput->GetLeftStickY() < 0.0f || gInput->GetKeyPress(VK_DOWN))
 	{
 		dirY = gInput->GetLeftStickY();
+
 	}
 	else if (gInput->GetRightStickY() > 0.0f || gInput->GetRightStickY() < 0.0f || gInput->GetKeyPress(VK_UP))
 	{
@@ -69,6 +71,25 @@ void ResultScene::Update()
 	else if (gInput->GetRightStickX() > 0.0f || gInput->GetRightStickX() < 0.0f || gInput->GetKeyPress(VK_RIGHT))
 	{
 		dirX = gInput->GetRightStickX();
+	}
+
+	//	移動入力（キーボード）
+	if (gInput->GetKeyPress(VK_DOWN))
+	{
+		dirY = -1.0f;
+	}
+	else if (gInput->GetKeyPress(VK_UP))
+	{
+		dirY = 1.0f;
+	}
+
+	if (gInput->GetKeyPress(VK_LEFT))
+	{
+		dirX = -1.0f;
+	}
+	else if (gInput->GetKeyPress(VK_RIGHT))
+	{
+		dirX = 1.0f;
 	}
 
 	// ベクトルに速度をかけて位置を変更
