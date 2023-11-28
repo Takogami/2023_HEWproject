@@ -47,7 +47,19 @@ public:
 	bool IsControllerButtonTrigger(WORD button);
 
 	// Xboxコントローラーのボタンの状態を取得するメソッド
-	bool IsControllerButtonRepeat(WORD button);
+	bool IsControllerButtonRepeat(WORD button, int cCount, int cTime);
+
+	// コントローラーの左スティックのX軸の値を取得
+	float GetLeftStickX();
+
+	// コントローラーの左スティックのY軸の値を取得
+	float GetLeftStickY();
+
+	// コントローラーの右スティックのX軸の値を取得
+	float GetRightStickX();
+
+	// コントローラーの右スティックのY軸の値を取得
+	float GetRightStickY();
 };
 
 //唯一の実体変数のextern宣言

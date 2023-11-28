@@ -45,7 +45,7 @@ TitleScene::~TitleScene()
 void TitleScene::Update()
 {
 	// とりあえずテスト用の入力処理
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A, 100, 10) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}

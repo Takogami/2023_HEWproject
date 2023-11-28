@@ -42,7 +42,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A, 100, 10) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
@@ -54,21 +54,21 @@ void ResultScene::Update()
 	dirY = 0.0f;
 
 	// 移動入力
-	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) || gInput->GetKeyPress(VK_DOWN))
+	if (gInput->GetLeftStickY() > 0.0f || gInput->GetLeftStickY() < 0.0f || gInput->GetKeyPress(VK_DOWN))
 	{
-		dirY = -1.0f;
+		dirY = gInput->GetLeftStickY();
 	}
-	else if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_UP) || gInput->GetKeyPress(VK_UP))
+	else if (gInput->GetRightStickY() > 0.0f || gInput->GetRightStickY() < 0.0f || gInput->GetKeyPress(VK_UP))
 	{
-		dirY = 1.0f;
+		dirY = gInput->GetRightStickY();
 	}
-	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_LEFT) || gInput->GetKeyPress(VK_LEFT))
+	if (gInput->GetLeftStickX() > 0.0f || gInput->GetLeftStickX() < 0.0f || gInput->GetKeyPress(VK_LEFT))
 	{
-		dirX = -1.0f;
+		dirX = gInput->GetLeftStickX();
 	}
-	else if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_RIGHT) || gInput->GetKeyPress(VK_RIGHT))
+	else if (gInput->GetRightStickX() > 0.0f || gInput->GetRightStickX() < 0.0f || gInput->GetKeyPress(VK_RIGHT))
 	{
-		dirX = 1.0f;
+		dirX = gInput->GetRightStickX();
 	}
 
 	// ベクトルに速度をかけて位置を変更

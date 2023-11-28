@@ -43,7 +43,7 @@ bool CInput::IsControllerButtonTrigger(WORD button)
 	return false;
 }
 
-bool CInput::IsControllerButtonRepeat(WORD button)
+bool CInput::IsControllerButtonRepeat(WORD button, int cCount, int cTime)
 {
 	//押してるカウントを計る
 	Presstime++;
@@ -53,7 +53,7 @@ bool CInput::IsControllerButtonRepeat(WORD button)
 		Presstime = 0;//Presstimeの初期化
 		return true;
 	}
-	else if (Presstime > 100)//100カウント押したら
+	else if (Presstime > cCount && Presstime % cTime == 0)//100カウント押したら
 	{
 		//Press処理に移行する
 		IsControllerButtonPressed(button);
@@ -89,4 +89,62 @@ bool CInput::GetKeyTrigger(int key)
 void CInput::Update()
 {
 	memcpy_s(oldKeyState, sizeof(oldKeyState), keyState, sizeof(keyState));
+}
+
+
+
+float CInput::GetLeftStickX()
+{
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
+	{
+		// スティックのX軸の値を取得
+		return state.Gamepad.sThumbLX / static_cast<float>(32767);
+	}
+
+	return 0.0f; // エラー時は0を返す
+}
+
+float CInput::GetLeftStickY()
+{
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
+	{
+		// スティックのY軸の値を取得
+		return state.Gamepad.sThumbLY / static_cast<float>(32767);
+	}
+
+	return 0.0f; // エラー時は0を返す
+}
+
+float CInput::GetRightStickX()
+{
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
+	{
+		// 右スティックのX軸の値を取得
+		return state.Gamepad.sThumbRX / static_cast<float>(32767);
+	}
+
+	return 0.0f; // エラー時は0を返す
+}
+
+float CInput::GetRightStickY()
+{
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+	if (XInputGetState(0, &state) == ERROR_SUCCESS)
+	{
+		// 右スティックのY軸の値を取得
+		return state.Gamepad.sThumbRY / static_cast<float>(32767);
+	}
+
+	return 0.0f; // エラー時は0を返す
 }
