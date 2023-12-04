@@ -50,7 +50,6 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT};
-
 			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す
@@ -76,34 +75,46 @@ void CScene::DestroyStage()
 	SAFE_RELEASE(vertexBufferMap);
 }
 
-void CScene::CorrectPosition(CGameObject* moveObject, CGameObject* holdObject)
+void CScene::CorrectPosition(CPlayer* moveObject, CGameObject* holdObject)
 {
 	float overlapX = moveObject->Bcol.sizeX / 2 + holdObject->Bcol.sizeX / 2 - std::abs(moveObject->Bcol.centerX - holdObject->Bcol.centerX);
 	float overlapY = moveObject->Bcol.sizeY / 2 + holdObject->Bcol.sizeY / 2 - std::abs(moveObject->Bcol.centerY - holdObject->Bcol.centerY);
 
-	// どちらの方向にめり込んでいるかを判定
-	if (overlapX < overlapY) {
+	if (overlapX < overlapY)
+	{
 		// X軸方向にめり込んでいる場合
-		if (moveObject->Bcol.centerX < holdObject->Bcol.centerX) {
+		if (moveObject->Bcol.centerX < holdObject->Bcol.centerX)
+		{
 			moveObject->Bcol.centerX -= overlapX;
+			//コライダーの中心点とオブジェクトの中心点を連動させる
+			moveObject->transform.position.x = moveObject->Bcol.centerX;
 		}
-		else {
+		else
+		{
 			moveObject->Bcol.centerX += overlapX;
+			//コライダーの中心点とオブジェクトの中心点を連動させる
+			moveObject->transform.position.x = moveObject->Bcol.centerX;
 		}
 	}
-	else {
+	else{
 		// Y軸方向にめり込んでいる場合
-		if (moveObject->Bcol.centerY < holdObject->Bcol.centerY) {
+		if (moveObject->Bcol.centerY < holdObject->Bcol.centerY)
+		{
 			moveObject->Bcol.centerY -= overlapY;
+			//コライダーの中心点とオブジェクトの中心点を連動させる
+			moveObject->transform.position.y = moveObject->Bcol.centerY;
 		}
-		else {
+		else
+		{
 			moveObject->Bcol.centerY += overlapY;
+			//コライダーの中心点とオブジェクトの中心点を連動させる
+			moveObject->transform.position.y = moveObject->Bcol.centerY;
 		}
-	}
 
-	//コライダーの中心点とオブジェクトの中心点を連動させる
-	moveObject->transform.position.x = moveObject->Bcol.centerX;
-	moveObject->transform.position.y = moveObject->Bcol.centerY;
+		//コライダーの中心点とオブジェクトの中心点を連動させる
+		moveObject->transform.position.x = moveObject->Bcol.centerX;
+		moveObject->transform.position.y = moveObject->Bcol.centerY;
+	}
 }
 
 bool CScene::TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2)

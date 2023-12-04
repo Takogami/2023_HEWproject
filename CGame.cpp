@@ -18,6 +18,12 @@ CGame::CGame()
 void CGame::Update()
 {
 	SceneManager->Update();
+
+	// escapeキーでゲームを終了
+	if (gInput->GetKeyPress(VK_ESCAPE))
+	{
+		PostQuitMessage(0);
+	}
 }
 
 CGame::~CGame()

@@ -146,6 +146,7 @@
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
+    <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CTerrainLoader.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />
+    <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CTerrainLoader.h" />

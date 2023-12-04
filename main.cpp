@@ -10,9 +10,6 @@
 #define CLASS_NAME    "DX21Smpl"// ウインドウクラスの名前
 #define WINDOW_NAME   "スケルトンプログラム"// ウィンドウの名前
 
-#define SCREEN_WIDTH (1920)	// ウインドウの幅
-#define SCREEN_HEIGHT (1080)	// ウインドウの高さ
-
 // 関数のプロトタイプ宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -44,6 +41,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR IpCmdLine
 
 	/* ウインドウを作る関数を呼び出す */
 
+	// 画面サイズを取得
+	int screenX = GetSystemMetrics(SM_CXSCREEN);
+	int screenY = GetSystemMetrics(SM_CYSCREEN);
+
 	HWND hWnd; // ウインドウハンドル = ウインドウID
 	hWnd = CreateWindowEx(0,// 拡張ウィンドウスタイル
 		CLASS_NAME,// ウィンドウクラスの名前
@@ -51,8 +52,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR IpCmdLine
 		WS_POPUP,// ウィンドウスタイル
 		CW_USEDEFAULT,// ウィンドウの左上Ｘ座標
 		CW_USEDEFAULT,// ウィンドウの左上Ｙ座標
-		SCREEN_WIDTH,// ウィンドウの幅
-		SCREEN_HEIGHT,// ウィンドウの高さ
+		screenX,// ウィンドウの幅
+		screenY,// ウィンドウの高さ
 		NULL,// 親ウィンドウのハンドル
 		NULL,// メニューハンドルまたは子ウィンドウID
 		hInstance,// インスタンスハンドル
@@ -170,14 +171,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYDOWN:
 		gInput->SetKeyDownState(wParam);
-
-#ifdef _DEBUG
-		//デバッグ時にescapeで終了
-		if (gInput->GetKeyPress(VK_ESCAPE))
-		{
-			PostQuitMessage(0);
-		}
-#endif
 		break;
 
 	case WM_KEYUP:

@@ -54,7 +54,7 @@ public:
 
 	//初期化処理(コンストラクタ) 引数1:頂点バッファ 引数2:テクスチャ 引数3:テクスチャ移動量
 	//※ 引数3 はuv分割しないなら入力の必要はありません
-	CGameObject(ID3D11Buffer*, ID3D11ShaderResourceView*, FLOAT_XY _uv = { 1.0f,1.0f });
+	CGameObject(ID3D11Buffer*, ID3D11ShaderResourceView*, FLOAT_XY uv = { 1.0f,1.0f });
 	//終了処理(デストラクタ)
 	virtual ~CGameObject();
 

@@ -22,13 +22,13 @@
 using namespace DirectX;
 
 //コンストラクタ
-CGameObject::CGameObject(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY _uv)
+CGameObject::CGameObject(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv)
 {
 	//使用カメラの初期化
 	useCamera = nullptr;
 
 	//モデルの作成
-	D3D_CreateSquare({ 0.0f ,0.0f }, { 1.0f ,1.0f }, _uv, &vb);
+	D3D_CreateSquare({ 0.0f ,0.0f }, { 1.0f ,1.0f }, uv, &vb);
 
 	//引数で受け取った頂点バッファとテクスチャをセットする
 	vertexBuffer = vb;
