@@ -50,7 +50,6 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT};
-
 			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す
@@ -74,51 +73,6 @@ void CScene::DestroyStage()
 
 	// マップ用頂点バッファの解放
 	SAFE_RELEASE(vertexBufferMap);
-}
-
-void CScene::CorrectPosition(CGameObject* moveObject, CGameObject* holdObject)
-{
-	float overlapX = moveObject->Bcol.sizeX / 2 + holdObject->Bcol.sizeX / 2 - std::abs(moveObject->Bcol.centerX - holdObject->Bcol.centerX);
-	float overlapY = moveObject->Bcol.sizeY / 2 + holdObject->Bcol.sizeY / 2 - std::abs(moveObject->Bcol.centerY - holdObject->Bcol.centerY);
-
-	// どちらの方向にめり込んでいるかを判定
-	if (overlapX < overlapY) {
-		// X軸方向にめり込んでいる場合
-		if (moveObject->Bcol.centerX < holdObject->Bcol.centerX) {
-			moveObject->Bcol.centerX -= overlapX;
-		}
-		else {
-			moveObject->Bcol.centerX += overlapX;
-		}
-	}
-	else {
-		// Y軸方向にめり込んでいる場合
-		if (moveObject->Bcol.centerY < holdObject->Bcol.centerY) {
-			moveObject->Bcol.centerY -= overlapY;
-		}
-		else {
-			moveObject->Bcol.centerY += overlapY;
-		}
-	}
-
-	//コライダーの中心点とオブジェクトの中心点を連動させる
-	moveObject->transform.position.x = moveObject->Bcol.centerX;
-	moveObject->transform.position.y = moveObject->Bcol.centerY;
-}
-
-bool CScene::TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2)
-{
-	// 中心点間の距離
-	float distanceX = std::abs(obj1.centerX - obj2.centerX);
-	float distanceY = std::abs(obj1.centerY - obj2.centerY);
-
-	// 中心点間の距離がそれぞれの矩形の幅と高さの半分を足したものより小さい場合、重なっていると判定
-	if (distanceX < (obj1.sizeX / 2 + obj2.sizeX / 2) && distanceY < (obj1.sizeY / 2 + obj2.sizeY / 2))
-	{
-		return true;
-	}
-
-	return false;
 }
 
 void CScene::DrawTerrain()

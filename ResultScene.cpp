@@ -8,7 +8,7 @@ ResultScene::ResultScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO), { 0.33f ,0.25f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO), { 0.33f ,0.25f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -42,63 +42,10 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A, 100, 10) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
-
-	/* ↓ 仮説プレイヤー操作 後でPlayerクラスに移植予定 ↓ */
-
-	// 向きを戻す
-	dirX = 0.0f;
-	dirY = 0.0f;
-
-	// 移動入力
-	//	コントローラー用の入力
-	if (gInput->GetLeftStickY() > 0.0f || gInput->GetLeftStickY() < 0.0f || gInput->GetKeyPress(VK_DOWN))
-	{
-		dirY = gInput->GetLeftStickY();
-
-	}
-	else if (gInput->GetRightStickY() > 0.0f || gInput->GetRightStickY() < 0.0f || gInput->GetKeyPress(VK_UP))
-	{
-		dirY = gInput->GetRightStickY();
-	}
-	if (gInput->GetLeftStickX() > 0.0f || gInput->GetLeftStickX() < 0.0f || gInput->GetKeyPress(VK_LEFT))
-	{
-		dirX = gInput->GetLeftStickX();
-	}
-	else if (gInput->GetRightStickX() > 0.0f || gInput->GetRightStickX() < 0.0f || gInput->GetKeyPress(VK_RIGHT))
-	{
-		dirX = gInput->GetRightStickX();
-	}
-
-	//	移動入力（キーボード）
-	if (gInput->GetKeyPress(VK_DOWN))
-	{
-		dirY = -1.0f;
-	}
-	else if (gInput->GetKeyPress(VK_UP))
-	{
-		dirY = 1.0f;
-	}
-
-	if (gInput->GetKeyPress(VK_LEFT))
-	{
-		dirX = -1.0f;
-	}
-	else if (gInput->GetKeyPress(VK_RIGHT))
-	{
-		dirX = 1.0f;
-	}
-
-	// ベクトルに速度をかけて位置を変更
-	player->transform.position.x += dirX * 0.03f;
-	player->transform.position.y += dirY * 0.03f;
-
-	/* ↑ 仮説プレイヤー操作 後でPlayerクラスに移植予定 ↑ */
-
-	Cam->Update();
 
 	// 各オブジェクトの更新
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -117,6 +64,8 @@ void ResultScene::Update()
 		}
 	}
 
+	Cam->cameraPos.x = player->transform.position.x;
+	Cam->Update();
 }
 
 void ResultScene::Draw()

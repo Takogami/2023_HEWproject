@@ -12,11 +12,7 @@ private:
 	// まとめてUpdateとDrawを行うために使用
 	std::list<CGameObject*>Objects;
 
-	/* ↓ 仮設プレイヤー ↓ */
-	CGameObject* player;
-	float dirX = 0.0f;
-	float dirY = 0.0f;
-	/* ↑ 仮設プレイヤー ↑ */
+	CPlayer* player;
 
 	ID3D11Buffer* vertexBufferCharacter;
 

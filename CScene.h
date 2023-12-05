@@ -2,7 +2,7 @@
 
 /* インクルード */
 #include <list>
-#include "CGameObject.h"
+#include "CPlayer.h"
 #include "CCamera.h"
 #include "CTerrainLoader.h"
 #include "CTextureLoader.h"
@@ -35,11 +35,6 @@ public:
 
 	// ステージの後片付け(各オブジェクトの解放など)
 	void DestroyStage();
-
-	// 四角形同士の当たり判定
-	static bool TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2);
-	// 位置補正
-	static void CorrectPosition(CGameObject* moveObject, CGameObject* holdObject);
 
 	// ステージの描画のみを行う
 	void DrawTerrain();
