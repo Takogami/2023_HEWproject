@@ -18,11 +18,11 @@ private:
 	// マップオブジェクト用の頂点バッファ
 	static ID3D11Buffer* vertexBufferMap;
 
-protected:
+public:
+	/* メンバ変数 */
 	// マップオブジェクト用のリスト
 	static std::list<CGameObject*> map_object;
 
-public:
 	/* メソッド */
 
 	// コンストラクタ

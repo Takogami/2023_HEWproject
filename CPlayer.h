@@ -6,6 +6,13 @@ class CPlayer :
 {
     /* メンバ変数 */
 
+    // 移動速度
+    float moveSpeed;
+    // 前フレームされた衝突補正の方向
+    CORRECT_DIR prevFrameCorrect = { 0 };
+    // 前フレームの方向
+    DirectX::XMFLOAT3 prevFrameDir = { 0.0f, 0.0f, 0.0f };
+
 public:
     /* メンバ変数 */
 
@@ -15,6 +22,8 @@ public:
     /* メソッド */
 
     CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv);
+    // 移動速度を設定
+    inline void SetMoveSpeed(float sp) { moveSpeed = sp; };
     void Update() override;
     void Draw() override;
     ~CPlayer() override;
