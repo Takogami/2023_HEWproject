@@ -42,7 +42,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
@@ -51,17 +51,6 @@ void ResultScene::Update()
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Update();
-	}
-
-	// マップのオブジェクトとの当たり判定を取る
-	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
-	{
-		// 地形とプレイヤーの当たり判定
-		if (TestBoxCollision(player->Bcol, (*it)->Bcol))
-		{
-			// 位置を補正する
-			CorrectPosition(player, *it);
-		}
 	}
 
 	Cam->cameraPos.x = player->transform.position.x;

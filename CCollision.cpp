@@ -3,6 +3,8 @@
 
 void CCollision::CorrectPosition(BoxCollider& obj1, BoxCollider& obj2)
 {
+	/*
+
 	float overlapX = moveObject->Bcol.sizeX / 2 + holdObject->Bcol.sizeX / 2 - std::abs(moveObject->Bcol.centerX - holdObject->Bcol.centerX);
 	float overlapY = moveObject->Bcol.sizeY / 2 + holdObject->Bcol.sizeY / 2 - std::abs(moveObject->Bcol.centerY - holdObject->Bcol.centerY);
 
@@ -41,6 +43,8 @@ void CCollision::CorrectPosition(BoxCollider& obj1, BoxCollider& obj2)
 		moveObject->transform.position.x = moveObject->Bcol.centerX;
 		moveObject->transform.position.y = moveObject->Bcol.centerY;
 	}
+
+	*/
 }
 
 bool CCollision::TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2)

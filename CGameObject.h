@@ -18,6 +18,7 @@
 /* インクルード */
 #include "direct3d.h"
 #include "CTransform.h"
+#include "CCollision.h"
 
 /* CCameraクラスの前方宣言 */
 class CCamera;
