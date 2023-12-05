@@ -1,6 +1,5 @@
 #include "CPlayer.h"
 #include "CInput.h"
-#include "CScene.h"
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(vb, tex, uv)

@@ -22,15 +22,6 @@
 /* CCameraクラスの前方宣言 */
 class CCamera;
 
-// BoxCollider型の定義
-struct BoxCollider
-{
-	float centerX;	// Boxコライダーの中心点X
-	float centerY;	// Boxコライダーの中心点Y
-	float sizeX;	// Boxコライダーのx方向の大きさ
-	float sizeY;	// Boxコライダーのy方向の大きさ
-};
-
 //CGameObjectクラス
 class CGameObject
 {
