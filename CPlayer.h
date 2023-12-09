@@ -6,12 +6,18 @@ class CPlayer :
 {
     /* メンバ変数 */
 
+private:
     // 移動速度
     float moveSpeed;
     // 前フレームされた衝突補正の方向
     CORRECT_DIR prevFrameCorrect = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, 0.0f, 0.0f };
+
+    /* メソッド */
+    void Input();   // 
+    void Jump();    // 
+
 
 public:
     /* メンバ変数 */

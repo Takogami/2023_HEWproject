@@ -5,15 +5,12 @@
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(vb, tex, uv)
 {
+	// 初期スピード設定
 	SetMoveSpeed(0.05f);
 }
 
-void CPlayer::Update()
+void CPlayer::Input()
 {
-	// 向きを戻す
-	dir.x = 0.0f;
-	dir.y = 0.0f;
-
 	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) || gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y != 1)
 	{
 		// 同時に反対のキーが押されていないか
@@ -75,6 +72,44 @@ void CPlayer::Update()
 			dir.x = prevFrameDir.x;
 		}
 	}
+
+	// スティック入力一時保存用
+	float input_stickX, input_stickY;
+
+	// スティックの入力を保存
+	input_stickX = gInput->GetRightStickX();
+	input_stickY = gInput->GetRightStickY();
+
+	// 前のフレームでめり込んだ方向でないなら移動量を適応する
+	if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
+		(input_stickX < 0.0f && prevFrameCorrect.x != 1))
+	{
+		dir.x = input_stickX;
+	}
+	// 前のフレームでめり込んだ方向に移動しようとしてるなら移動量を適応しない
+	else
+	{
+		dir.x = 0;
+	}
+	// 前のフレームでめり込んだ方向でないなら方向を適応
+	if ((input_stickY > 0.0f && prevFrameCorrect.y != -1) ||
+		(input_stickY < 0.0f && prevFrameCorrect.y != 1))
+	{
+		dir.y = input_stickY;
+	}
+	else
+	{
+		dir.y = 0;
+	}
+}
+
+void CPlayer::Update()
+{
+	// 向きを戻す
+	dir.x = 0.0f;
+	dir.y = 0.0f;
+
+	Input();
 
 	// 前フレームの補正方向を初期化
 	prevFrameCorrect = { 0 };
