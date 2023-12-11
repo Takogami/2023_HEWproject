@@ -15,7 +15,10 @@ class CInput
 {
 	//メンバ変数
 	int Presstime = 0;
+
+	XINPUT_STATE state;
 	XINPUT_STATE oldState;  // 新しく追加
+
 	//キー状態の記録領域
 	bool keyState[256] = { false };
 	//１フレーム前のキー入力状態の記憶領域
