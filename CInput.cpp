@@ -2,6 +2,7 @@
 #include "CInput.h"
 #include <WinError.h>	// ERROR_SUCCESSなどが含まれている
 #include <memory.h>		
+#include <cmath>
 
 CInput::CInput()
 {
@@ -147,4 +148,61 @@ float CInput::GetRightStickY()
 	}
 
 	return 0.0f; // エラー時は0を返す
+}
+
+
+float CInput::GetLeftStickXWithDeadzone()
+{
+	float value = GetLeftStickX();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float CInput::GetLeftStickYWithDeadzone()
+{
+	float value = GetLeftStickY();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float CInput::GetRightStickXWithDeadzone()
+{
+	float value = GetRightStickX();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float CInput::GetRightStickYWithDeadzone()
+{
+	float value = GetRightStickY();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else 
+	{
+		return 0.0f;
+	}
 }

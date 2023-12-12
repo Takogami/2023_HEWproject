@@ -12,22 +12,16 @@ void CPlayer::Update()
 	dir.x = 0.0f;
 	dir.y = 0.0f;
 
+
+
 	// 移動入力
-	if ((gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_DOWN) || gInput->GetKeyPress(VK_DOWN)))
+	if ((gInput->GetLeftStickYWithDeadzone() || gInput->GetKeyPress(VK_DOWN)))
 	{
-		dir.y = -1.0f;
+		dir.y = gInput->GetLeftStickYWithDeadzone();
 	}
-	else if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_UP) || gInput->GetKeyPress(VK_UP))
+	if (gInput->GetLeftStickXWithDeadzone() || gInput->GetKeyPress(VK_UP))
 	{
-		dir.y = 1.0f;
-	}
-	if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_LEFT) || gInput->GetKeyPress(VK_LEFT))
-	{
-		dir.x = -1.0f;
-	}
-	else if (gInput->IsControllerButtonPressed(XINPUT_GAMEPAD_DPAD_RIGHT) || gInput->GetKeyPress(VK_RIGHT))
-	{
-		dir.x = 1.0f;
+		dir.x = gInput->GetLeftStickXWithDeadzone();
 	}
 
 	//単位ベクトル化(矢印を１にする) = 正規化
