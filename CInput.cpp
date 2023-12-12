@@ -32,6 +32,8 @@ bool CInput::IsControllerButtonTrigger(WORD button)
 
 		return isTriggered;
 	}
+
+	return false;
 }
 
 bool CInput::IsControllerButtonRepeat(WORD button, int cCount, int cTime)
