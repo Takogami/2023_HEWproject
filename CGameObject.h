@@ -38,8 +38,8 @@ protected:
 public:
 	/* メンバ変数 */
 
-	CTransform transform;								//仮想世界の中の位置座標,スケール,回転率
-	DirectX::XMFLOAT4 materialDiffuse = { 1,1,1,1 };	//マテリアル色の設定
+	CTransform transform;								// 仮想世界の中の位置座標,スケール,回転率
+	DirectX::XMFLOAT4 materialDiffuse = { 1,1,1,1 };	// マテリアル色の設定
 	BoxCollider Bcol = { 0.0f, 0.0f, 0.0f, 0.0f };		// Boxコライダーパラメータ
 
 	/* メソッド */

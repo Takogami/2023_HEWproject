@@ -9,6 +9,13 @@ struct BoxCollider
 	float sizeY;	// Boxコライダーのy方向の大きさ
 };
 
+// 補正方向型の定義
+struct CORRECT_DIR
+{
+	int x;
+	int y;
+};
+
 class CCollision
 {
 public:
@@ -18,7 +25,7 @@ public:
 	// 四角形同士の当たり判定
 	static bool TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2);
 	// 位置補正
-	static void CorrectPosition(BoxCollider& obj1, BoxCollider& obj2);
+	static CORRECT_DIR CorrectPosition(BoxCollider& obj1, BoxCollider& obj2);
 
 };
 

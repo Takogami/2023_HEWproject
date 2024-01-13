@@ -1,50 +1,46 @@
 #include "CCollision.h"
 #include <cmath>
 
-void CCollision::CorrectPosition(BoxCollider& obj1, BoxCollider& obj2)
+CORRECT_DIR CCollision::CorrectPosition(BoxCollider& moveObject, BoxCollider& holdObject)
 {
-	/*
+	// x,yそれぞれめり込んでいる長さを計算
+	float overlapX = moveObject.sizeX / 2 + holdObject.sizeX / 2 - std::abs(moveObject.centerX - holdObject.centerX);
+	float overlapY = moveObject.sizeY / 2 + holdObject.sizeY / 2 - std::abs(moveObject.centerY - holdObject.centerY);
 
-	float overlapX = moveObject->Bcol.sizeX / 2 + holdObject->Bcol.sizeX / 2 - std::abs(moveObject->Bcol.centerX - holdObject->Bcol.centerX);
-	float overlapY = moveObject->Bcol.sizeY / 2 + holdObject->Bcol.sizeY / 2 - std::abs(moveObject->Bcol.centerY - holdObject->Bcol.centerY);
+	// 補正した方向を格納するCORRECT_DIR型変数
+	CORRECT_DIR correct_dir = { 0 };
 
+	// コライダーを補正する
 	if (overlapX < overlapY)
 	{
 		// X軸方向にめり込んでいる場合
-		if (moveObject->Bcol.centerX < holdObject->Bcol.centerX)
+		if (moveObject.centerX < holdObject.centerX)
 		{
-			moveObject->Bcol.centerX -= overlapX;
-			//コライダーの中心点とオブジェクトの中心点を連動させる
-			moveObject->transform.position.x = moveObject->Bcol.centerX;
+			moveObject.centerX -= overlapX;
+			correct_dir.x = -1;
 		}
 		else
 		{
-			moveObject->Bcol.centerX += overlapX;
-			//コライダーの中心点とオブジェクトの中心点を連動させる
-			moveObject->transform.position.x = moveObject->Bcol.centerX;
+			moveObject.centerX += overlapX;
+			correct_dir.x = 1;
 		}
 	}
 	else {
 		// Y軸方向にめり込んでいる場合
-		if (moveObject->Bcol.centerY < holdObject->Bcol.centerY)
+		if (moveObject.centerY < holdObject.centerY)
 		{
-			moveObject->Bcol.centerY -= overlapY;
-			//コライダーの中心点とオブジェクトの中心点を連動させる
-			moveObject->transform.position.y = moveObject->Bcol.centerY;
+			moveObject.centerY -= overlapY;
+			correct_dir.y = -1;
 		}
 		else
 		{
-			moveObject->Bcol.centerY += overlapY;
-			//コライダーの中心点とオブジェクトの中心点を連動させる
-			moveObject->transform.position.y = moveObject->Bcol.centerY;
+			moveObject.centerY += overlapY;
+			correct_dir.y = 1;
 		}
-
-		//コライダーの中心点とオブジェクトの中心点を連動させる
-		moveObject->transform.position.x = moveObject->Bcol.centerX;
-		moveObject->transform.position.y = moveObject->Bcol.centerY;
 	}
 
-	*/
+	// 補正した方向を返す
+	return correct_dir;
 }
 
 bool CCollision::TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2)

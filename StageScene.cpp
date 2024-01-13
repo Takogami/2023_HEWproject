@@ -1,8 +1,7 @@
-/* インクルード */
-#include "ResultScene.h"
+#include "StageScene.h"
 #include "CSceneManager.h"	// シーン切り替えのためにインクルード
 
-ResultScene::ResultScene()
+StageScene::StageScene()
 {
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
@@ -14,15 +13,15 @@ ResultScene::ResultScene()
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
-	player->transform * 0.2f;
+	player->transform * 0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.1f };
 
 	// 構成するステージと使用するカメラのポインタを指定
-	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);
+	CScene::CreateStage(TERRAIN_ID::STAGE_2, Cam);
 }
 
-ResultScene::~ResultScene()
+StageScene::~StageScene()
 {
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferCharacter);
@@ -40,11 +39,11 @@ ResultScene::~ResultScene()
 	CScene::DestroyStage();
 }
 
-void ResultScene::Update()
+void StageScene::Update()
 {
 	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}
 
 	// 各オブジェクトの更新
@@ -57,7 +56,7 @@ void ResultScene::Update()
 	Cam->Update();
 }
 
-void ResultScene::Draw()
+void StageScene::Draw()
 {
 	D3D_ClearScreen();
 
