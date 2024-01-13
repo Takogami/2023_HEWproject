@@ -3,6 +3,7 @@
 /* インクルード */
 #include <list>
 #include "CPlayer.h"
+#include "CCursor.h"
 #include "CCamera.h"
 #include "CTerrainLoader.h"
 #include "CTextureLoader.h"
