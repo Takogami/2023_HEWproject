@@ -16,7 +16,7 @@ ResultScene::ResultScene()
 	// スケールの設定
 	player->transform * 0.2f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
+	player->Bcol = { player->transform.position.x+=0.3f, player->transform.position.y, 0.2f, 0.2f};
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);

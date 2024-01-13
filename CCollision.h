@@ -9,6 +9,14 @@ struct BoxCollider
 	float sizeY;	// Boxコライダーのy方向の大きさ
 };
 
+struct Rectangle
+{
+	float leftX;
+	float rigthX;
+	float topY;
+	float bottomY;
+};
+
 // 補正方向型の定義
 struct CORRECT_DIR
 {

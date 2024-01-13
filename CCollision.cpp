@@ -4,28 +4,15 @@
 CORRECT_DIR CCollision::CorrectPosition(BoxCollider& moveObject, BoxCollider& holdObject)
 {
 	// x,y‚»‚ê‚¼‚ê‚ß‚è‚ñ‚Å‚¢‚é’·‚³‚ğŒvZ
-	float overlapX = moveObject.sizeX / 2 + holdObject.sizeX / 2 - std::abs(moveObject.centerX - holdObject.centerX);
-	float overlapY = moveObject.sizeY / 2 + holdObject.sizeY / 2 - std::abs(moveObject.centerY - holdObject.centerY);
-
+	float overlapX = ((moveObject.sizeX / 2) + (holdObject.sizeX / 2)) - std::abs(moveObject.centerX - holdObject.centerX);
+	float overlapY = ((moveObject.sizeY / 2) + (holdObject.sizeY / 2)) - std::abs(moveObject.centerY - holdObject.centerY);
 	// •â³‚µ‚½•ûŒü‚ğŠi”[‚·‚éCORRECT_DIRŒ^•Ï”
 	CORRECT_DIR correct_dir = { 0 };
 
+
 	// ƒRƒ‰ƒCƒ_[‚ğ•â³‚·‚é
-	if (overlapX < overlapY)
+	if (overlapY < overlapX)
 	{
-		// X²•ûŒü‚É‚ß‚è‚ñ‚Å‚¢‚éê‡
-		if (moveObject.centerX < holdObject.centerX)
-		{
-			moveObject.centerX -= overlapX;
-			correct_dir.x = -1;
-		}
-		else
-		{
-			moveObject.centerX += overlapX;
-			correct_dir.x = 1;
-		}
-	}
-	else {
 		// Y²•ûŒü‚É‚ß‚è‚ñ‚Å‚¢‚éê‡
 		if (moveObject.centerY < holdObject.centerY)
 		{
@@ -37,9 +24,24 @@ CORRECT_DIR CCollision::CorrectPosition(BoxCollider& moveObject, BoxCollider& ho
 			moveObject.centerY += overlapY;
 			correct_dir.y = 1;
 		}
+
+	}
+	//–{—ˆ‚Ì‚ß‚è‚İŒvZ‚Ì•â³‚Æ­‚µˆá‚¤‚Ì‚Å0.002•ª‚ğ{‚µ‚Ä‚ ‚°‚é
+	else if ((overlapX + 0.002) < overlapY) {
+		// X²•ûŒü‚É‚ß‚è‚ñ‚Å‚¢‚éê‡
+		if (moveObject.centerX < holdObject.centerX)
+		{
+			moveObject.centerX -= overlapX;
+			correct_dir.x = -1;
+		}
+		else if (moveObject.centerX > holdObject.centerX)
+		{
+			moveObject.centerX += overlapX;
+			correct_dir.x = 1;
+		}
 	}
 
-	// •â³‚µ‚½•ûŒü‚ğ•Ô‚·
+	 //•â³‚µ‚½•ûŒü‚ğ•Ô‚·
 	return correct_dir;
 }
 

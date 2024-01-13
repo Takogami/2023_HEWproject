@@ -2,7 +2,7 @@
 #include "CScene.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (true)
+#define USE_CONTROLLER (false)   
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(vb, tex, uv)
@@ -38,6 +38,7 @@ void CPlayer::PlayerInput()
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
 	{
 		isJump = true;
+	/*	this->transform.position.y = -0.2f;*/
 	}
 
 #else
@@ -104,6 +105,16 @@ void CPlayer::PlayerInput()
 		}
 	}
 
+	if (gInput->GetKeyPress(VK_SPACE))
+	{
+		/*isJump = true;*/
+		this->transform.position.y = 0.0f;
+	}
+	if (gInput->GetKeyPress(VK_TAB))
+	{
+		isJump = true;
+	}
+
 #endif
 }
 
@@ -119,9 +130,10 @@ float CPlayer::Jump()
 
 void CPlayer::Update()
 {
+
 	// 向きを戻す
 	dir.x = 0.0f;
-	dir.y = 0.0f;
+	dir.y = -1.0f;
 
 	// プレイヤー操作関連の入力処理
 	PlayerInput();
@@ -136,11 +148,11 @@ void CPlayer::Update()
 	
 	// 重力の影響を受けてY軸方向の速度を更新
 	// ジャンプ中ならジャンプ力の更新処理を行う
-	velocity.y = isJump ? Jump() : velocity.y -= gravity;
+	velocity.y = isJump ? Jump() : velocity.y += gravity;
 
 	// ベクトルに速度をかけて位置を変更
 	this->transform.position.x += dir.x * velocity.x;
-	this->transform.position.y += velocity.y;
+	this->transform.position.y += dir.y * velocity.y;
 
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
