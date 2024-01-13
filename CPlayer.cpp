@@ -104,12 +104,6 @@ void CPlayer::PlayerInput()
 			dir.x = prevFrameDir.x;
 		}
 	}
-
-	if (gInput->GetKeyPress(VK_SPACE))
-	{
-		/*isJump = true;*/
-		this->transform.position.y = 0.0f;
-	}
 	if (gInput->GetKeyPress(VK_TAB))
 	{
 		isJump = true;

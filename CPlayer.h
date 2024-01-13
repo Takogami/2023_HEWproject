@@ -10,7 +10,7 @@ private:
     // 重力
     const float gravity = 0.97f / 200;
     // ジャンプ開始時(初期状態)のジャンプの強さ
-    const float ini_jumpStrength = 17.0f / 200;
+    const float ini_jumpStrength = 13.0f / 200;
     // 現在のジャンプの強さ
     float jumpStrength = ini_jumpStrength;
     // ジャンプフラグ

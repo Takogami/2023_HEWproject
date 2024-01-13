@@ -27,7 +27,7 @@ CORRECT_DIR CCollision::CorrectPosition(BoxCollider& moveObject, BoxCollider& ho
 
 	}
 	//–{—ˆ‚Ì‚ß‚è‚İŒvZ‚Ì•â³‚Æ­‚µˆá‚¤‚Ì‚Å0.002•ª‚ğ{‚µ‚Ä‚ ‚°‚é
-	else if ((overlapX + 0.002) < overlapY) {
+	else if ((overlapX + 0.002f) < overlapY) {
 		// X²•ûŒü‚É‚ß‚è‚ñ‚Å‚¢‚éê‡
 		if (moveObject.centerX < holdObject.centerX)
 		{
