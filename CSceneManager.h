@@ -2,6 +2,7 @@
 
 #include "TitleScene.h"
 #include "ResultScene.h"
+#include "StageScene.h"
 
 //	シーンの種類（列挙型）
 enum class SCENE_ID
@@ -18,9 +19,10 @@ private:
 	static CSceneManager* instance;
 
 	TitleScene* title;						//タイトルシーンクラス
+	StageScene* stage;					//リザルトシーンクラス
 	ResultScene* result;					//リザルトシーンクラス
 
-	SCENE_ID NowScene = SCENE_ID::RESULT;	//現在のシーンの状態
+	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
 
 	CSceneManager();
 	~CSceneManager();

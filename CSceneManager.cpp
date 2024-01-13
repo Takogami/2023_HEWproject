@@ -1,4 +1,5 @@
 #include "CSceneManager.h"
+#include "CScene.h"
 
 // CTextureLoaderクラスのstaticメンバ変数の初期化
 CSceneManager* CSceneManager::instance = nullptr;
@@ -6,18 +7,18 @@ CSceneManager* CSceneManager::instance = nullptr;
 // コンストラクタ
 CSceneManager::CSceneManager()
 {
-	title = new TitleScene();	//タイトルシーンのnew
-	result = new ResultScene();	//リザルトシーンのnew
+	title = nullptr;
+	stage = nullptr;
+	result = nullptr;
 
-	// 初期シーン設定
+	// デフォルトのシーンを初期化します
 	ChangeScene(SCENE_ID::TITLE);
 }
 
 // デストラクタ
 CSceneManager::~CSceneManager()
 {
-	delete title;
-	delete result;
+	
 }
 
 void CSceneManager::CleanupSingleton()
@@ -56,6 +57,12 @@ void CSceneManager::Update()
 		title->Draw();
 		break;
 
+	//	ステージ01
+	case SCENE_ID::STAGE_01:
+		stage->Update();
+		stage->Draw();
+		break;
+
 	// リザルト
 	case SCENE_ID::RESULT:
 		result->Update();
@@ -66,5 +73,47 @@ void CSceneManager::Update()
 
 void CSceneManager::ChangeScene(SCENE_ID _inScene)
 {
+	// 1. 現在のシーンに関連するリソースを解放する
+	switch (_inScene)
+	{
+	case SCENE_ID::TITLE:
+		// もし現在のシーンがTITLEなら、RESULTシーンを解放する
+		delete title;
+		title = nullptr;
+		break;
+
+	case SCENE_ID::STAGE_01:
+		// もし現在のシーンがSTAGE_01なら、STAGE_01シーンを解放する
+		delete stage;
+		stage = nullptr;
+		break;
+
+	case SCENE_ID::RESULT:
+		// もし現在のシーンがRESULTなら、TITLEシーンを解放する
+		delete result;
+		result = nullptr;
+		break;
+	}
+
+	// 2. 新しいシーンの識別子を設定する
 	NowScene = _inScene;
+
+	// 3. 新しいシーンのリソースを作成し設定する
+	switch (NowScene)
+	{
+	case SCENE_ID::TITLE:
+		// もし新しいシーンがTITLEなら、新しいTITLEシーンを作成する
+		title = new TitleScene();
+		break;
+
+	case SCENE_ID::STAGE_01:
+		// もし新しいシーンがSTAGE_01なら、新しいSTAGE_01シーンを作成する
+		stage = new StageScene();
+		break;
+
+	case SCENE_ID::RESULT:
+		// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
+		result = new ResultScene();
+		break;
+	}
 }

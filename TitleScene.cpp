@@ -47,7 +47,7 @@ void TitleScene::Update()
 	// とりあえずテスト用の入力処理
 	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
 	}
 
 	// カメラのアップデート
