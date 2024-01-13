@@ -15,11 +15,17 @@ class CInput
 {
 	//メンバ変数
 	int Presstime = 0;
-	XINPUT_STATE oldState;  // 新しく追加
+
+	XINPUT_STATE state;
+	XINPUT_STATE oldState; 
+
 	//キー状態の記録領域
 	bool keyState[256] = { false };
 	//１フレーム前のキー入力状態の記憶領域
 	bool oldKeyState[256] = { false };
+
+	//	デッドゾーンの閾値
+	const float DEADZONE_THRESHOLD = 0.2f;
 
 public:
 	//メンバ関数
@@ -42,24 +48,28 @@ public:
 
 	// Xboxコントローラーのボタンの状態を取得するメソッド
 	bool IsControllerButtonPressed(WORD button);
-
 	// Xboxコントローラーのボタンの状態を取得するメソッド
 	bool IsControllerButtonTrigger(WORD button);
-
 	// Xboxコントローラーのボタンの状態を取得するメソッド
 	bool IsControllerButtonRepeat(WORD button, int cCount, int cTime);
 
 	// コントローラーの左スティックのX軸の値を取得
 	float GetLeftStickX();
-
 	// コントローラーの左スティックのY軸の値を取得
 	float GetLeftStickY();
-
 	// コントローラーの右スティックのX軸の値を取得
 	float GetRightStickX();
-
 	// コントローラーの右スティックのY軸の値を取得
 	float GetRightStickY();
+
+	//	コントローラーの左スティックのX軸の値を取得する（デッドゾーン考慮）
+	float GetLeftStickXWithDeadzone();
+	//	コントローラーの左スティックのY軸の値を取得する（デッドゾーン考慮）
+	float GetLeftStickYWithDeadzone();
+	//	コントローラーの右スティックのX軸の値を取得する（デッドゾーン考慮）
+	float GetRightStickXWithDeadzone();
+	//	コントローラーの右スティックのY軸の値を取得する（デッドゾーン考慮）
+	float GetRightStickYWithDeadzone();
 };
 
 //唯一の実体変数のextern宣言

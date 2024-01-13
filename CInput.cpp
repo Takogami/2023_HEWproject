@@ -2,17 +2,16 @@
 #include "CInput.h"
 #include <WinError.h>	// ERROR_SUCCESSなどが含まれている
 #include <memory.h>		
+#include <cmath>
 
 CInput::CInput()
 {
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
 	ZeroMemory(&oldState, sizeof(XINPUT_STATE));
 }
 
 bool CInput::IsControllerButtonPressed(WORD button)
 {
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		return (state.Gamepad.wButtons & button) != 0;
@@ -23,9 +22,6 @@ bool CInput::IsControllerButtonPressed(WORD button)
 
 bool CInput::IsControllerButtonTrigger(WORD button)
 {
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		bool wasPressed = oldState.Gamepad.wButtons & button;
@@ -33,9 +29,6 @@ bool CInput::IsControllerButtonTrigger(WORD button)
 
 		// 前回は押されておらず、今回は押された場合に true を返す
 		bool isTriggered = !wasPressed && isPressed;
-
-		// 更新処理で今の状態を保存
-		oldState = state;
 
 		return isTriggered;
 	}
@@ -89,15 +82,13 @@ bool CInput::GetKeyTrigger(int key)
 void CInput::Update()
 {
 	memcpy_s(oldKeyState, sizeof(oldKeyState), keyState, sizeof(keyState));
+
+	// 更新処理で今の状態を保存
+	oldState = state;
 }
-
-
 
 float CInput::GetLeftStickX()
 {
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		// スティックのX軸の値を取得
@@ -109,9 +100,6 @@ float CInput::GetLeftStickX()
 
 float CInput::GetLeftStickY()
 {
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		// スティックのY軸の値を取得
@@ -123,9 +111,6 @@ float CInput::GetLeftStickY()
 
 float CInput::GetRightStickX()
 {
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		// 右スティックのX軸の値を取得
@@ -137,9 +122,6 @@ float CInput::GetRightStickX()
 
 float CInput::GetRightStickY()
 {
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 	if (XInputGetState(0, &state) == ERROR_SUCCESS)
 	{
 		// 右スティックのY軸の値を取得
@@ -147,4 +129,61 @@ float CInput::GetRightStickY()
 	}
 
 	return 0.0f; // エラー時は0を返す
+}
+
+
+float CInput::GetLeftStickXWithDeadzone()
+{
+	float value = GetLeftStickX();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float CInput::GetLeftStickYWithDeadzone()
+{
+	float value = GetLeftStickY();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float CInput::GetRightStickXWithDeadzone()
+{
+	float value = GetRightStickX();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
+float CInput::GetRightStickYWithDeadzone()
+{
+	float value = GetRightStickY();
+	//	デッドゾーンの範囲より大きければ、その値を返す。小さければ0を返す。
+	if (std::fabs(value) > DEADZONE_THRESHOLD)
+	{
+		return value;
+	}
+	else 
+	{
+		return 0.0f;
+	}
 }

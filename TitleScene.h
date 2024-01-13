@@ -15,9 +15,14 @@ private:
 	std::list<CGameObject*>Objects;
 
 	CGameObject* player;
-	CGameObject* player2;
+	CCursor* player2;
+	CGameObject* player3;
+	CGameObject* player4;
+	CGameObject* player5;
 
 	ID3D11Buffer* vertexBufferCharacter;
+
+	CCursor_Point cursorPoint;
 
 public:
 	// コンストラクタ

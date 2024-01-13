@@ -31,6 +31,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 {
 	CHAR1,
 	TAKO,
+	STAGE,
 };
 
 // CTextureLoaderクラス
@@ -46,6 +47,7 @@ private:
 	{
 		L"asset/char01.png",
 		L"asset/Tako.jpg",
+		L"asset/Madoka_Magika_(Logo).png",
 	};
 
 	/* メソッド */
