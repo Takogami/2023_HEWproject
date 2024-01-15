@@ -74,6 +74,10 @@ void CSceneManager::Update()
 void CSceneManager::ChangeScene(SCENE_ID _inScene)
 {
 	// 1. 現在のシーンに関連するリソースを解放する
+
+	// ステージを読み込んでいたなら解放する
+	CScene::DestroyStage();
+
 	switch (_inScene)
 	{
 	case SCENE_ID::TITLE:

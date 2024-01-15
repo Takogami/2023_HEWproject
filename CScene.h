@@ -35,7 +35,7 @@ public:
 	void CreateStage(TERRAIN_ID _id, CCamera* _useCamera);
 
 	// ステージの後片付け(各オブジェクトの解放など)
-	void DestroyStage();
+	static void DestroyStage();
 
 	// ステージの描画のみを行う
 	void DrawTerrain();
