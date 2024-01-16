@@ -22,17 +22,20 @@
 using namespace DirectX;
 
 //コンストラクタ
-CGameObject::CGameObject(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv)
+CGameObject::CGameObject(ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOAT_XY _uv)
 {
 	//使用カメラの初期化
 	useCamera = nullptr;
 
 	//モデルの作成
-	D3D_CreateSquare({ 0.0f ,0.0f }, { 1.0f ,1.0f }, uv, &vb);
+	D3D_CreateSquare({ 0.0f ,0.0f }, { 1.0f ,1.0f }, _uv, &_vb);
+
+	//uv分割の設定
+	sprit = _uv;
 
 	//引数で受け取った頂点バッファとテクスチャをセットする
-	vertexBuffer = vb;
-	texture = tex;
+	vertexBuffer = _vb;
+	texture = _tex;
 }
 
 //デストラクタ
@@ -106,4 +109,11 @@ void CGameObject::SetUseingCamera(CCamera* setCamera)
 {
 	//カメラのポインタを受け取る
 	useCamera = setCamera;
+}
+
+void CGameObject::TextureCutout(int u_num, int v_num)
+{
+	//指定された分だけテクスチャを移動させる
+	uv.x = sprit.x * u_num;
+	uv.y = sprit.y * v_num;
 }

@@ -64,6 +64,7 @@ TitleScene::~TitleScene()
 	{
 		delete (*it);
 	}
+
 	// ƒJƒƒ‰‚Ìíœ
 	delete Cam;
 }

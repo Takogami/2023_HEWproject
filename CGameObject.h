@@ -31,7 +31,9 @@ protected:
 
 	ID3D11Buffer* vertexBuffer;			//描画に使用する頂点バッファ
 	ID3D11ShaderResourceView* texture;	//テクスチャ変数
-	FLOAT_XY uv = { 0.0f,0.0f };		//uv分割用(アニメーションに使用)
+
+	FLOAT_XY uv = { 0.0f,0.0f };		//uv分割移動量(アニメーションに使用)
+	FLOAT_XY sprit = { 0.0f,0.0f };		//1コマのサイズ
 
 	CCamera* useCamera;					//描画に使用するカメラのポインタ
 
@@ -54,10 +56,10 @@ public:
 	virtual void Update();
 	//ゲームループごとに描画する処理
 	virtual void Draw();
-
-	//マテリアル色セット用関数
-	void SetMaterial(DirectX::XMFLOAT4 material) { materialDiffuse = material; };
 	//使用するカメラを設定
 	void SetUseingCamera(CCamera* setCamera);
+	//テクスチャの切り抜き
+	//引数1:u方向の何番目を切り抜くか  引数2:v方向の何番目を切り抜くか
+	void TextureCutout(int u_num, int v_num);
 };
 

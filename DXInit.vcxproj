@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCollision.cpp" />
     <ClCompile Include="CCursor.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCollision.h" />
     <ClInclude Include="CCursor.h" />

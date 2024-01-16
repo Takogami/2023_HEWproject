@@ -18,7 +18,19 @@ CSceneManager::CSceneManager()
 // デストラクタ
 CSceneManager::~CSceneManager()
 {
-	
+	// 各シーンの解放
+	if (title != nullptr)
+	{
+		delete title;
+	}
+	if (result != nullptr)
+	{
+		delete result;
+	}
+	if (stage != nullptr)
+	{
+		delete stage;
+	}
 }
 
 void CSceneManager::CleanupSingleton()
