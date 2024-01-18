@@ -19,6 +19,7 @@
 #include "direct3d.h"
 #include "CTransform.h"
 #include "CCollision.h"
+#include "CAnimation.h"
 
 /* CCameraクラスの前方宣言 */
 class CCamera;
@@ -36,6 +37,7 @@ protected:
 	FLOAT_XY sprit = { 0.0f,0.0f };		//1コマのサイズ
 
 	CCamera* useCamera;					//描画に使用するカメラのポインタ
+	CAnimation* anim;					//アニメーションクラス
 
 public:
 	/* メンバ変数 */
@@ -58,6 +60,21 @@ public:
 	virtual void Draw();
 	//使用するカメラを設定
 	void SetUseingCamera(CCamera* setCamera);
+
+	//アニメーションの初期化
+	//引数1:初期の再生状態 引数2:横方向の分割数 引数3:初期アニメーションパターン 引数4:初期スピード
+	void InitAnimParameter(bool iniPlaying, int spritU, ANIM_PATTERN pattern, float sp);
+	// アニメーションのスピードを設定
+	void SetAnimationSpeed(float sp);
+	// アニメーションのパターンを設定
+	void SetAnimationPattern(ANIM_PATTERN pattern);
+	// アニメーションの再生
+	void PlayAnimation();
+	// アニメーションの停止
+	void StopAnimation();
+	// アニメーションのリセット
+	void ResetAnimation();
+
 	//テクスチャの切り抜き
 	//引数1:u方向の何番目を切り抜くか  引数2:v方向の何番目を切り抜くか
 	void TextureCutout(int u_num, int v_num);
