@@ -11,7 +11,7 @@ TitleScene::TitleScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::CHAR1), {0.33f ,0.25f});
+	player = new CGameObject(0, vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::CHAR1), {0.33f ,0.25f});
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	//自身の投影に使うカメラの設定
@@ -28,7 +28,7 @@ TitleScene::TitleScene()
 	player2->transform.position = { -0.424f, -0.3f };
 
 	//プレイヤーの実体化と初期化
-	player3 = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	player3 = new CGameObject(0, vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(player3);
 	//自身の投影にカメラを使用しない
@@ -36,7 +36,7 @@ TitleScene::TitleScene()
 	player3->transform.position = { 0.0f, -0.3f };
 
 	//プレイヤーの実体化と初期化
-	player4 = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	player4 = new CGameObject(0, vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(player4);
 	//自身の投影にカメラを使用しない
@@ -44,7 +44,7 @@ TitleScene::TitleScene()
 	player4->transform.position = { 0.0f, -0.6f };
 
 	//プレイヤーの実体化と初期化
-	player5 = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	player5 = new CGameObject(0, vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(player5);
 	//自身の投影にカメラを使用しない

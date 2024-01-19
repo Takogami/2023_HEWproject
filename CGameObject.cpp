@@ -22,7 +22,7 @@
 using namespace DirectX;
 
 //コンストラクタ
-CGameObject::CGameObject(ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOAT_XY _uv)
+CGameObject::CGameObject(int _objectType, ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOAT_XY _uv)
 {
 	//使用カメラの初期化
 	useCamera = nullptr;
@@ -36,6 +36,7 @@ CGameObject::CGameObject(ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOA
 	//引数で受け取った頂点バッファとテクスチャをセットする
 	vertexBuffer = _vb;
 	texture = _tex;
+	objectType = _objectType;
 }
 
 //デストラクタ
@@ -116,4 +117,14 @@ void CGameObject::TextureCutout(int u_num, int v_num)
 	//指定された分だけテクスチャを移動させる
 	uv.x = sprit.x * u_num;
 	uv.y = sprit.y * v_num;
+}
+
+void CGameObject::SetObjectType(int _objectType) 
+{
+	this->objectType = _objectType;
+}
+
+int CGameObject::GetObjectType() const 
+{
+	return objectType;
 }

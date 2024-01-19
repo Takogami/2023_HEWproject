@@ -40,6 +40,10 @@ public:
     CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv);
     // ˆÚ“®‘¬“x‚ğİ’è
     inline void SetMoveSpeed(float sp) { velocity.x = sp; };
+
+    //  •—‚Ìˆ—i‚¨‚µj
+    void Wind();
+
     void Update() override;
     void Draw() override;
     ~CPlayer() override;

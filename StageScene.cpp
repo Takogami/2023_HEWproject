@@ -15,7 +15,7 @@ StageScene::StageScene()
 	// スケールの設定
 	player->transform * 0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.1f };
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.1f, 0.1f };
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_2, Cam);
@@ -51,6 +51,9 @@ void StageScene::Update()
 	{
 		(*it)->Update();
 	}
+
+	//	風起きる関数
+	player->Wind();
 
 	Cam->cameraPos.x = player->transform.position.x;
 	Cam->Update();

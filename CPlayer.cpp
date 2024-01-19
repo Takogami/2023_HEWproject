@@ -5,7 +5,7 @@
 #define USE_CONTROLLER (false)   
 
 //明示的に親クラスのコンストラクタを呼び出す
-CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(vb, tex, uv)
+CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(1, vb, tex, uv)
 {
 	// 初期スピード設定
 	SetMoveSpeed(0.05f);
@@ -122,6 +122,7 @@ float CPlayer::Jump()
 	return jumpStrength;
 }
 
+
 void CPlayer::Update()
 {
 
@@ -157,27 +158,62 @@ void CPlayer::Update()
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
 		{
-			// コライダーの位置を補正し、補正した方向を受け取る
-			prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
-
-			// 天井にぶつかっていたならジャンプ力を0にする
-			if (prevFrameCorrect.y == -1)
+			switch ((*it)->objectType)
 			{
-				dir.y = -1.0f;		// 向きを下にする
-				jumpStrength = 0;	// ジャンプ力を0にする
-			}
-			// 重力によって地面に衝突していたなら
-			if (prevFrameCorrect.y == 1)
-			{
-				dir.y = -1.0f;
-				velocity.y = 0.0f;				// 速度Yを0に戻す
-				jumpStrength = ini_jumpStrength;
-				isJump = false;
-			}
+			case 1:
+				// コライダーの位置を補正し、補正した方向を受け取る
+				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 
-			// オブジェクトの位置とコライダーの中心を合わせる
-			this->transform.position.x = this->Bcol.centerX;
-			this->transform.position.y = this->Bcol.centerY;
+				// 天井にぶつかっていたならジャンプ力を0にする
+				if (prevFrameCorrect.y == -1)
+				{
+					dir.y = -1.0f;		// 向きを下にする
+					jumpStrength = 0;	// ジャンプ力を0にする
+				}
+				// 重力によって地面に衝突していたなら
+				if (prevFrameCorrect.y == 1)
+				{
+					dir.y = -1.0f;
+					velocity.y = 0.0f;				// 速度Yを0に戻す
+					jumpStrength = ini_jumpStrength;
+					isJump = false;
+				}
+
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+				break;
+
+			case 2:
+				//	オブジェクトに当たったらtrue
+				isWind = true;
+
+				
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void CPlayer::Wind()
+{
+	//	風が吹いてるオブジェクトに当たったら…
+	if (isWind == true)
+	{
+		//	右向きベクトル
+		dir.x = 1.0f;
+
+		//	風が起きてるような計算
+		this->transform.position.x += dir.x * velocity.x * 1.1f;
+
+		//	地面に当たったら…
+		if (prevFrameCorrect.y == 1)
+		{
+			//	移動を終了
+			isWind = false;
 		}
 	}
 }
@@ -188,7 +224,6 @@ void CPlayer::Draw()
 	// 全てのゲームオブジェクト共通の描画処理を行う
 	CGameObject::Draw();
 }
-
 
 CPlayer::~CPlayer()
 {
