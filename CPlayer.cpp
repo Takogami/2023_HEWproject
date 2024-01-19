@@ -19,6 +19,7 @@ void CPlayer::PlayerInput()
 
 	// スティック入力一時保存用
 	float input_stickX;
+	float input_stickY;
 
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
@@ -42,73 +43,157 @@ void CPlayer::PlayerInput()
 	}
 
 #else
+	switch (State)
+	{
+	case PState::NORMAL:
+		if (gInput->GetKeyPress(VK_DOWN) /*&& prevFrameCorrect.y != 1*/)
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_UP))
+			{
+				// 押されていないなら方向を更新する
+				/*dir.y = -1.0f;
+				prevFrameDir.y = dir.y;*/
 
-	if (gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y != 1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_UP))
-		{
-			// 押されていないなら方向を更新する
-			dir.y = -1.0f;
-			prevFrameDir.y = dir.y;
+				SetState(PState::FALL);// 倒れた状態へ移行
+				transform.scale.y *= 0.1f;
+				this->Bcol.sizeY *= 0.1f;
+				transform.position.y -= 0.1f;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				/*dir.y = prevFrameDir.y;*/
+			}
 		}
-		else
+		else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
 		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.y = prevFrameDir.y;
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_DOWN))
+			{
+				// 押されていないなら方向を更新する
+				//dir.y = 1.0f;
+				prevFrameDir.y = dir.y;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				dir.y = prevFrameDir.y;
+			}
 		}
-	}
-	else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_DOWN))
-		{
-			// 押されていないなら方向を更新する
-			dir.y = 1.0f;
-			prevFrameDir.y = dir.y;
-		}
-		else
-		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.y = prevFrameDir.y;
-		}
-	}
 
-	if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_RIGHT))
+		if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
 		{
-			// 押されていないなら方向を更新する
-			dir.x = -1.0f;
-			prevFrameDir.x = dir.x;
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_RIGHT))
+			{
+				// 押されていないなら方向を更新する
+				dir.x = -1.0f;
+				prevFrameDir.x = dir.x;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				dir.x = prevFrameDir.x;
+			}
 		}
-		else
+		else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
 		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.x = prevFrameDir.x;
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_LEFT))
+			{
+				// 押されていないなら方向を更新する
+				dir.x = 1.0f;
+				prevFrameDir.x = dir.x;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				dir.x = prevFrameDir.x;
+			}
 		}
-	}
-	else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_LEFT))
+		if (gInput->GetKeyPress(VK_TAB))
 		{
-			// 押されていないなら方向を更新する
-			dir.x = 1.0f;
-			prevFrameDir.x = dir.x;
+			isJump = true;
 		}
-		else
+		break;
+	case PState::FALL:
+		if (gInput->GetKeyPress(VK_UP))
 		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.x = prevFrameDir.x;
-		}
-	}
-	if (gInput->GetKeyPress(VK_TAB))
-	{
-		isJump = true;
-	}
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_DOWN))
+			{
+				SetState(PState::NORMAL);// 立ち状態
+				transform.scale.y *= 10.0;
+				this->Bcol.sizeY *= 10.0f;
+				transform.position.y += 0.1f;
+			}
+			else
+			{
 
+			}
+		}
+		if (gInput->GetKeyTrigger(VK_LEFT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_RIGHT))
+			{
+				SetState(PState::BREAKLEFT);// 左に折れた状態
+			}
+			else
+			{
+
+			}
+		}
+		else if (gInput->GetKeyTrigger(VK_RIGHT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_LEFT))
+			{
+				SetState(PState::BREAKRIGHT);// 右に折れた状態
+			}
+			else
+			{
+
+			}
+		}
+
+		if (gInput->GetKeyPress(VK_TAB))
+		{
+			isJump = true;
+		}
+		break;
+	case PState::BREAKLEFT:
+		if (gInput->GetKeyTrigger(VK_RIGHT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_LEFT))
+			{
+				SetState(PState::FALL);// 倒れた状態
+			}
+			else
+			{
+
+			}
+		}
+		break;
+	case PState::BREAKRIGHT:
+		if (gInput->GetKeyTrigger(VK_LEFT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_RIGHT))
+			{
+				SetState(PState::FALL);// 倒れた状態
+			}
+			else
+			{
+
+			}
+		}
+		break;
+	default:
+		break;
+	}
 #endif
 }
 
@@ -120,6 +205,16 @@ float CPlayer::Jump()
 	jumpStrength -= gravity;
 	// 計算したジャンプ力を適応
 	return jumpStrength;
+}
+
+PState CPlayer::GetState()
+{
+	return PState();
+}
+
+void CPlayer::SetState(PState state)
+{
+	State = state;
 }
 
 void CPlayer::Update()
