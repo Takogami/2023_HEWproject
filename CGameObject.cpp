@@ -43,8 +43,13 @@ CGameObject::CGameObject(ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOA
 //デストラクタ
 CGameObject::~CGameObject()
 {
+	// animの二重deleteを防ぐ
+	if (anim != nullptr)
+	{
+		delete anim;
+		anim = nullptr;
+	}
 	SAFE_RELEASE(vertexBuffer);
-	delete anim;
 }
 
 //Update

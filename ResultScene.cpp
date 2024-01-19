@@ -20,6 +20,10 @@ ResultScene::ResultScene()
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 3, ANIM_PATTERN::TEST, 0.05f);
 
+	// スムージングの実体化
+	camSmooth = new CSmoothing;
+	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
+
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);
 }
@@ -37,6 +41,7 @@ ResultScene::~ResultScene()
 
 	// カメラオブジェクトの削除
 	delete Cam;
+	delete camSmooth;
 
 	// ステージの後片付け
 	CScene::DestroyStage();
@@ -55,7 +60,7 @@ void ResultScene::Update()
 		(*it)->Update();
 	}
 
-	Cam->cameraPos.x = player->transform.position.x;
+	camSmooth->Update();
 	Cam->Update();
 }
 

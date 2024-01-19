@@ -152,6 +152,7 @@
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CSceneManager.cpp" />
+    <ClCompile Include="CSmoothing.cpp" />
     <ClCompile Include="CTerrainLoader.cpp" />
     <ClCompile Include="CTextureLoader.cpp" />
     <ClCompile Include="CTransform.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSceneManager.h" />
+    <ClInclude Include="CSmoothing.h" />
     <ClInclude Include="CTerrainLoader.h" />
     <ClInclude Include="CTextureLoader.h" />
     <ClInclude Include="CTransform.h" />
