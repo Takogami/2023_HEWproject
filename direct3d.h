@@ -2,6 +2,7 @@
 
 #include <d3d11.h>		//DirectX11を使うためのヘッダーファイル
 #include <DirectXMath.h>//DirectXの数学関連のヘッダーファイル
+#include "DirectWhite.h"
 
 //DirectXの解放の簡略化マクロ
 #define SAFE_RELEASE(p)      { if( NULL != p ) { p->Release(); p = NULL; } }

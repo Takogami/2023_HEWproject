@@ -8,7 +8,7 @@ ResultScene::ResultScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::CHAR1), { 0.33f ,0.25f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -18,7 +18,7 @@ ResultScene::ResultScene()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
-	player->InitAnimParameter(true, 3, ANIM_PATTERN::TEST, 0.05f);
+	player->InitAnimParameter(true, 10, ANIM_PATTERN::TEST, 0.05f);
 
 	// スムージングの実体化
 	camSmooth = new CSmoothing;
