@@ -1,9 +1,8 @@
 #include "CCursor.h"
 #include "CInput.h"
 
-CCursor::CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex) : CGameObject(0, vb, tex, uv)
+CCursor::CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex) : CGameObject(vb, tex, uv)
 {
-
 }
 
 void CCursor::Update()

@@ -146,6 +146,7 @@
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCollision.cpp" />
     <ClCompile Include="CCursor.cpp" />
+    <ClCompile Include="CDrawString.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCollision.h" />
     <ClInclude Include="CCursor.h" />
+    <ClInclude Include="CDrawString.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />

@@ -57,3 +57,7 @@ extern ID3D11BlendState* m_pBlendStateAdditive;    //ƒuƒŒƒ“ƒhƒXƒe[ƒg—p•Ï”i‰Á
 
 // ’è”ƒoƒbƒtƒ@—p•Ï”‚ğ‘¼cpp‚ÉŒöŠJ
 extern ID3D11Buffer* m_pConstBuffer;
+
+// DirectWrite‚ğŒöŠJ
+extern DirectWrite* directWrite;
+extern FontData fontData;

@@ -18,7 +18,7 @@ class CCursor :
 private:
     /* ƒƒ“ƒo•Ï” */
 
-    int scene_count;
+    int scene_count = 0;
 
 
 public:

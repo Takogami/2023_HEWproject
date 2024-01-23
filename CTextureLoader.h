@@ -34,6 +34,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	STAGE,
 	NUM,
 	WIND_POS,	//	風の起こる位置
+	BG,
 };
 
 // CTextureLoaderクラス
@@ -52,6 +53,7 @@ private:
 		L"asset/Madoka_Magika_(Logo).png",
 		L"asset/suuji.png",
 		L"asset/Fade.png",	//	試しでテクスチャ読み込み
+		L"asset/bg.png",
 	};
 
 	/* メソッド */

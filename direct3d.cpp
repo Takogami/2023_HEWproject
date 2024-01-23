@@ -36,7 +36,7 @@ ID3D11Buffer* m_pConstBuffer;               //定数バッファ用
 D3D11_VIEWPORT          m_Viewport;         //ビューポート
 ID3D11BlendState* m_pBlendStateAlpha;       //ブレンドステート用変数（アルファブレンディング）
 ID3D11BlendState* m_pBlendStateAdditive;    //ブレンドステート用変数（加算合成）
-DirectWrite* directWhite;
+DirectWrite* directWrite;
 FontData fontData;
 
 //IASetVertexBufferで使用する変数
@@ -218,11 +218,9 @@ HRESULT D3D_Create(HWND hwnd)
     BlendState.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
     m_pDevice->CreateBlendState(&BlendState, &m_pBlendStateAdditive);
 
-    directWhite = new DirectWrite(&fontData);
-    directWhite->Init(m_pSwapChain);
-
-    fontData.font = directWhite->GetFontName((int)FontID::LETROGO);
-    directWhite->SetFont(fontData);
+    directWrite = new DirectWrite(&fontData);
+    directWrite->Init(m_pSwapChain);
+    directWrite->SetFont(fontData);
 
     return hr;
 }
@@ -257,10 +255,10 @@ void D3D_Release()
     SAFE_RELEASE(m_pBlendStateAdditive);
 
     // directWhiteを解放
-    if (directWhite)
+    if (directWrite)
     {
-        delete directWhite;
-        directWhite = nullptr;
+        delete directWrite;
+        directWrite = nullptr;
     }
 }
 
@@ -351,8 +349,6 @@ void D3D_ClearScreen()
 
 void D3D_UpdateScreen()
 {
-    directWhite->DrawString("abcあいうえおアイウエオ漢字", 0.0f, 0.0f, D2D1_DRAW_TEXT_OPTIONS_NONE);
-
     //ダブルバッファの切り替えを行い画面を更新する
     m_pSwapChain->Present(0, 0);
 }
