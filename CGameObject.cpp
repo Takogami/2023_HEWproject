@@ -22,7 +22,7 @@
 using namespace DirectX;
 
 //コンストラクタ
-CGameObject::CGameObject(int _objectType, ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOAT_XY _uv)
+CGameObject::CGameObject(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type)
 {
 	//アニメーションクラスの実体化
 	anim = new CAnimation;
@@ -30,15 +30,15 @@ CGameObject::CGameObject(int _objectType, ID3D11Buffer* _vb, ID3D11ShaderResourc
 	useCamera = nullptr;
 
 	//モデルの作成
-	D3D_CreateSquare({ 0.0f ,0.0f }, { 1.0f ,1.0f }, _uv, &_vb);
+	D3D_CreateSquare({ 0.0f ,0.0f }, { 1.0f ,1.0f }, uv, &vb);
 
 	//uv分割の設定
-	sprit = _uv;
+	sprit = uv;
 
 	//引数で受け取った頂点バッファとテクスチャをセットする
-	vertexBuffer = _vb;
-	texture = _tex;
-	objectType = _objectType;
+	vertexBuffer = vb;
+	texture = tex;
+	objectType = type;
 }
 
 //デストラクタ
@@ -185,12 +185,12 @@ void CGameObject::TextureCutout(int u_num, int v_num)
 	uv.y = sprit.y * v_num;
 }
 
-void CGameObject::SetObjectType(int _objectType) 
+void CGameObject::SetObjectType(OBJECT_TYPE _objectType)
 {
 	this->objectType = _objectType;
 }
 
-int CGameObject::GetObjectType() const 
+OBJECT_TYPE CGameObject::GetObjectType() const
 {
 	return objectType;
 }

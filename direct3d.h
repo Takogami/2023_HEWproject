@@ -2,6 +2,7 @@
 
 #include <d3d11.h>		//DirectX11‚ğg‚¤‚½‚ß‚Ìƒwƒbƒ_[ƒtƒ@ƒCƒ‹
 #include <DirectXMath.h>//DirectX‚Ì”ŠwŠÖ˜A‚Ìƒwƒbƒ_[ƒtƒ@ƒCƒ‹
+#include "DirectWhite.h"
 
 //DirectX‚Ì‰ğ•ú‚ÌŠÈ—ª‰»ƒ}ƒNƒ
 #define SAFE_RELEASE(p)      { if( NULL != p ) { p->Release(); p = NULL; } }
@@ -56,3 +57,7 @@ extern ID3D11BlendState* m_pBlendStateAdditive;    //ƒuƒŒƒ“ƒhƒXƒe[ƒg—p•Ï”i‰Á
 
 // ’è”ƒoƒbƒtƒ@—p•Ï”‚ğ‘¼cpp‚ÉŒöŠJ
 extern ID3D11Buffer* m_pConstBuffer;
+
+// DirectWrite‚ğŒöŠJ
+extern DirectWrite* directWrite;
+extern FontData fontData;

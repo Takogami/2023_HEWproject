@@ -39,7 +39,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 1)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back( new CGameObject(1, vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO)) );
+				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO)));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -56,7 +56,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 2)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CGameObject(2, vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_POS)));
+				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_POS),{ 1.0f, 1.0f }, OBJECT_TYPE::WIND));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする

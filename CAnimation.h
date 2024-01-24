@@ -41,7 +41,7 @@ private:
 	std::vector<std::vector<int>> animationTable
 	{
 		{ 0, ANIM_LOOP },
-		{ 6, 7, 8, 7, ANIM_LOOP},
+		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ANIM_LOOP},
 	};
 
 	// アニメーションスピード

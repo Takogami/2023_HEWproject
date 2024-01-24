@@ -13,12 +13,19 @@ private:
 	// まとめてUpdateとDrawを行うために使用
 	std::list<CGameObject*>Objects;
 
+	// 背景
+	CGameObject* bg;
+
 	CPlayer* player;
 
 	// カメラ追従のスムージング
 	CSmoothing* camSmooth;
 
 	ID3D11Buffer* vertexBufferCharacter;
+	ID3D11Buffer* vertexBufferObject;
+
+	CDrawString* drawStringTest;
+	CDrawString* drawStringTest2;
 
 public:
 	ResultScene();

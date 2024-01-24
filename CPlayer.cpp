@@ -5,7 +5,7 @@
 #define USE_CONTROLLER (false)
 
 //明示的に親クラスのコンストラクタを呼び出す
-CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(1, vb, tex, uv)
+CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
 	// 初期スピード設定
 	SetMoveSpeed(0.05f);
@@ -230,9 +230,9 @@ void CPlayer::Update()
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
 		{
-			switch ((*it)->objectType)
+			switch ((*it)->GetObjectType())
 			{
-			case 1:
+			case OBJECT_TYPE::NORMAL:
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 
@@ -256,7 +256,7 @@ void CPlayer::Update()
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
-			case 2:
+			case OBJECT_TYPE::WIND:
 				//	オブジェクトに当たったらtrue
 				isWind = true;
 

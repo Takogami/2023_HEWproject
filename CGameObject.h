@@ -24,6 +24,14 @@
 /* CCameraクラスの前方宣言 */
 class CCamera;
 
+// オブジェクトの種類
+enum class OBJECT_TYPE
+{
+	NORMAL,	// 通常オブジェクト
+	PLAYER,	// プレイヤーオブジェクト
+	WIND,	// 風オブジェクト
+};
+
 //CGameObjectクラス
 class CGameObject
 {
@@ -39,11 +47,12 @@ protected:
 	CCamera* useCamera;					//描画に使用するカメラのポインタ
 	CAnimation* anim;					//アニメーションクラス
 
+	OBJECT_TYPE objectType = OBJECT_TYPE::NORMAL; // 1: 壁や床, 2: 敵 など
+
 public:
 	/* メンバ変数 */
 
-	int objectType = 0; // 1: 壁や床, 2: 敵 など
-	bool isWind = false;      // 風が吹いているかどうかのフラグ
+	bool isWind = false;     // 風が吹いているかどうかのフラグ
 	float windTime = 0.0f;   // 風が吹く時間
 	float windTimer = 0.0f;  // 風のタイマー
 
@@ -56,9 +65,9 @@ public:
 
 	/* メソッド */
 
-	//初期化処理(コンストラクタ) 引数1:オブジェクトのID 引数2:頂点バッファ 引数3:テクスチャ 引数4:テクスチャ移動量
-	//※ 引数3 はuv分割しないなら入力の必要はありません
-	CGameObject(int, ID3D11Buffer*, ID3D11ShaderResourceView*, FLOAT_XY uv = { 1.0f,1.0f });
+	//初期化処理(コンストラクタ) 引数1:頂点バッファ 引数2:テクスチャ 引数3:テクスチャ移動量, 引数4:オブジェクトのID 
+	//※ 引数3 はuv分割しないなら入力の必要はありません 引数4 通常オブジェクトの場合は入力の必要はありません
+	CGameObject(ID3D11Buffer*, ID3D11ShaderResourceView*, FLOAT_XY uv = { 1.0f,1.0f }, OBJECT_TYPE type = OBJECT_TYPE::NORMAL);
 	//終了処理(デストラクタ)
 	virtual ~CGameObject();
 
@@ -87,7 +96,9 @@ public:
 	//引数1:u方向の何番目を切り抜くか  引数2:v方向の何番目を切り抜くか
 	void TextureCutout(int u_num, int v_num);
 
-	void SetObjectType(int _objectType);
-	int GetObjectType() const;
+	// ゲームオブジェクトの種類をセット
+	void SetObjectType(OBJECT_TYPE _objectType);
+	// ゲームオブジェクトの種類を取得
+	OBJECT_TYPE GetObjectType() const;
 };
 

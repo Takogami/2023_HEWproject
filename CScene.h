@@ -8,6 +8,7 @@
 #include "CTerrainLoader.h"
 #include "CTextureLoader.h"
 #include "CInput.h"
+#include "CDrawString.h"
 
 class CScene
 {
