@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DirectWhite.h"
+#include "DirectWrite.h"
 #include "direct3d.h"
 
 // フォントコレクションローダー

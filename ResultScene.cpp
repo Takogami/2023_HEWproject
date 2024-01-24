@@ -45,8 +45,10 @@ ResultScene::ResultScene()
 
 	drawStringTest2 = new CDrawString;
 	drawStringTest2->SetFont(FontID::LETROGO);
-	drawStringTest2->SetString("これはテストです。abc あいうえお アイウエオ 漢字");
-	drawStringTest2->SetPosition({0.0f, 200.0f});
+	drawStringTest2->SetString("これはテストです。\nabc\nあいうえお\nアイウエオ\n漢字");
+	drawStringTest2->SetPosition({0.0f, 400.0f});
+	drawStringTest2->SetFontSize(30.0f);
+	drawStringTest2->SetLineSpacing(20.0f);
 	drawStringTest2->SetShadow({ -2.0f, -1.0f }, 0.0f, 0.0f, 0.0f, 0.5f);
 
 	// 構成するステージと使用するカメラのポインタを指定

@@ -2,7 +2,38 @@
 
 void CDrawString::SetString(std::string _drawString)
 {
-	drawString = _drawString;
+	// 配列の初期化を行う
+	drawString.resize(0);
+	// メモリ領域を合わせる
+	drawString.shrink_to_fit();
+	// 行数カウントを0に戻す
+	lineCount = 0;
+
+	// 改行コードがあるかを確認
+	std::size_t newlinePos = _drawString.find('\n');
+	// 改行コードが無いなら渡された文字列をそのまま格納
+	if (newlinePos == std::string::npos)
+	{
+		// 行を追加する
+		drawString.resize(drawString.size() + 1);
+		lineCount++;
+		// 配列の先頭にそのまま格納
+		drawString[0] = _drawString;
+		return;
+	}
+
+	// 改行コードがなくなるまで繰り返す
+	for (lineCount = 0; newlinePos != std::string::npos; lineCount++)
+	{
+		// 改行コードまでの文字列サイズを取得する
+		newlinePos = _drawString.find('\n');
+		// 行を追加する
+		drawString.resize(drawString.size() + 1);
+		// 改行コードまでの文字列を保存
+		drawString[lineCount] = _drawString.substr(0, newlinePos);
+		// 格納した文字列を切り離して残りの文字を格納
+		_drawString = _drawString.erase(0, newlinePos + 1);
+	}
 }
 
 void CDrawString::SetFontSize(FLOAT size)
@@ -48,6 +79,11 @@ void CDrawString::SetFontStyle(FONT_STYLE fontStyle)
 	param.fontStyle = (DWRITE_FONT_STYLE)fontStyle;
 }
 
+void CDrawString::SetLineSpacing(FLOAT spacing)
+{
+	lineSpacing = spacing;
+}
+
 void CDrawString::SetActive(bool isAct)
 {
 	isActive = isAct;
@@ -55,8 +91,8 @@ void CDrawString::SetActive(bool isAct)
 
 void CDrawString::Draw()
 {
-	// アクティブでないなら描画処理を行わない
-	if (!isActive)
+	// アクティブでない または 文字列が設定されていないなら描画処理を行わない
+	if (!isActive || drawString.size() == 0)
 	{
 		return;
 	}
@@ -65,6 +101,19 @@ void CDrawString::Draw()
 	fontData = param;
 	// フォントのセット
 	directWrite->SetFont(fontData);
+
+	// 初期位置を保存
+	FLOAT_XY defPos = position;
+
 	// パラメータを渡して文字列の描画を行う
-	directWrite->DrawString(this->drawString, position.x, position.y, D2D1_DRAW_TEXT_OPTIONS_NONE, shadow);
+	for (int i = 0; lineCount > i; i++)
+	{
+		// directWhiteで描画する
+		directWrite->DrawString(this->drawString[i], position.x, position.y, D2D1_DRAW_TEXT_OPTIONS_NONE, shadow);
+		// 描画位置、フォントサイズ、行間から位置を決定する
+		position.y = position.y + fontData.fontSize + lineSpacing;
+	}
+
+	// 文字列描画位置をデフォルトに戻す
+	position = defPos;
 }

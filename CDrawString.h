@@ -1,7 +1,8 @@
 #pragma once
 
-#include "DirectWhite.h"
+#include "DirectWrite.h"
 #include "direct3d.h"
+#include <vector>
 
 // フォントスタイル
 enum class FONT_STYLE
@@ -37,13 +38,18 @@ class CDrawString
 {
 private:
 	// 設定された文字列
-	std::string drawString = "";
+	std::vector<std::string> drawString;
+	// 行数カウント
+	int lineCount = 0;
+	
 	// 文字列の表示位置
 	FLOAT_XY position = { 0.0f, 0.0f };
 	// 影の設定 trueで影を表示
 	bool shadow = false;
 	// フォントのパラメータ
 	FontData param;
+	// 行間
+	FLOAT lineSpacing = 0.0f;
 
 	// 文字の表示状態
 	bool isActive = true;
@@ -65,6 +71,8 @@ public:
 	void SetFontWeight(FONT_WEIGHT fontWeight);
 	// フォントのスタイルを設定
 	void SetFontStyle(FONT_STYLE fontStyle);
+	// 改行時の行間を設定
+	void SetLineSpacing(FLOAT spacing);
 	// 文字列を描画を行うか否かを設定
 	void SetActive(bool isActive);
 

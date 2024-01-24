@@ -158,7 +158,7 @@
     <ClCompile Include="CTextureLoader.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="direct3d.cpp" />
-    <ClCompile Include="DirectWhite.cpp" />
+    <ClCompile Include="DirectWrite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="StageScene.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="CTextureLoader.h" />
     <ClInclude Include="CTransform.h" />
     <ClInclude Include="direct3d.h" />
-    <ClInclude Include="DirectWhite.h" />
+    <ClInclude Include="DirectWrite.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="StageScene.h" />

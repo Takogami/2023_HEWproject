@@ -75,7 +75,7 @@
     <ClCompile Include="CSmoothing.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="DirectWhite.cpp">
+    <ClCompile Include="DirectWrite.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CDrawString.cpp">
@@ -146,7 +146,7 @@
     <ClInclude Include="CSmoothing.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DirectWhite.h">
+    <ClInclude Include="DirectWrite.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CDrawString.h">
