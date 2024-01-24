@@ -1,15 +1,15 @@
 #include "CPlayer.h"
 #include "CScene.h"
 
-// �R���g���[���[���g���ꍇ��true���w��
+// コントローラーを使う場合はtrueを指定
 #define USE_CONTROLLER (false)   
 
-//�����I�ɐe�N���X�̃R���X�g���N�^���Ăяo��
+//明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(1, vb, tex, uv)
 {
-	// �����X�s�[�h�ݒ�
+	// 初期スピード設定
 	SetMoveSpeed(0.05f);
-	// �d�͂������l�Ƃ���
+	// 重力を初期値とする
 	velocity.y = gravity;
 }
 
@@ -17,24 +17,25 @@ void CPlayer::PlayerInput()
 {
 #if USE_CONTROLLER == true
 
-	// �X�e�B�b�N���͈ꎞ�ۑ��p
+	// スティック入力一時保存用
 	float input_stickX;
+	float input_stickY;
 
-	// �X�e�B�b�N�̓��͂�ۑ�
+	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
 
-	// �O�̃t���[���ł߂荞�񂾕����łȂ��Ȃ�ړ��ʂ�K������
+	// 前のフレームでめり込んだ方向でないなら移動量を適応する
 	if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
 		(input_stickX < 0.0f && prevFrameCorrect.x != 1))
 	{
 		dir.x = input_stickX;
 	}
-	// �O�̃t���[���ł߂荞�񂾕����Ɉړ����悤�Ƃ��Ă�Ȃ�ړ��ʂ�K�����Ȃ�
+	// 前のフレームでめり込んだ方向に移動しようとしてるなら移動量を適応しない
 	else
 	{
 		dir.x = 0;
 	}
-	// B�{�^�����͂łƂ肠�����̃W�����v����
+	// Bボタン入力でとりあえずのジャンプ操作
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
 	{
 		isJump = true;
@@ -42,118 +43,222 @@ void CPlayer::PlayerInput()
 	}
 
 #else
+	switch (State)
+	{
+	case PState::NORMAL:
+		if (gInput->GetKeyPress(VK_DOWN) /*&& prevFrameCorrect.y != 1*/)
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_UP))
+			{
+				// 押されていないなら方向を更新する
+				/*dir.y = -1.0f;
+				prevFrameDir.y = dir.y;*/
 
-	if (gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y != 1)
-	{
-		// �����ɔ��΂̃L�[��������Ă��Ȃ���
-		if (!gInput->GetKeyPress(VK_UP))
-		{
-			// ������Ă��Ȃ��Ȃ�������X�V����
-			dir.y = -1.0f;
-			prevFrameDir.y = dir.y;
+				SetState(PState::FALL);// 倒れた状態へ移行
+				transform.scale.y *= 0.1f;
+				this->Bcol.sizeY *= 0.1f;
+				transform.position.y -= 0.1f;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				/*dir.y = prevFrameDir.y;*/
+			}
 		}
-		else
+		else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
 		{
-			// ������Ă��܂��Ă���Ȃ�O�̕��������̂܂ܓK��
-			dir.y = prevFrameDir.y;
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_DOWN))
+			{
+				// 押されていないなら方向を更新する
+				//dir.y = 1.0f;
+				prevFrameDir.y = dir.y;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				dir.y = prevFrameDir.y;
+			}
 		}
-	}
-	else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
-	{
-		// �����ɔ��΂̃L�[��������Ă��Ȃ���
-		if (!gInput->GetKeyPress(VK_DOWN))
-		{
-			// ������Ă��Ȃ��Ȃ�������X�V����
-			dir.y = 1.0f;
-			prevFrameDir.y = dir.y;
-		}
-		else
-		{
-			// ������Ă��܂��Ă���Ȃ�O�̕��������̂܂ܓK��
-			dir.y = prevFrameDir.y;
-		}
-	}
 
-	if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
-	{
-		// �����ɔ��΂̃L�[��������Ă��Ȃ���
-		if (!gInput->GetKeyPress(VK_RIGHT))
+		if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
 		{
-			// ������Ă��Ȃ��Ȃ�������X�V����
-			dir.x = -1.0f;
-			prevFrameDir.x = dir.x;
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_RIGHT))
+			{
+				// 押されていないなら方向を更新する
+				dir.x = -1.0f;
+				prevFrameDir.x = dir.x;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				dir.x = prevFrameDir.x;
+			}
 		}
-		else
+		else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
 		{
-			// ������Ă��܂��Ă���Ȃ�O�̕��������̂܂ܓK��
-			dir.x = prevFrameDir.x;
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_LEFT))
+			{
+				// 押されていないなら方向を更新する
+				dir.x = 1.0f;
+				prevFrameDir.x = dir.x;
+			}
+			else
+			{
+				// 押されてしまっているなら前の方向をそのまま適応
+				dir.x = prevFrameDir.x;
+			}
 		}
-	}
-	else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
-	{
-		// �����ɔ��΂̃L�[��������Ă��Ȃ���
-		if (!gInput->GetKeyPress(VK_LEFT))
+		if (gInput->GetKeyPress(VK_TAB))
 		{
-			// ������Ă��Ȃ��Ȃ�������X�V����
-			dir.x = 1.0f;
-			prevFrameDir.x = dir.x;
+			isJump = true;
 		}
-		else
+		break;
+	case PState::FALL:
+		if (gInput->GetKeyPress(VK_UP))
 		{
-			// ������Ă��܂��Ă���Ȃ�O�̕��������̂܂ܓK��
-			dir.x = prevFrameDir.x;
-		}
-	}
-	if (gInput->GetKeyPress(VK_TAB))
-	{
-		isJump = true;
-	}
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyPress(VK_DOWN))
+			{
+				SetState(PState::NORMAL);// 立ち状態
+				transform.scale.y *= 10.0;
+				this->Bcol.sizeY *= 10.0f;
+				transform.position.y += 0.1f;
+			}
+			else
+			{
 
+			}
+		}
+		if (gInput->GetKeyTrigger(VK_LEFT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_RIGHT))
+			{
+				SetState(PState::BREAKLEFT);// 左に折れた状態
+			}
+			else
+			{
+
+			}
+		}
+		else if (gInput->GetKeyTrigger(VK_RIGHT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_LEFT))
+			{
+				SetState(PState::BREAKRIGHT);// 右に折れた状態
+			}
+			else
+			{
+
+			}
+		}
+
+		if (gInput->GetKeyPress(VK_TAB))
+		{
+			isJump = true;
+		}
+		break;
+	case PState::BREAKLEFT:
+		if (gInput->GetKeyTrigger(VK_RIGHT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_LEFT))
+			{
+				SetState(PState::FALL);// 倒れた状態
+			}
+			else
+			{
+
+			}
+		}
+		break;
+	case PState::BREAKRIGHT:
+		if (gInput->GetKeyTrigger(VK_LEFT))
+		{
+			// 同時に反対のキーが押されていないか
+			if (!gInput->GetKeyTrigger(VK_RIGHT))
+			{
+				SetState(PState::FALL);// 倒れた状態
+			}
+			else
+			{
+
+			}
+		}
+		break;
+	default:
+		break;
+	}
 #endif
 }
 
 float CPlayer::Jump()
 {
-	// ��������ɂ���
+	// 向きを上にする
 	dir.y = 1.0f;
-	// �W�����v�͂��d�͂ɏ]���čX�V
+	// ジャンプ力を重力に従って更新
 	jumpStrength -= gravity;
-	// �v�Z�����W�����v�͂�K��
+	// 計算したジャンプ力を適応
 	return jumpStrength;
 }
 
 
+
+
+
+
+
+
+
+
+
+
+PState CPlayer::GetState()
+{
+	return PState();
+}
+
+void CPlayer::SetState(PState state)
+{
+	State = state;
+}
+
 void CPlayer::Update()
 {
 
-	// ������߂�
+	// 向きを戻す
 	dir.x = 0.0f;
 	dir.y = -1.0f;
 
-	// �v���C���[����֘A�̓��͏���
+	// プレイヤー操作関連の入力処理
 	PlayerInput();
 
-	// �O�t���[���̕␳������������
+	// 前フレームの補正方向を初期化
 	prevFrameCorrect = { 0 };
 
-	// �P�ʃx�N�g����(�����P�ɂ���) = ���K��
-	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// �x�N�g���v�Z�p�̌^�ɓ����
-	v = DirectX::XMVector3Normalize(v);					// ���K������
-	DirectX::XMStoreFloat3(&dir, v);					// ���̕ϐ�dir�ɖ߂�
+	// 単位ベクトル化(矢印を１にする) = 正規化
+	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// ベクトル計算用の型に入れる
+	v = DirectX::XMVector3Normalize(v);					// 正規化する
+	DirectX::XMStoreFloat3(&dir, v);					// 元の変数dirに戻す
 	
-	// �d�͂̉e�����󂯂�Y�������̑��x���X�V
-	// �W�����v���Ȃ�W�����v�͂̍X�V�������s��
+	// 重力の影響を受けてY軸方向の速度を更新
+	// ジャンプ中ならジャンプ力の更新処理を行う
 	velocity.y = isJump ? Jump() : velocity.y += gravity;
 
-	// �x�N�g���ɑ��x�������Ĉʒu��ύX
+	// ベクトルに速度をかけて位置を変更
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y += dir.y * velocity.y;
 
-	// �e�N���X��Update()�𖾎��I�ɌĂяo��
-	// �S�ẴQ�[���I�u�W�F�N�g���ʂ̍X�V�������s��
+	// 親クラスのUpdate()を明示的に呼び出す
+	// 全てのゲームオブジェクト共通の更新処理を行う
 	CGameObject::Update();
 
-	// �n�`�Ƃ̓����蔻��ƕ␳
+	// 地形との当たり判定と補正
 	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
@@ -161,31 +266,31 @@ void CPlayer::Update()
 			switch ((*it)->objectType)
 			{
 			case 1:
-				// �R���C�_�[�̈ʒu��␳���A�␳�����������󂯎��
+				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 
-				// �V��ɂԂ����Ă����Ȃ�W�����v�͂�0�ɂ���
+				// 天井にぶつかっていたならジャンプ力を0にする
 				if (prevFrameCorrect.y == -1)
 				{
-					dir.y = -1.0f;		// ���������ɂ���
-					jumpStrength = 0;	// �W�����v�͂�0�ɂ���
+					dir.y = -1.0f;		// 向きを下にする
+					jumpStrength = 0;	// ジャンプ力を0にする
 				}
-				// �d�͂ɂ���Ēn�ʂɏՓ˂��Ă����Ȃ�
+				// 重力によって地面に衝突していたなら
 				if (prevFrameCorrect.y == 1)
 				{
 					dir.y = -1.0f;
-					velocity.y = 0.0f;				// ���xY��0�ɖ߂�
+					velocity.y = 0.0f;				// 速度Yを0に戻す
 					jumpStrength = ini_jumpStrength;
 					isJump = false;
 				}
 
-				// �I�u�W�F�N�g�̈ʒu�ƃR���C�_�[�̒��S�����킹��
+				// オブジェクトの位置とコライダーの中心を合わせる
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
 			case 2:
-				//	�I�u�W�F�N�g�ɓ���������true
+				//	オブジェクトに当たったらtrue
 				isWind = true;
 
 				
@@ -200,19 +305,19 @@ void CPlayer::Update()
 
 void CPlayer::Wind()
 {
-	//	���������Ă�I�u�W�F�N�g�ɓ���������c
+	//	風が吹いてるオブジェクトに当たったら…
 	if (isWind == true)
 	{
-		//	�E�����x�N�g��
+		//	右向きベクトル
 		dir.x = 1.0f;
 
-		//	�����N���Ă�悤�Ȍv�Z
+		//	風が起きてるような計算
 		this->transform.position.x += dir.x * velocity.x * 1.1f;
 
-		//	�n�ʂɓ���������c
+		//	地面に当たったら…
 		if (prevFrameCorrect.y == 1)
 		{
-			//	�ړ����I��
+			//	移動を終了
 			isWind = false;
 		}
 	}
@@ -220,14 +325,14 @@ void CPlayer::Wind()
 
 void CPlayer::Draw()
 {
-	// �e�N���X��Draw()�𖾎��I�ɌĂяo��
-	// �S�ẴQ�[���I�u�W�F�N�g���ʂ̕`�揈�����s��
+	// 親クラスのDraw()を明示的に呼び出す
+	// 全てのゲームオブジェクト共通の描画処理を行う
 	CGameObject::Draw();
 }
 
 CPlayer::~CPlayer()
 {
-	// �e�N���X�̃R���X�g���N�^�𖾎��I�ɌĂяo��
-	// ���_�o�b�t�@�̉�����s��
+	// 親クラスのコンストラクタを明示的に呼び出す
+	// 頂点バッファの解放を行う
 	CGameObject::~CGameObject();
 }

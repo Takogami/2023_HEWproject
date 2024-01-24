@@ -1,6 +1,14 @@
 #pragma once
 #include "CGameObject.h"
 
+enum class PState // プレイヤーの状態
+{
+    NORMAL,     //通常
+    FALL,       //倒れている
+    BREAKLEFT,  //左に折れている
+    BREAKRIGHT, //右に折れている
+};
+
 class CPlayer :
     public CGameObject
 {
@@ -15,6 +23,8 @@ private:
     float jumpStrength = ini_jumpStrength;
     // ジャンプフラグ
     bool isJump = false;
+    // プレイヤー状態
+    PState State = PState::NORMAL;
 
     // 移動速度
     DirectX::XMFLOAT2 velocity;
@@ -28,6 +38,9 @@ private:
 
     void PlayerInput(); // 入力処理
     float Jump();       // ジャンプ力を返す
+
+    PState GetState();
+    void SetState(PState state);
 
 public:
     /* メンバ変数 */
@@ -48,4 +61,3 @@ public:
     void Draw() override;
     ~CPlayer() override;
 };
-
