@@ -2,7 +2,7 @@
 #include "CScene.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (false)   
+#define USE_CONTROLLER (false)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv) : CGameObject(1, vb, tex, uv)
@@ -19,6 +19,7 @@ void CPlayer::PlayerInput()
 
 	// スティック入力一時保存用
 	float input_stickX;
+	float input_stickY;
 
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
@@ -42,74 +43,145 @@ void CPlayer::PlayerInput()
 	}
 
 #else
-
-	if (gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y != 1)
+	switch (State)
 	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_UP))
+	case PState::NORMAL:
+		if (gInput->GetKeyPress(VK_DOWN) /*&& prevFrameCorrect.y != 1*/)
 		{
-			// 押されていないなら方向を更新する
-			dir.y = -1.0f;
-			prevFrameDir.y = dir.y;
+			if (!gInput->GetKeyPress(VK_UP))
+			{
+				/*dir.y = -1.0f;
+				prevFrameDir.y = dir.y;*/
+
+				SetState(PState::FALL);
+				transform.scale.y *= 0.1f;
+				this->Bcol.sizeY *= 0.1f;
+				transform.position.y -= 0.1f;
+			}
+			else
+			{
+				/*dir.y = prevFrameDir.y;*/
+			}
 		}
-		else
+		else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
 		{
-			// 押されてしまっているなら前の方向をそのまま適応
+			if (!gInput->GetKeyPress(VK_DOWN))
+			{
+				//dir.y = 1.0f;
+				prevFrameDir.y = dir.y;
+			}
+			else
+			{
+				dir.y = prevFrameDir.y;
+			}
+		}
+		if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
+		{
+			if (!gInput->GetKeyPress(VK_RIGHT))
+			{
+				dir.x = -1.0f;
+				prevFrameDir.x = dir.x;
+			}
+			else
+			{
+				dir.x = prevFrameDir.x;
+			}
+		}
+		else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
+		{
 			dir.y = prevFrameDir.y;
+			if (!gInput->GetKeyPress(VK_LEFT))
+			{
+				dir.x = 1.0f;
+				prevFrameDir.x = dir.x;
+			}
+			else
+			{
+				dir.x = prevFrameDir.x;
+			}
 		}
-	}
-	else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_DOWN))
+		if (gInput->GetKeyPress(VK_TAB))
 		{
-			// 押されていないなら方向を更新する
-			dir.y = 1.0f;
-			prevFrameDir.y = dir.y;
+			isJump = true;
 		}
-		else
-		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.y = prevFrameDir.y;
-		}
-	}
+		break;
 
-	if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_RIGHT))
+	case PState::FALL:
+		if (gInput->GetKeyPress(VK_UP))
 		{
-			// 押されていないなら方向を更新する
-			dir.x = -1.0f;
-			prevFrameDir.x = dir.x;
-		}
-		else
-		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.x = prevFrameDir.x;
-		}
-	}
-	else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
-	{
-		// 同時に反対のキーが押されていないか
-		if (!gInput->GetKeyPress(VK_LEFT))
-		{
-			// 押されていないなら方向を更新する
-			dir.x = 1.0f;
-			prevFrameDir.x = dir.x;
-		}
-		else
-		{
-			// 押されてしまっているなら前の方向をそのまま適応
-			dir.x = prevFrameDir.x;
-		}
-	}
-	if (gInput->GetKeyPress(VK_TAB))
-	{
-		isJump = true;
-	}
+			if (!gInput->GetKeyPress(VK_DOWN))
+			{
+				SetState(PState::NORMAL);
+				transform.scale.y *= 10.0;
+				this->Bcol.sizeY *= 10.0f;
+				transform.position.y += 0.1f;
+			}
+			else
+			{
 
+			}
+			if (gInput->GetKeyTrigger(VK_LEFT))
+			{
+				if (!gInput->GetKeyTrigger(VK_RIGHT))
+				{
+					SetState(PState::BREAKLEFT);
+				}
+				else
+				{
+
+				}
+			}
+			else if (gInput->GetKeyTrigger(VK_RIGHT))
+			{
+				if (!gInput->GetKeyTrigger(VK_LEFT))
+				{
+					SetState(PState::BREAKRIGHT);
+				}
+				else
+				{
+
+				}
+			}
+			if (gInput->GetKeyPress(VK_TAB))
+			{
+				isJump = true;
+			}
+			break;
+
+	case PState::BREAKLEFT:
+		if (gInput->GetKeyTrigger(VK_RIGHT))
+		{
+			if (!gInput->GetKeyTrigger(VK_LEFT))
+			{
+				SetState(PState::FALL);
+			}
+			else
+			{
+
+			}
+		}
+		break;
+
+	case PState::BREAKRIGHT:
+		if (gInput->GetKeyTrigger(VK_LEFT))
+		{
+			if (!gInput->GetKeyTrigger(VK_RIGHT))
+			{
+				SetState(PState::FALL);
+			}
+			else
+			{
+
+			}
+		}
+		break;
+
+	default:
+		break;
+		}
+	}
 #endif
+
 }
 
 float CPlayer::Jump()
@@ -216,6 +288,16 @@ void CPlayer::Wind()
 			isWind = false;
 		}
 	}
+}
+
+PState CPlayer::GetState()
+{
+	return State;
+}
+
+void CPlayer::SetState(PState state)
+{
+	State = state;
 }
 
 void CPlayer::Draw()

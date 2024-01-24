@@ -1,48 +1,61 @@
-#pragma once
+ï»¿#pragma once
 #include "CGameObject.h"
+
+enum class PState
+{
+    NORMAL,
+    FALL,
+    BREAKLEFT,
+    BREAKRIGHT,
+};
 
 class CPlayer :
     public CGameObject
 {
 private:
-    /* ƒƒ“ƒo•Ï” */
+    /* ãƒ¡ãƒ³ãƒå¤‰æ•° */
 
-    // d—Í
+    // é‡åŠ›
     const float gravity = 0.97f / 200;
-    // ƒWƒƒƒ“ƒvŠJn(‰Šúó‘Ô)‚ÌƒWƒƒƒ“ƒv‚Ì‹­‚³
+    // ã‚¸ãƒ£ãƒ³ãƒ—é–‹å§‹æ™‚(åˆæœŸçŠ¶æ…‹)ã®ã‚¸ãƒ£ãƒ³ãƒ—ã®å¼·ã•
     const float ini_jumpStrength = 13.0f / 200;
-    // Œ»İ‚ÌƒWƒƒƒ“ƒv‚Ì‹­‚³
+    // ç¾åœ¨ã®ã‚¸ãƒ£ãƒ³ãƒ—ã®å¼·ã•
     float jumpStrength = ini_jumpStrength;
-    // ƒWƒƒƒ“ƒvƒtƒ‰ƒO
+    // ã‚¸ãƒ£ãƒ³ãƒ—ãƒ•ãƒ©ã‚°
     bool isJump = false;
 
-    // ˆÚ“®‘¬“x
+    PState State = PState::NORMAL;
+
+    // ç§»å‹•é€Ÿåº¦
     DirectX::XMFLOAT2 velocity;
 
-    // ‘OƒtƒŒ[ƒ€‚³‚ê‚½Õ“Ë•â³‚Ì•ûŒü
+    // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã•ã‚ŒãŸè¡çªè£œæ­£ã®æ–¹å‘
     CORRECT_DIR prevFrameCorrect = { 0 };
-    // ‘OƒtƒŒ[ƒ€‚Ì•ûŒü
+    // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ–¹å‘
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
 
-    /* ƒƒ\ƒbƒh */
+    /* ãƒ¡ã‚½ãƒƒãƒ‰ */
 
-    void PlayerInput(); // “ü—Íˆ—
-    float Jump();       // ƒWƒƒƒ“ƒv—Í‚ğ•Ô‚·
+    void PlayerInput(); // å…¥åŠ›å‡¦ç†
+    float Jump();       // ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’è¿”ã™
 
 public:
-    /* ƒƒ“ƒo•Ï” */
+    /* ãƒ¡ãƒ³ãƒå¤‰æ•° */
 
-    // •ûŒüƒxƒNƒgƒ‹
+    // æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
     DirectX::XMFLOAT3 dir = { 0.0f, 0.0f, 0.0f };
 
-    /* ƒƒ\ƒbƒh */
+    /* ãƒ¡ã‚½ãƒƒãƒ‰ */
 
     CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv);
-    // ˆÚ“®‘¬“x‚ğİ’è
+    // ç§»å‹•é€Ÿåº¦ã‚’è¨­å®š
     inline void SetMoveSpeed(float sp) { velocity.x = sp; };
 
-    //  •—‚Ìˆ—i‚¨‚µj
+    //  é¢¨ã®å‡¦ç†ï¼ˆãŠè©¦ã—ï¼‰
     void Wind();
+
+    PState GetState();
+    void SetState(PState state);
 
     void Update() override;
     void Draw() override;
