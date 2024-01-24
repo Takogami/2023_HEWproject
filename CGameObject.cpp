@@ -22,8 +22,10 @@
 using namespace DirectX;
 
 //コンストラクタ
-CGameObject::CGameObject(ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOAT_XY _uv)
+CGameObject::CGameObject(int _objectType, ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOAT_XY _uv)
 {
+	//アニメーションクラスの実体化
+	anim = new CAnimation;
 	//使用カメラの初期化
 	useCamera = nullptr;
 
@@ -36,11 +38,18 @@ CGameObject::CGameObject(ID3D11Buffer* _vb, ID3D11ShaderResourceView* _tex, FLOA
 	//引数で受け取った頂点バッファとテクスチャをセットする
 	vertexBuffer = _vb;
 	texture = _tex;
+	objectType = _objectType;
 }
 
 //デストラクタ
 CGameObject::~CGameObject()
 {
+	// animの二重deleteを防ぐ
+	if (anim != nullptr)
+	{
+		delete anim;
+		anim = nullptr;
+	}
 	SAFE_RELEASE(vertexBuffer);
 }
 
@@ -52,6 +61,11 @@ void CGameObject::Update()
 	//オブジェクトの位置とコライダーの中心を合わせる
 	this->Bcol.centerX = this->transform.position.x;
 	this->Bcol.centerY = this->transform.position.y;
+
+	// アニメーションの更新
+	anim->Update();
+	// uv移動量を取得
+	uv = anim->GetUV();
 
 	//ここにUpdate処理を記述する
 	//共通処理以外は継承先にoverrideして記述すること
@@ -111,9 +125,72 @@ void CGameObject::SetUseingCamera(CCamera* setCamera)
 	useCamera = setCamera;
 }
 
+void CGameObject::InitAnimParameter(bool iniPlaying, int spritU, ANIM_PATTERN pattern, float sp)
+{
+	// 初期状態で再生するか設定
+	if (iniPlaying)
+	{
+		anim->PlayAnimation();
+	}
+	else
+	{
+		anim->StopAnimation();
+	}
+	// アニメーションクラスのカウンタを初期化する
+	anim->ResetAnimation();
+	// 横方向の分割数を設定
+	anim->SetSpritU(spritU);
+	// uv移動量の設定
+	anim->SetMovementUV(sprit);
+	// 初期に再生するパターンを設定
+	anim->SetAnimationPattern(pattern);
+	// 初期に再生するパターンを設定
+	anim->SetAnimationSpeed(sp);
+}
+
+void CGameObject::SetAnimationSpeed(float sp)
+{
+	// アニメーションクラスに速度を送る
+	anim->SetAnimationSpeed(sp);
+}
+
+void CGameObject::SetAnimationPattern(ANIM_PATTERN pattern)
+{
+	// アニメーションクラスにパターンを送る
+	anim->SetAnimationPattern(pattern);
+}
+
+void CGameObject::PlayAnimation()
+{
+	// アニメーションクラスに再生命令を送る
+	anim->PlayAnimation();
+}
+
+void CGameObject::StopAnimation()
+{
+	// アニメーションクラスに停止命令を送る
+	anim->StopAnimation();
+}
+
+void CGameObject::ResetAnimation()
+{
+	// アニメーションクラスにリセット命令を送る
+	anim->ResetAnimation();
+}
+
 void CGameObject::TextureCutout(int u_num, int v_num)
 {
 	//指定された分だけテクスチャを移動させる
 	uv.x = sprit.x * u_num;
 	uv.y = sprit.y * v_num;
+}
+
+void CGameObject::SetObjectType(int _objectType) 
+{
+	this->objectType = _objectType;
+}
+
+int CGameObject::GetObjectType() const 
+{
+	return objectType;
 }

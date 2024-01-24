@@ -2,6 +2,7 @@
 
 /* インクルード */
 #include"CScene.h"
+#include"CSmoothing.h"
 
 class ResultScene : public CScene
 {
@@ -13,6 +14,9 @@ private:
 	std::list<CGameObject*>Objects;
 
 	CPlayer* player;
+
+	// カメラ追従のスムージング
+	CSmoothing* camSmooth;
 
 	ID3D11Buffer* vertexBufferCharacter;
 

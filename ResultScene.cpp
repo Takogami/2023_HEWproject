@@ -8,7 +8,7 @@ ResultScene::ResultScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO), { 0.33f ,0.25f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::CHAR1), { 0.33f ,0.25f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -17,8 +17,12 @@ ResultScene::ResultScene()
 	player->transform * 0.2f;
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
-	// テクスチャを切り抜く
-	player->TextureCutout(1,1);
+	// アニメーションの初期化
+	player->InitAnimParameter(true, 3, ANIM_PATTERN::TEST, 0.05f);
+
+	// スムージングの実体化
+	camSmooth = new CSmoothing;
+	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);
@@ -37,6 +41,7 @@ ResultScene::~ResultScene()
 
 	// カメラオブジェクトの削除
 	delete Cam;
+	delete camSmooth;
 
 	// ステージの後片付け
 	CScene::DestroyStage();
@@ -55,7 +60,7 @@ void ResultScene::Update()
 		(*it)->Update();
 	}
 
-	Cam->cameraPos.x = player->transform.position.x;
+	camSmooth->Update();
 	Cam->Update();
 }
 

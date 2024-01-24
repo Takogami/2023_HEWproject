@@ -19,7 +19,7 @@ private:
 	static CSceneManager* instance;
 
 	TitleScene* title;						//タイトルシーンクラス
-	StageScene* stage;					//リザルトシーンクラス
+	StageScene* stage;						//ステージシーンクラス
 	ResultScene* result;					//リザルトシーンクラス
 
 	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
