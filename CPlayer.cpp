@@ -146,6 +146,7 @@ void CPlayer::PlayerInput()
 			{
 				isJump = true;
 			}
+		}
 			break;
 
 	case PState::BREAKLEFT:
@@ -178,7 +179,6 @@ void CPlayer::PlayerInput()
 
 	default:
 		break;
-		}
 	}
 #endif
 
