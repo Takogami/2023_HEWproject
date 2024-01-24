@@ -47,7 +47,7 @@ public:
 
     /* メソッド */
 
-    CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv);
+    CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type = OBJECT_TYPE::PLAYER);
     // 移動速度を設定
     inline void SetMoveSpeed(float sp) { velocity.x = sp; };
 
