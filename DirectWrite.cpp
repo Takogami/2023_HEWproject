@@ -161,7 +161,7 @@ HRESULT DirectWrite::Init(IDXGISwapChain* swapChain)
 	// dpiの設定
 	FLOAT dpiX;
 	FLOAT dpiY;
-	dpiX = GetDpiForWindow(GetDesktopWindow());
+	dpiX = GetDpiForSystem();
 	dpiY = dpiX;
 
 	// レンダーターゲットの作成
