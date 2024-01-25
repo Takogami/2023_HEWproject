@@ -2,7 +2,7 @@
 #include "CScene.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (false)
+#define USE_CONTROLLER (true)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
@@ -17,31 +17,80 @@ void CPlayer::PlayerInput()
 {
 #if USE_CONTROLLER == true
 
-	// スティック入力一時保存用
-	float input_stickX;
-	float input_stickY;
-
+	
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
-
-	// 前のフレームでめり込んだ方向でないなら移動量を適応する
-	if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
-		(input_stickX < 0.0f && prevFrameCorrect.x != 1))
+	input_stickY = gInput->GetLeftStickY();
+	switch (State)
 	{
-		dir.x = input_stickX;
+	case PState::NORMAL: //通常状態
+		// 前のフレームでめり込んだ方向でないなら移動量を適応する
+		if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
+			(input_stickX < 0.0f && prevFrameCorrect.x != 1))
+		{
+			dir.x = input_stickX;
+		}
+		// 前のフレームでめり込んだ方向に移動しようとしてるなら移動量を適応しない
+		else
+		{
+			dir.x = 0;
+		}
+		if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
+		{
+			SetState(PState::FALL);// 倒れる
+			transform.scale.y *= 0.1f;
+			this->Bcol.sizeY *= 0.1f;
+			transform.position.y -= 0.1f;
+		}
+		// Bボタン入力でとりあえずのジャンプ操作
+		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
+		{
+			isJump = true;
+			/*	this->transform.position.y = -0.2f;*/
+		}
+		break;
+	case PState::FALL:// 倒れた状態
+		if ((input_stickY > 0.0f) && (old_input_stickY <= 0.0f))
+		{
+				SetState(PState::NORMAL);// 通常状態に戻す
+				transform.scale.y *= 10.0;
+				this->Bcol.sizeY *= 10.0f;
+				transform.position.y += 0.1f;
+		}
+		if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
+		{
+			SetState(PState::BREAKLEFT);// 左に折れる
+			transform.rotation += 90;
+		}
+		if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
+		{
+			SetState(PState::BREAKRIGHT);// 右に折れる
+			transform.rotation -= 90;
+		}
+		// Bボタン入力でとりあえずのジャンプ操作
+		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
+		{
+			isJump = true;
+			/*	this->transform.position.y = -0.2f;*/
+		}
+			break;
+	case PState::BREAKLEFT:// 左に折れた状態
+		if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
+		{
+			SetState(PState::FALL);// 倒れた状態に戻す
+			transform.rotation -= 90;
+		}
+		break;
+	case PState::BREAKRIGHT:// 右に折れた状態
+		if (input_stickX < -1.0f && (old_input_stickX >= -1.0f))
+		{
+			SetState(PState::FALL);// 倒れた状態に戻す
+			transform.rotation += 90;
+		}
+		break;
 	}
-	// 前のフレームでめり込んだ方向に移動しようとしてるなら移動量を適応しない
-	else
-	{
-		dir.x = 0;
-	}
-	// Bボタン入力でとりあえずのジャンプ操作
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
-	{
-		isJump = true;
-	/*	this->transform.position.y = -0.2f;*/
-	}
-
+	old_input_stickX= input_stickX;
+	old_input_stickY= input_stickY;
 #else
 	switch (State)
 	{
@@ -125,6 +174,7 @@ void CPlayer::PlayerInput()
 				if (!gInput->GetKeyTrigger(VK_RIGHT))
 				{
 					SetState(PState::BREAKLEFT);
+					transform.rotation += 90;
 				}
 				else
 				{
@@ -136,6 +186,7 @@ void CPlayer::PlayerInput()
 				if (!gInput->GetKeyTrigger(VK_LEFT))
 				{
 					SetState(PState::BREAKRIGHT);
+					transform.rotation -= 90;
 				}
 				else
 				{
@@ -155,6 +206,7 @@ void CPlayer::PlayerInput()
 			if (!gInput->GetKeyTrigger(VK_LEFT))
 			{
 				SetState(PState::FALL);
+				transform.rotation -= 90;
 			}
 			else
 			{
@@ -169,6 +221,7 @@ void CPlayer::PlayerInput()
 			if (!gInput->GetKeyTrigger(VK_RIGHT))
 			{
 				SetState(PState::FALL);
+				transform.rotation += 90;
 			}
 			else
 			{
@@ -272,8 +325,8 @@ void CPlayer::Update()
 
 void CPlayer::Wind()
 {
-	//	風が吹いてるオブジェクトに当たったら…
-	if (isWind == true)
+	//	プレイヤーの状態が折れていて風が吹いてるオブジェクトに当たったら…
+	if (isWind == true && (State == PState::BREAKLEFT || State == PState::BREAKRIGHT))
 	{
 		//	右向きベクトル
 		dir.x = 1.0f;
