@@ -161,6 +161,7 @@
     <ClCompile Include="DirectWrite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="DirectWrite.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="SelectScene.h" />
     <ClInclude Include="StageScene.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexShader.h" />
