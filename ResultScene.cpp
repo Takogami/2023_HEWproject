@@ -12,7 +12,7 @@ ResultScene::ResultScene()
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.33f ,0.125f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -22,7 +22,7 @@ ResultScene::ResultScene()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
-	player->InitAnimParameter(true, 10, ANIM_PATTERN::TEST, 0.05f);
+	player->InitAnimParameter(true, 3, 8, ANIM_PATTERN::NO_ANIM, 0.1f);
 
 	// 背景の設定
 	bg->SetUseingCamera(Cam);

@@ -2,7 +2,7 @@
 #include "CScene.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (true)
+#define USE_CONTROLLER (false)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
@@ -35,12 +35,19 @@ void CPlayer::PlayerInput()
 		{
 			dir.x = 0;
 		}
+		if ((input_stickX < 0.0f)
+		{
+			SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
+		}
+		else if ((input_stickX > 0.0f)
+		{
+			SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
+		}
+
 		if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
 		{
 			SetState(PState::FALL);// 倒れる
-			transform.scale.y *= 0.1f;
-			this->Bcol.sizeY *= 0.1f;
-			transform.position.y -= 0.1f;
+			SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
 		}
 		// Bボタン入力でとりあえずのジャンプ操作
 		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
@@ -53,19 +60,17 @@ void CPlayer::PlayerInput()
 		if ((input_stickY > 0.0f) && (old_input_stickY <= 0.0f))
 		{
 				SetState(PState::NORMAL);// 通常状態に戻す
-				transform.scale.y *= 10.0;
-				this->Bcol.sizeY *= 10.0f;
-				transform.position.y += 0.1f;
+				SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 		}
 		if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
 		{
 			SetState(PState::BREAKLEFT);// 左に折れる
-			transform.rotation += 90;
+			SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 		}
 		if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
 		{
 			SetState(PState::BREAKRIGHT);// 右に折れる
-			transform.rotation -= 90;
+			SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
 		}
 		// Bボタン入力でとりあえずのジャンプ操作
 		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
@@ -78,14 +83,14 @@ void CPlayer::PlayerInput()
 		if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
 		{
 			SetState(PState::FALL);// 倒れた状態に戻す
-			transform.rotation -= 90;
+			SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
 		}
 		break;
 	case PState::BREAKRIGHT:// 右に折れた状態
 		if (input_stickX < -1.0f && (old_input_stickX >= -1.0f))
 		{
 			SetState(PState::FALL);// 倒れた状態に戻す
-			transform.rotation += 90;
+			SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
 		}
 		break;
 	}
@@ -94,42 +99,42 @@ void CPlayer::PlayerInput()
 #else
 	switch (State)
 	{
-	case PState::NORMAL:
-		if (gInput->GetKeyPress(VK_DOWN) /*&& prevFrameCorrect.y != 1*/)
+	case PState::NORMAL:// 通常状態の処理
+		//SetAnimationPattern(ANIM_PATTERN::NO_ANIM);
+		if (gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y == 1)
 		{
 			if (!gInput->GetKeyPress(VK_UP))
 			{
 				/*dir.y = -1.0f;
 				prevFrameDir.y = dir.y;*/
 
-				SetState(PState::FALL);
-				transform.scale.y *= 0.1f;
-				this->Bcol.sizeY *= 0.1f;
-				transform.position.y -= 0.1f;
+				SetState(PState::FALL);// 倒れた状態
+				SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
 			}
 			else
 			{
 				/*dir.y = prevFrameDir.y;*/
 			}
 		}
-		else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
-		{
-			if (!gInput->GetKeyPress(VK_DOWN))
-			{
-				//dir.y = 1.0f;
-				prevFrameDir.y = dir.y;
-			}
-			else
-			{
-				dir.y = prevFrameDir.y;
-			}
-		}
+		//else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
+		//{
+		//	if (!gInput->GetKeyPress(VK_DOWN))
+		//	{
+		//		//dir.y = 1.0f;
+		//		prevFrameDir.y = dir.y;
+		//	}
+		//	else
+		//	{
+		//		dir.y = prevFrameDir.y;
+		//	}
+		//}
 		if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
 		{
 			if (!gInput->GetKeyPress(VK_RIGHT))
 			{
 				dir.x = -1.0f;
 				prevFrameDir.x = dir.x;
+				SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
 			}
 			else
 			{
@@ -138,75 +143,75 @@ void CPlayer::PlayerInput()
 		}
 		else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
 		{
-			dir.y = prevFrameDir.y;
+			//dir.y = prevFrameDir.y;
 			if (!gInput->GetKeyPress(VK_LEFT))
 			{
 				dir.x = 1.0f;
 				prevFrameDir.x = dir.x;
+				SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
 			}
 			else
 			{
 				dir.x = prevFrameDir.x;
 			}
 		}
+		else if (!gInput->GetKeyPress(VK_RIGHT) && !gInput->GetKeyPress(VK_LEFT) && !gInput->GetKeyPress(VK_UP) && !gInput->GetKeyPress(VK_DOWN))
+		{
+			SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+		}
+
 		if (gInput->GetKeyPress(VK_TAB))
 		{
 			isJump = true;
 		}
 		break;
 
-	case PState::FALL:
+	case PState::FALL:// 倒れた状態の処理
 		if (gInput->GetKeyPress(VK_UP))
 		{
 			if (!gInput->GetKeyPress(VK_DOWN))
 			{
-				SetState(PState::NORMAL);
-				transform.scale.y *= 10.0;
-				this->Bcol.sizeY *= 10.0f;
-				transform.position.y += 0.1f;
+				SetState(PState::NORMAL);// 通常状態
+				SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 			}
 			else
 			{
 
 			}
-			if (gInput->GetKeyTrigger(VK_LEFT))
+		}
+		if (gInput->GetKeyTrigger(VK_LEFT))
+		{
+			if (!gInput->GetKeyTrigger(VK_RIGHT))
 			{
-				if (!gInput->GetKeyTrigger(VK_RIGHT))
-				{
-					SetState(PState::BREAKLEFT);
-					transform.rotation += 90;
-				}
-				else
-				{
-
-				}
+				SetState(PState::BREAKLEFT);// 左に折れる状態
+				SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 			}
-			else if (gInput->GetKeyTrigger(VK_RIGHT))
+			else
 			{
-				if (!gInput->GetKeyTrigger(VK_LEFT))
-				{
-					SetState(PState::BREAKRIGHT);
-					transform.rotation -= 90;
-				}
-				else
-				{
 
-				}
-			}
-			if (gInput->GetKeyPress(VK_TAB))
-			{
-				isJump = true;
 			}
 		}
-			break;
+		else if (gInput->GetKeyTrigger(VK_RIGHT))
+		{
+			if (!gInput->GetKeyTrigger(VK_LEFT))
+			{
+				SetState(PState::BREAKRIGHT);// 右に折れる状態
+				SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
+			}
+			else
+			{
+
+			}
+		}
+		break;
 
 	case PState::BREAKLEFT:
 		if (gInput->GetKeyTrigger(VK_RIGHT))
 		{
 			if (!gInput->GetKeyTrigger(VK_LEFT))
 			{
-				SetState(PState::FALL);
-				transform.rotation -= 90;
+				SetState(PState::FALL);// 倒れた状態
+				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
 			}
 			else
 			{
@@ -220,8 +225,8 @@ void CPlayer::PlayerInput()
 		{
 			if (!gInput->GetKeyTrigger(VK_RIGHT))
 			{
-				SetState(PState::FALL);
-				transform.rotation += 90;
+				SetState(PState::FALL);// 倒れた状態
+				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
 			}
 			else
 			{
