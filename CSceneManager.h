@@ -3,11 +3,13 @@
 #include "TitleScene.h"
 #include "ResultScene.h"
 #include "StageScene.h"
+#include "SelectScene.h"
 
 //	シーンの種類（列挙型）
 enum class SCENE_ID
 {
 	TITLE,
+	SELECT,
 	STAGE_01,
 	RESULT,
 };
@@ -21,6 +23,7 @@ private:
 	TitleScene* title;						//タイトルシーンクラス
 	StageScene* stage;						//ステージシーンクラス
 	ResultScene* result;					//リザルトシーンクラス
+	SelectScene* select;
 
 	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
 

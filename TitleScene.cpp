@@ -76,7 +76,7 @@ void TitleScene::Update()
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
 	}
 
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_A, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		//CCursorでの列挙型のSceneを取得する
 		cursorPoint = player2->GetCursorPoint();
@@ -85,7 +85,7 @@ void TitleScene::Update()
 		{
 		case CCursor_Point::STAGE:
 			// ステージの場合の処理を書く
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT);
 			break;
 		case CCursor_Point::OPTION:
 			// オプションの場合の処理を書く

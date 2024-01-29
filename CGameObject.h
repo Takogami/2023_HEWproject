@@ -56,7 +56,7 @@ public:
 	float windTime = 0.0f;   // 風が吹く時間
 	float windTimer = 0.0f;  // 風のタイマー
 
-	float acceleration = 0.001f;	//	風の強さ
+	float acceleration = 0.001f;//	風の強さ
 	float deltaTime = 0.01f;	//	1フレームと前のフレームの間に経過した時間の差分
 
 	CTransform transform;								// 仮想世界の中の位置座標,スケール,回転率

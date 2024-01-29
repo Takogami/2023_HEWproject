@@ -9,6 +9,7 @@
 #include "CTextureLoader.h"
 #include "CInput.h"
 #include "CDrawString.h"
+#include "CEase.h"
 
 class CScene
 {
