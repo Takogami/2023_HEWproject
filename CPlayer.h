@@ -26,13 +26,13 @@ private:
 
     PState State = PState::NORMAL;
 
-    // 移動速度
-    DirectX::XMFLOAT2 velocity;
-
     // 前フレームされた衝突補正の方向
     CORRECT_DIR prevFrameCorrect = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
+
+    CTimer* time;
+
 
     /* メソッド */
 
@@ -41,6 +41,9 @@ private:
 
 public:
     /* メンバ変数 */
+
+    // 移動速度
+    DirectX::XMFLOAT2 velocity;
 
     // 方向ベクトル
     DirectX::XMFLOAT3 dir = { 0.0f, 0.0f, 0.0f };
@@ -51,8 +54,7 @@ public:
     // 移動速度を設定
     inline void SetMoveSpeed(float sp) { velocity.x = sp; };
 
-    //  風の処理（お試し）
-    void Wind();
+    void WindUp();  //  上向き
 
     PState GetState();
     void SetState(PState state);

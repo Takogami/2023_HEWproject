@@ -1,5 +1,6 @@
 #include "CPlayer.h"
 #include "CScene.h"
+#include "CWind.h"
 
 // コントローラーを使う場合はtrueを指定
 #define USE_CONTROLLER (false)
@@ -11,6 +12,8 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 	SetMoveSpeed(0.05f);
 	// 重力を初期値とする
 	velocity.y = gravity;
+
+	time = new CTimer();
 }
 
 void CPlayer::PlayerInput()
@@ -224,6 +227,7 @@ void CPlayer::Update()
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
 	CGameObject::Update();
+	time->Update();
 
 	// 地形との当たり判定と補正
 	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
@@ -256,11 +260,16 @@ void CPlayer::Update()
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
-			case OBJECT_TYPE::WIND:
+			case OBJECT_TYPE::WIND_RIGHT:	//	風（右向き）
 				//	オブジェクトに当たったらtrue
-				isWind = true;
+				isWind_right = true;
+				break;
 
-				
+			case OBJECT_TYPE::WIND_UP:	//	風（上向き）
+				//	オブジェクトに当たったtrue
+				isWind_up = true;
+				//	タイマーの初期化
+				time->InitTimer(3, TIMER_MODE::COUNT_DOWN);
 				break;
 
 			default:
@@ -268,24 +277,35 @@ void CPlayer::Update()
 			}
 		}
 	}
+
+	//=======================//
+	if (isWind_right)
+	{
+		if (time->GetTimerState() != TIMER_STATE::UPDATE)
+		{
+			time->StartTimer();
+		}
+		wind->Wind_Right(this, 0.8f);
+	}
+
+	if (time->GetTime() == 0)
+	{
+		isWind_right = false;
+	}
+	//=======================//
 }
 
-void CPlayer::Wind()
+void CPlayer::WindUp()
 {
-	//	風が吹いてるオブジェクトに当たったら…
-	if (isWind == true)
+	if (isWind_up)
 	{
-		//	右向きベクトル
-		dir.x = 1.0f;
-
-		//	風が起きてるような計算
-		this->transform.position.x += dir.x * velocity.x * 1.1f;
-
-		//	地面に当たったら…
+		// 上向きベクトル
+		dir.y = 1.0f;
+		// 風が起きているような計算
+		this->transform.position.y += wind_power;
 		if (prevFrameCorrect.y == 1)
 		{
-			//	移動を終了
-			isWind = false;
+			isWind_up = false;
 		}
 	}
 }
@@ -312,4 +332,5 @@ CPlayer::~CPlayer()
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う
 	CGameObject::~CGameObject();
+	delete time;
 }

@@ -156,7 +156,9 @@
     <ClCompile Include="CSmoothing.cpp" />
     <ClCompile Include="CTerrainLoader.cpp" />
     <ClCompile Include="CTextureLoader.cpp" />
+    <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CTransform.cpp" />
+    <ClCompile Include="CWind.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="DirectWrite.cpp" />
     <ClCompile Include="main.cpp" />
@@ -180,7 +182,9 @@
     <ClInclude Include="CSmoothing.h" />
     <ClInclude Include="CTerrainLoader.h" />
     <ClInclude Include="CTextureLoader.h" />
+    <ClInclude Include="CTimer.h" />
     <ClInclude Include="CTransform.h" />
+    <ClInclude Include="CWind.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="DirectWrite.h" />
     <ClInclude Include="PixelShader.h" />

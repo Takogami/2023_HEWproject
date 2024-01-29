@@ -53,7 +53,7 @@ void StageScene::Update()
 	}
 
 	//	•—‹N‚«‚éŠÖ”
-	player->Wind();
+	player->WindUp();
 
 	Cam->cameraPos.x = player->transform.position.x;
 	Cam->Update();
