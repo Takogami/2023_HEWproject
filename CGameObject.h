@@ -20,16 +20,19 @@
 #include "CTransform.h"
 #include "CCollision.h"
 #include "CAnimation.h"
+#include "CTimer.h"
 
 /* CCameraクラスの前方宣言 */
 class CCamera;
+class CWind;
 
 // オブジェクトの種類
 enum class OBJECT_TYPE
 {
 	NORMAL,	// 通常オブジェクト
 	PLAYER,	// プレイヤーオブジェクト
-	WIND,	// 風オブジェクト
+	WIND_RIGHT,	// 風オブジェクト（右向き）
+	WIND_UP,	// 風オブジェクト（上向き）
 };
 
 //CGameObjectクラス
@@ -52,16 +55,17 @@ protected:
 public:
 	/* メンバ変数 */
 
-	bool isWind = false;     // 風が吹いているかどうかのフラグ
-	float windTime = 0.0f;   // 風が吹く時間
-	float windTimer = 0.0f;  // 風のタイマー
+	bool isWind_right = false;	//	風のオブジェクトに当たったかどうか
+	bool isWind_up = false;
 
-	float acceleration = 0.001f;//	風の強さ
-	float deltaTime = 0.01f;	//	1フレームと前のフレームの間に経過した時間の差分
+	//	風の強さ
+	float wind_power = 0.1f;
 
 	CTransform transform;								// 仮想世界の中の位置座標,スケール,回転率
 	DirectX::XMFLOAT4 materialDiffuse = { 1,1,1,1 };	// マテリアル色の設定
 	BoxCollider Bcol = { 0.0f, 0.0f, 0.0f, 0.0f };		// Boxコライダーパラメータ
+	
+	CWind* wind;	//	風のクラス
 
 	/* メソッド */
 

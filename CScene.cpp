@@ -52,11 +52,11 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT};
 			}
 
-			//	風が起きる場所生成
+			//	風が起きるオブジェクト生成（右方向）
 			if (map_data[i][j] == 2)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_POS),{ 1.0f, 1.0f }, OBJECT_TYPE::WIND));
+				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS),{ 1.0f, 1.0f }, OBJECT_TYPE::WIND_RIGHT));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -67,10 +67,23 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 
-				map_object.back()->isWind = true;
-				map_object.back()->windTime = 5.0f; // 風が吹く時間（例として5秒）
-				map_object.back()->windTimer = 0.0f; // 風のタイマー初期化
+			//	風が起きるオブジェクト生成（上向き）
+			if (map_data[i][j] == 3)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS), { 1.0f, 1.0f }, OBJECT_TYPE::WIND_UP));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す
