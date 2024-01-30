@@ -12,8 +12,6 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 	SetMoveSpeed(0.05f);
 	// 重力を初期値とする
 	velocity.y = gravity;
-
-	time = new CTimer();
 }
 
 void CPlayer::PlayerInput()
@@ -197,13 +195,19 @@ float CPlayer::Jump()
 	return jumpStrength;
 }
 
-
 void CPlayer::Update()
 {
-
-	// 向きを戻す
-	dir.x = 0.0f;
-	dir.y = -1.0f;
+	// 風の影響を受けていないなら向きを戻す
+	if (dir_wind.x == 0.0f)
+	{
+		// 向きを戻す
+		dir.x = 0.0f;
+	}
+	if (dir_wind.y == 0.0f)
+	{
+		// 向きを戻す
+		dir.y = -1.0f;
+	}
 
 	// プレイヤー操作関連の入力処理
 	PlayerInput();
@@ -215,7 +219,13 @@ void CPlayer::Update()
 	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// ベクトル計算用の型に入れる
 	v = DirectX::XMVector3Normalize(v);					// 正規化する
 	DirectX::XMStoreFloat3(&dir, v);					// 元の変数dirに戻す
-	
+
+	// 風の影響でのy方向の速度が限界値を超えないようにする
+	if ((dir_wind.y == 1.0f || dir_wind.y == -1.0f) && velocity.y > velocityY_limit)
+	{
+		velocity.y = velocityY_limit;
+	}
+
 	// 重力の影響を受けてY軸方向の速度を更新
 	// ジャンプ中ならジャンプ力の更新処理を行う
 	velocity.y = isJump ? Jump() : velocity.y += gravity;
@@ -224,10 +234,33 @@ void CPlayer::Update()
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y += dir.y * velocity.y;
 
+	// 移動量に風の計算を加える
+	if (dir_wind.x == 1.0f)
+	{
+		windStrength -= 0.001f;
+		if (windStrength <= 0.0f)
+		{
+			dir_wind.x = 0.0f;
+			windStrength = 0.0f;
+		}
+		this->transform.position.x += windStrength;
+	}
+	// 
+	if (dir_wind.y == 1.0f)
+	{
+		windStrength -= 0.001f;
+		if (windStrength <= 0.0f)
+		{
+			dir_wind.y = 0.0f;
+			windStrength = 0.0f;
+		}
+		this->transform.position.y += windStrength;
+	}
+
+
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
 	CGameObject::Update();
-	time->Update();
 
 	// 地形との当たり判定と補正
 	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
@@ -261,51 +294,23 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_RIGHT:	//	風（右向き）
-				//	オブジェクトに当たったらtrue
-				isWind_right = true;
+				dir_wind.x = 1.0f;
+				dir.x = 1.0f;
+				windStrength = 0.01f;
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->Bcol.centerX = this->transform.position.x;
+				this->Bcol.centerY = this->transform.position.y;
 				break;
 
-			case OBJECT_TYPE::WIND_UP:	//	風（上向き）
-				//	オブジェクトに当たったtrue
-				isWind_up = true;
-				//	タイマーの初期化
-				time->InitTimer(3, TIMER_MODE::COUNT_DOWN);
+			case OBJECT_TYPE::WIND_UP:		//	風（上向き）
+				dir_wind.y = 1.0f;
+				dir.y = 1.0f;
+				windStrength = 0.01f;
 				break;
 
 			default:
 				break;
 			}
-		}
-	}
-
-	//=======================//
-	if (isWind_right)
-	{
-		if (time->GetTimerState() != TIMER_STATE::UPDATE)
-		{
-			time->StartTimer();
-		}
-		wind->Wind_Right(this, 0.8f);
-	}
-
-	if (time->GetTime() == 0)
-	{
-		isWind_right = false;
-	}
-	//=======================//
-}
-
-void CPlayer::WindUp()
-{
-	if (isWind_up)
-	{
-		// 上向きベクトル
-		dir.y = 1.0f;
-		// 風が起きているような計算
-		this->transform.position.y += wind_power;
-		if (prevFrameCorrect.y == 1)
-		{
-			isWind_up = false;
 		}
 	}
 }
@@ -332,5 +337,4 @@ CPlayer::~CPlayer()
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う
 	CGameObject::~CGameObject();
-	delete time;
 }

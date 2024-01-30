@@ -16,7 +16,7 @@ SelectScene::SelectScene()
 	StageSelect->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
 	StageSelect->SetFontStyle(FONT_STYLE::ITALIC);
 
-	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_POS));
+	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS));
 	Objects.push_back(StagePreview);
 	StagePreview->transform.position = { -1.0f, -0.15f, 0.5f };
 	StagePreview->transform * 1.5f;

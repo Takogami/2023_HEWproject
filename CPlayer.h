@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "CGameObject.h"
+#include "CTimer.h"
 
 enum class PState
 {
@@ -19,6 +20,9 @@ private:
     const float gravity = 0.97f / 200;
     // ジャンプ開始時(初期状態)のジャンプの強さ
     const float ini_jumpStrength = 13.0f / 200;
+    // 速度の限界値
+    const float velocityY_limit = 0.0005f;
+
     // 現在のジャンプの強さ
     float jumpStrength = ini_jumpStrength;
     // ジャンプフラグ
@@ -30,9 +34,6 @@ private:
     CORRECT_DIR prevFrameCorrect = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
-
-    CTimer* time;
-
 
     /* メソッド */
 
@@ -48,13 +49,16 @@ public:
     // 方向ベクトル
     DirectX::XMFLOAT3 dir = { 0.0f, 0.0f, 0.0f };
 
+    // 受けている風の方向ベクトル
+    DirectX::XMFLOAT3 dir_wind = { 0.0f, 0.0f, 0.0f };
+    // 受けている風力
+    float windStrength = 0.0f;
+
     /* メソッド */
 
     CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type = OBJECT_TYPE::PLAYER);
     // 移動速度を設定
     inline void SetMoveSpeed(float sp) { velocity.x = sp; };
-
-    void WindUp();  //  上向き
 
     PState GetState();
     void SetState(PState state);
