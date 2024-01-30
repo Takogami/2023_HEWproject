@@ -295,6 +295,52 @@ float CPlayer::Jump()
 	return jumpStrength;
 }
 
+void CPlayer::ReceiveWind()
+{
+	// �����E
+	if (dir_wind.x == 1.0f)
+	{
+		// �󂯂Ă��镗�͂���߂�
+		receiveWindPower -= 0.001f;
+		// �󂯂Ă��镗�͂��Ȃ������畗�x�N�g����0�ɖ߂�
+		if (receiveWindPower <= 0.0f)
+		{
+			dir_wind.x = 0.0f;
+			receiveWindPower = 0.0f;
+		}
+		// �ړ��ʂɕ��̌v�Z��������
+		this->transform.position.x += receiveWindPower;
+	}
+	// �E����
+	else if (dir_wind.x == -1.0f)
+	{
+		// �󂯂Ă��镗�͂���߂�
+		receiveWindPower -= 0.001f;
+		// �󂯂Ă��镗�͂��Ȃ������畗�x�N�g����0�ɖ߂�
+		if (receiveWindPower <= 0.0f)
+		{
+			dir_wind.x = 0.0f;
+			receiveWindPower = 0.0f;
+		}
+		// �ړ��ʂɕ��̌v�Z��������
+		this->transform.position.x -= receiveWindPower;
+	}
+	// ������
+	if (dir_wind.y == 1.0f)
+	{
+		// �󂯂Ă��镗�͂���߂�
+		receiveWindPower -= 0.001f;
+		// �󂯂Ă��镗�͂��Ȃ������畗�x�N�g����0�ɖ߂�
+		if (receiveWindPower <= 0.0f)
+		{
+			dir_wind.y = 0.0f;
+			receiveWindPower = 0.0f;
+		}
+		// �ړ��ʂɕ��̌v�Z��������
+		this->transform.position.y += receiveWindPower;
+	}
+}
+
 void CPlayer::Update()
 {
 	// 風の影響を受けていないなら向きを戻す
@@ -334,29 +380,8 @@ void CPlayer::Update()
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y += dir.y * velocity.y;
 
-	// 移動量に風の計算を加える
-	if (dir_wind.x == 1.0f)
-	{
-		windStrength -= 0.001f;
-		if (windStrength <= 0.0f)
-		{
-			dir_wind.x = 0.0f;
-			windStrength = 0.0f;
-		}
-		this->transform.position.x += windStrength;
-	}
-	// 
-	if (dir_wind.y == 1.0f)
-	{
-		windStrength -= 0.001f;
-		if (windStrength <= 0.0f)
-		{
-			dir_wind.y = 0.0f;
-			windStrength = 0.0f;
-		}
-		this->transform.position.y += windStrength;
-	}
-
+	// ���̌v�Z���s��
+	ReceiveWind();
 
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
@@ -367,6 +392,7 @@ void CPlayer::Update()
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
 		{
+			// �I�u�W�F�N�g�̎�ނɉ����ď�����ς���
 			switch ((*it)->GetObjectType())
 			{
 			case OBJECT_TYPE::NORMAL:
@@ -393,19 +419,20 @@ void CPlayer::Update()
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
-			case OBJECT_TYPE::WIND_RIGHT:	//	風（右向き）
-				dir_wind.x = 1.0f;
+			case OBJECT_TYPE::WIND_RIGHT:	//	���i�E�����j
+				// �����������̋������擾����
+				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
+				// �����������̌����̕ۑ��ƃv���C���[�̈ړ�������ύX����
 				dir.x = 1.0f;
-				windStrength = 0.01f;
-				// オブジェクトの位置とコライダーの中心を合わせる
-				this->Bcol.centerX = this->transform.position.x;
-				this->Bcol.centerY = this->transform.position.y;
+				dir_wind.x = 1.0f;
 				break;
 
-			case OBJECT_TYPE::WIND_UP:		//	風（上向き）
-				dir_wind.y = 1.0f;
+			case OBJECT_TYPE::WIND_UP:		//	���i������j
+				// �����������̋������擾����
+				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
+				// �����������̌����̕ۑ��ƃv���C���[�̈ړ�������ύX����
 				dir.y = 1.0f;
-				windStrength = 0.01f;
+				dir_wind.y = 1.0f;
 				break;
 
 			default:
