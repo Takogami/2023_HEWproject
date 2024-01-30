@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "CGameObject.h"
-#include "CTimer.h"
 
 enum class PState
 {
@@ -16,6 +15,12 @@ class CPlayer :
 private:
     /* メンバ変数 */
 
+    // スティック入力一時保存用
+    float input_stickX;
+    float input_stickY;
+    float old_input_stickX = 0.0f;
+    float old_input_stickY = 0.0f;
+
     // 重力
     const float gravity = 0.97f / 200;
     // ジャンプ開始時(初期状態)のジャンプの強さ
@@ -26,6 +31,8 @@ private:
     float jumpStrength = ini_jumpStrength;
     // ジャンプフラグ
     bool isJump = false;
+    // アニメーションフラグ
+    bool isanimation = false;
 
     // プレイヤーの状態
     PState State = PState::NORMAL;

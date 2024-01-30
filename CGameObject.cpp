@@ -125,7 +125,7 @@ void CGameObject::SetUseingCamera(CCamera* setCamera)
 	useCamera = setCamera;
 }
 
-void CGameObject::InitAnimParameter(bool iniPlaying, int spritU, ANIM_PATTERN pattern, float sp)
+void CGameObject::InitAnimParameter(bool iniPlaying, int spritU, int spritV, ANIM_PATTERN pattern, float sp)
 {
 	// ‰Šúó‘Ô‚ÅÄ¶‚·‚é‚©İ’è
 	if (iniPlaying)
@@ -140,6 +140,8 @@ void CGameObject::InitAnimParameter(bool iniPlaying, int spritU, ANIM_PATTERN pa
 	anim->ResetAnimation();
 	// ‰¡•ûŒü‚Ì•ªŠ„”‚ğİ’è
 	anim->SetSpritU(spritU);
+	// c•ûŒü‚Ì•ªŠ„”‚ğİ’è
+	anim->SetSpritV(spritV);
 	// uvˆÚ“®—Ê‚Ìİ’è
 	anim->SetMovementUV(sprit);
 	// ‰Šú‚ÉÄ¶‚·‚éƒpƒ^[ƒ“‚ğİ’è
