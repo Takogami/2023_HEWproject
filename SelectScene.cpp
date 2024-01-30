@@ -82,7 +82,7 @@ void SelectScene::Update()
 			moveEndPos[i] = StageList[i]->transform.position.y - 0.7f;
 			selectMoveUp = true;
 			// イージングの初期化
-			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.4f, 0, EASE::easeOutCubic);
+			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutBack);
 		}
 	}
 	// 下移動
@@ -99,7 +99,7 @@ void SelectScene::Update()
 			moveEndPos[i] = StageList[i]->transform.position.y + 0.7f;
 			selectMoveDown = true;
 			// イージングの初期化
-			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutCubic);
+			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutBack);
 		}
 	}
 
@@ -130,7 +130,7 @@ void SelectScene::Update()
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを上移動させる
-			if (StageList[i]->transform.position.y <= moveEndPos[i])
+			if (StageList[i]->transform.position.y <= moveEndPos[i] && selectEase[i]->GetState() == STATE::END)
 			{
 				// 移動が終了しているなら最終座標を代入しておく
 				StageList[i]->transform.position.y = moveEndPos[i];
@@ -145,7 +145,7 @@ void SelectScene::Update()
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを下移動させる
-			if (StageList[i]->transform.position.y >= moveEndPos[i])
+			if (StageList[i]->transform.position.y >= moveEndPos[i] && selectEase[i]->GetState() == STATE::END)
 			{
 				// 移動が終了しているなら最終座標を代入しておく
 				StageList[i]->transform.position.y = moveEndPos[i];
