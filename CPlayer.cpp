@@ -1,15 +1,16 @@
 #include "CPlayer.h"
 #include "CScene.h"
+#include "CWind.h"
 
-// ƒRƒ“ƒgƒ[ƒ‰[‚ğg‚¤ê‡‚Ítrue‚ğw’è
+// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ä½¿ã†å ´åˆã¯trueã‚’æŒ‡å®š
 #define USE_CONTROLLER (false)
 
-//–¾¦“I‚ÉeƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğŒÄ‚Ño‚·
+//æ˜ç¤ºçš„ã«è¦ªã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å‘¼ã³å‡ºã™
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
-	// ‰ŠúƒXƒs[ƒhİ’è
+	// åˆæœŸã‚¹ãƒ”ãƒ¼ãƒ‰è¨­å®š
 	SetMoveSpeed(0.05f);
-	// d—Í‚ğ‰Šú’l‚Æ‚·‚é
+	// é‡åŠ›ã‚’åˆæœŸå€¤ã¨ã™ã‚‹
 	velocity.y = gravity;
 }
 
@@ -18,45 +19,45 @@ void CPlayer::PlayerInput()
 #if USE_CONTROLLER == true
 
 	
-	// ƒXƒeƒBƒbƒN‚Ì“ü—Í‚ğ•Û‘¶
+	// ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›ã‚’ä¿å­˜
 	input_stickX = gInput->GetLeftStickX();
 	input_stickY = gInput->GetLeftStickY();
 	switch (State)
 	{
-	case PState::NORMAL: //’Êíó‘Ô
+	case PState::NORMAL: //é€šå¸¸çŠ¶æ…‹
 		if (anim->GetIsAnimation() == false)
 		{
-			// ‘O‚ÌƒtƒŒ[ƒ€‚Å‚ß‚è‚ñ‚¾•ûŒü‚Å‚È‚¢‚È‚çˆÚ“®—Ê‚ğ“K‰‚·‚é
+			// å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã‚ã‚Šè¾¼ã‚“ã æ–¹å‘ã§ãªã„ãªã‚‰ç§»å‹•é‡ã‚’é©å¿œã™ã‚‹
 			if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
 				(input_stickX < 0.0f && prevFrameCorrect.x != 1))
 			{
 				dir.x = input_stickX;
 			}
-			// ‘O‚ÌƒtƒŒ[ƒ€‚Å‚ß‚è‚ñ‚¾•ûŒü‚ÉˆÚ“®‚µ‚æ‚¤‚Æ‚µ‚Ä‚é‚È‚çˆÚ“®—Ê‚ğ“K‰‚µ‚È‚¢
+			// å‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã‚ã‚Šè¾¼ã‚“ã æ–¹å‘ã«ç§»å‹•ã—ã‚ˆã†ã¨ã—ã¦ã‚‹ãªã‚‰ç§»å‹•é‡ã‚’é©å¿œã—ãªã„
 			else
 			{
 				dir.x = 0;
 			}
 			if (input_stickX < 0.0f)
 			{
-				SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// ¶‚É•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// å·¦ã«æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 			}
 			else if (input_stickX > 0.0f)
 			{
-				SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// ‰E‚É•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// å³ã«æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 			}
 
 			if (input_stickX == 0)
 			{
-				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// “®‚©‚È‚¢ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// å‹•ã‹ãªã„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 			}
 			if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
 			{
-				SetState(PState::FALL);// “|‚ê‚é
-				SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// “|‚ê‚½ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetState(PState::FALL);// å€’ã‚Œã‚‹
+				SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// å€’ã‚ŒãŸã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				anim->SetIsAnimation(true);
 			}
-			// Aƒ{ƒ^ƒ““ü—Í‚Å‚Æ‚è‚ ‚¦‚¸‚ÌƒWƒƒƒ“ƒv‘€ì
+			// Aãƒœã‚¿ãƒ³å…¥åŠ›ã§ã¨ã‚Šã‚ãˆãšã®ã‚¸ãƒ£ãƒ³ãƒ—æ“ä½œ
 			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
 			{
 				isJump = true;
@@ -64,28 +65,28 @@ void CPlayer::PlayerInput()
 			}
 		}
 		break;
-	case PState::FALL:// “|‚ê‚½ó‘Ô
+	case PState::FALL:// å€’ã‚ŒãŸçŠ¶æ…‹
 		if (anim->GetIsAnimation() == false)
 		{
 			if ((input_stickY > 0.0f) && (old_input_stickY <= 0.0f))
 			{
-				SetState(PState::NORMAL);// ’Êíó‘Ô‚É–ß‚·
-				SetAnimationPattern(ANIM_PATTERN::GETUP);// ‹N‚«ã‚ª‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetState(PState::NORMAL);// é€šå¸¸çŠ¶æ…‹ã«æˆ»ã™
+				SetAnimationPattern(ANIM_PATTERN::GETUP);// èµ·ãä¸ŠãŒã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				anim->SetIsAnimation(true);
 			}
 			if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
 			{
-				SetState(PState::BREAKLEFT);// ¶‚ÉÜ‚ê‚é
-				SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// ¶‚ÉÜ‚ê‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetState(PState::BREAKLEFT);// å·¦ã«æŠ˜ã‚Œã‚‹
+				SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// å·¦ã«æŠ˜ã‚Œã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				anim->SetIsAnimation(true);
 			}
 			if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
 			{
-				SetState(PState::BREAKRIGHT);// ‰E‚ÉÜ‚ê‚é
-				SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// ‰E‚ÉÜ‚ê‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetState(PState::BREAKRIGHT);// å³ã«æŠ˜ã‚Œã‚‹
+				SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// å³ã«æŠ˜ã‚Œã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				anim->SetIsAnimation(true);
 			}
-			// Bƒ{ƒ^ƒ““ü—Í‚Å‚Æ‚è‚ ‚¦‚¸‚ÌƒWƒƒƒ“ƒv‘€ì
+			// Bãƒœã‚¿ãƒ³å…¥åŠ›ã§ã¨ã‚Šã‚ãˆãšã®ã‚¸ãƒ£ãƒ³ãƒ—æ“ä½œ
 			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
 			{
 				isJump = true;
@@ -93,24 +94,24 @@ void CPlayer::PlayerInput()
 			}
 		}
 		break;
-	case PState::BREAKLEFT:// ¶‚ÉÜ‚ê‚½ó‘Ô
+	case PState::BREAKLEFT:// å·¦ã«æŠ˜ã‚ŒãŸçŠ¶æ…‹
 		if (anim->GetIsAnimation() == false)
 		{
 			if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
 			{
-				SetState(PState::FALL);// “|‚ê‚½ó‘Ô‚É–ß‚·
-				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// Ü‚ê‚½‚Ì‚ª’¼‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetState(PState::FALL);// å€’ã‚ŒãŸçŠ¶æ…‹ã«æˆ»ã™
+				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// æŠ˜ã‚ŒãŸã®ãŒç›´ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				anim->SetIsAnimation(true);
 			}
 		}
 		break;
-	case PState::BREAKRIGHT:// ‰E‚ÉÜ‚ê‚½ó‘Ô
+	case PState::BREAKRIGHT:// å³ã«æŠ˜ã‚ŒãŸçŠ¶æ…‹
 		if (anim->GetIsAnimation() == false)
 		{
 			if (input_stickX < -1.0f && (old_input_stickX >= -1.0f))
 			{
-				SetState(PState::FALL);// “|‚ê‚½ó‘Ô‚É–ß‚·
-				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// Ü‚ê‚½‚Ì‚ª’¼‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetState(PState::FALL);// å€’ã‚ŒãŸçŠ¶æ…‹ã«æˆ»ã™
+				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// æŠ˜ã‚ŒãŸã®ãŒç›´ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				anim->SetIsAnimation(true);
 			}
 		}
@@ -123,7 +124,7 @@ void CPlayer::PlayerInput()
 #else
 	switch (State)
 	{
-	case PState::NORMAL:// ’Êíó‘Ô‚Ìˆ—
+	case PState::NORMAL:// é€šå¸¸çŠ¶æ…‹ã®å‡¦ç†
 		//SetAnimationPattern(ANIM_PATTERN::NO_ANIM);
 		//else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
 		//{
@@ -145,7 +146,7 @@ void CPlayer::PlayerInput()
 				{
 					dir.x = -1.0f;
 					prevFrameDir.x = dir.x;
-					SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// ¶‚É•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// å·¦ã«æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				}
 				else
 				{
@@ -159,7 +160,7 @@ void CPlayer::PlayerInput()
 				{
 					dir.x = 1.0f;
 					prevFrameDir.x = dir.x;
-					SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// ‰E‚É•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// å³ã«æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 				}
 				else
 				{
@@ -173,8 +174,8 @@ void CPlayer::PlayerInput()
 					/*dir.y = -1.0f;
 					prevFrameDir.y = dir.y;*/
 
-					SetState(PState::FALL);// “|‚ê‚½ó‘Ô
-					SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// “|‚ê‚½ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetState(PState::FALL);// å€’ã‚ŒãŸçŠ¶æ…‹
+					SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// å€’ã‚ŒãŸã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 					anim->SetIsAnimation(true);
 				}
 				else
@@ -184,7 +185,7 @@ void CPlayer::PlayerInput()
 			}
 			else if (!gInput->GetKeyPress(VK_RIGHT) && !gInput->GetKeyPress(VK_LEFT) && !gInput->GetKeyPress(VK_UP) && !gInput->GetKeyPress(VK_DOWN))
 			{
-				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// “®‚©‚È‚¢ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// å‹•ã‹ãªã„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 			}
 
 			if (gInput->GetKeyPress(VK_TAB))
@@ -194,15 +195,15 @@ void CPlayer::PlayerInput()
 		}
 		break;
 
-	case PState::FALL:// “|‚ê‚½ó‘Ô‚Ìˆ—
+	case PState::FALL:// å€’ã‚ŒãŸçŠ¶æ…‹ã®å‡¦ç†
 		if (anim->GetIsAnimation() == false)
 		{
 			if (gInput->GetKeyPress(VK_UP))
 			{
 				if (!gInput->GetKeyPress(VK_DOWN))
 				{
-					SetState(PState::NORMAL);// ’Êíó‘Ô
-					SetAnimationPattern(ANIM_PATTERN::GETUP);// ‹N‚«ã‚ª‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetState(PState::NORMAL);// é€šå¸¸çŠ¶æ…‹
+					SetAnimationPattern(ANIM_PATTERN::GETUP);// èµ·ãä¸ŠãŒã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 					anim->SetIsAnimation(true);
 				}
 				else
@@ -214,8 +215,8 @@ void CPlayer::PlayerInput()
 			{
 				if (!gInput->GetKeyTrigger(VK_RIGHT))
 				{
-					SetState(PState::BREAKLEFT);// ¶‚ÉÜ‚ê‚éó‘Ô
-					SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// ¶‚ÉÜ‚ê‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetState(PState::BREAKLEFT);// å·¦ã«æŠ˜ã‚Œã‚‹çŠ¶æ…‹
+					SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// å·¦ã«æŠ˜ã‚Œã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 					anim->SetIsAnimation(true);
 				}
 				else
@@ -227,8 +228,8 @@ void CPlayer::PlayerInput()
 			{
 				if (!gInput->GetKeyTrigger(VK_LEFT))
 				{
-					SetState(PState::BREAKRIGHT);// ‰E‚ÉÜ‚ê‚éó‘Ô
-					SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// ‰E‚ÉÜ‚ê‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetState(PState::BREAKRIGHT);// å³ã«æŠ˜ã‚Œã‚‹çŠ¶æ…‹
+					SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// å³ã«æŠ˜ã‚Œã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 					anim->SetIsAnimation(true);
 				}
 				else
@@ -246,8 +247,8 @@ void CPlayer::PlayerInput()
 			{
 				if (!gInput->GetKeyTrigger(VK_LEFT))
 				{
-					SetState(PState::FALL);// “|‚ê‚½ó‘Ô
-					SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// Ü‚ê‚½‚Ì‚ª’¼‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetState(PState::FALL);// å€’ã‚ŒãŸçŠ¶æ…‹
+					SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// æŠ˜ã‚ŒãŸã®ãŒç›´ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 					anim->SetIsAnimation(true);
 				}
 				else
@@ -265,8 +266,8 @@ void CPlayer::PlayerInput()
 			{
 				if (!gInput->GetKeyTrigger(VK_RIGHT))
 				{
-					SetState(PState::FALL);// “|‚ê‚½ó‘Ô
-					SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// Ü‚ê‚½‚Ì‚ª’¼‚éƒAƒjƒ[ƒVƒ‡ƒ“Ä¶
+					SetState(PState::FALL);// å€’ã‚ŒãŸçŠ¶æ…‹
+					SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// æŠ˜ã‚ŒãŸã®ãŒç›´ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿ
 					anim->SetIsAnimation(true);
 				}
 				else
@@ -286,46 +287,82 @@ void CPlayer::PlayerInput()
 
 float CPlayer::Jump()
 {
-	// Œü‚«‚ğã‚É‚·‚é
+	// å‘ãã‚’ä¸Šã«ã™ã‚‹
 	dir.y = 1.0f;
-	// ƒWƒƒƒ“ƒv—Í‚ğd—Í‚É]‚Á‚ÄXV
+	// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’é‡åŠ›ã«å¾“ã£ã¦æ›´æ–°
 	jumpStrength -= gravity;
-	// ŒvZ‚µ‚½ƒWƒƒƒ“ƒv—Í‚ğ“K‰
+	// è¨ˆç®—ã—ãŸã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’é©å¿œ
 	return jumpStrength;
 }
 
-
 void CPlayer::Update()
 {
+	// é¢¨ã®å½±éŸ¿ã‚’å—ã‘ã¦ã„ãªã„ãªã‚‰å‘ãã‚’æˆ»ã™
+	if (dir_wind.x == 0.0f)
+	{
+		// å‘ãã‚’æˆ»ã™
+		dir.x = 0.0f;
+	}
+	if (dir_wind.y == 0.0f)
+	{
+		// å‘ãã‚’æˆ»ã™
+		dir.y = -1.0f;
+	}
 
-	// Œü‚«‚ğ–ß‚·
-	dir.x = 0.0f;
-	dir.y = -1.0f;
-
-	// ƒvƒŒƒCƒ„[‘€ìŠÖ˜A‚Ì“ü—Íˆ—
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ“ä½œé–¢é€£ã®å…¥åŠ›å‡¦ç†
 	PlayerInput();
 
-	// ‘OƒtƒŒ[ƒ€‚Ì•â³•ûŒü‚ğ‰Šú‰»
+	// å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®è£œæ­£æ–¹å‘ã‚’åˆæœŸåŒ–
 	prevFrameCorrect = { 0 };
 
-	// ’PˆÊƒxƒNƒgƒ‹‰»(–îˆó‚ğ‚P‚É‚·‚é) = ³‹K‰»
-	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// ƒxƒNƒgƒ‹ŒvZ—p‚ÌŒ^‚É“ü‚ê‚é
-	v = DirectX::XMVector3Normalize(v);					// ³‹K‰»‚·‚é
-	DirectX::XMStoreFloat3(&dir, v);					// Œ³‚Ì•Ï”dir‚É–ß‚·
-	
-	// d—Í‚Ì‰e‹¿‚ğó‚¯‚ÄY²•ûŒü‚Ì‘¬“x‚ğXV
-	// ƒWƒƒƒ“ƒv’†‚È‚çƒWƒƒƒ“ƒv—Í‚ÌXVˆ—‚ğs‚¤
+	// å˜ä½ãƒ™ã‚¯ãƒˆãƒ«åŒ–(çŸ¢å°ã‚’ï¼‘ã«ã™ã‚‹) = æ­£è¦åŒ–
+	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// ãƒ™ã‚¯ãƒˆãƒ«è¨ˆç®—ç”¨ã®å‹ã«å…¥ã‚Œã‚‹
+	v = DirectX::XMVector3Normalize(v);					// æ­£è¦åŒ–ã™ã‚‹
+	DirectX::XMStoreFloat3(&dir, v);					// å…ƒã®å¤‰æ•°dirã«æˆ»ã™
+
+	// é¢¨ã®å½±éŸ¿ã§ã®yæ–¹å‘ã®é€Ÿåº¦ãŒé™ç•Œå€¤ã‚’è¶…ãˆãªã„ã‚ˆã†ã«ã™ã‚‹
+	if ((dir_wind.y == 1.0f || dir_wind.y == -1.0f) && velocity.y > velocityY_limit)
+	{
+		velocity.y = velocityY_limit;
+	}
+
+	// é‡åŠ›ã®å½±éŸ¿ã‚’å—ã‘ã¦Yè»¸æ–¹å‘ã®é€Ÿåº¦ã‚’æ›´æ–°
+	// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ãªã‚‰ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã®æ›´æ–°å‡¦ç†ã‚’è¡Œã†
 	velocity.y = isJump ? Jump() : velocity.y += gravity;
 
-	// ƒxƒNƒgƒ‹‚É‘¬“x‚ğ‚©‚¯‚ÄˆÊ’u‚ğ•ÏX
+	// ãƒ™ã‚¯ãƒˆãƒ«ã«é€Ÿåº¦ã‚’ã‹ã‘ã¦ä½ç½®ã‚’å¤‰æ›´
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y += dir.y * velocity.y;
 
-	// eƒNƒ‰ƒX‚ÌUpdate()‚ğ–¾¦“I‚ÉŒÄ‚Ño‚·
-	// ‘S‚Ä‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‹¤’Ê‚ÌXVˆ—‚ğs‚¤
+	// ç§»å‹•é‡ã«é¢¨ã®è¨ˆç®—ã‚’åŠ ãˆã‚‹
+	if (dir_wind.x == 1.0f)
+	{
+		windStrength -= 0.001f;
+		if (windStrength <= 0.0f)
+		{
+			dir_wind.x = 0.0f;
+			windStrength = 0.0f;
+		}
+		this->transform.position.x += windStrength;
+	}
+	// 
+	if (dir_wind.y == 1.0f)
+	{
+		windStrength -= 0.001f;
+		if (windStrength <= 0.0f)
+		{
+			dir_wind.y = 0.0f;
+			windStrength = 0.0f;
+		}
+		this->transform.position.y += windStrength;
+	}
+
+
+	// è¦ªã‚¯ãƒ©ã‚¹ã®Update()ã‚’æ˜ç¤ºçš„ã«å‘¼ã³å‡ºã™
+	// å…¨ã¦ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå…±é€šã®æ›´æ–°å‡¦ç†ã‚’è¡Œã†
 	CGameObject::Update();
 
-	// ’nŒ`‚Æ‚Ì“–‚½‚è”»’è‚Æ•â³
+	// åœ°å½¢ã¨ã®å½“ãŸã‚Šåˆ¤å®šã¨è£œæ­£
 	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
@@ -333,59 +370,47 @@ void CPlayer::Update()
 			switch ((*it)->GetObjectType())
 			{
 			case OBJECT_TYPE::NORMAL:
-				// ƒRƒ‰ƒCƒ_[‚ÌˆÊ’u‚ğ•â³‚µA•â³‚µ‚½•ûŒü‚ğó‚¯æ‚é
+				// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä½ç½®ã‚’è£œæ­£ã—ã€è£œæ­£ã—ãŸæ–¹å‘ã‚’å—ã‘å–ã‚‹
 				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 
-				// “Vˆä‚É‚Ô‚Â‚©‚Á‚Ä‚¢‚½‚È‚çƒWƒƒƒ“ƒv—Í‚ğ0‚É‚·‚é
+				// å¤©äº•ã«ã¶ã¤ã‹ã£ã¦ã„ãŸãªã‚‰ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’0ã«ã™ã‚‹
 				if (prevFrameCorrect.y == -1)
 				{
-					dir.y = -1.0f;		// Œü‚«‚ğ‰º‚É‚·‚é
-					jumpStrength = 0;	// ƒWƒƒƒ“ƒv—Í‚ğ0‚É‚·‚é
+					dir.y = -1.0f;		// å‘ãã‚’ä¸‹ã«ã™ã‚‹
+					jumpStrength = 0;	// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’0ã«ã™ã‚‹
 				}
-				// d—Í‚É‚æ‚Á‚Ä’n–Ê‚ÉÕ“Ë‚µ‚Ä‚¢‚½‚È‚ç
+				// é‡åŠ›ã«ã‚ˆã£ã¦åœ°é¢ã«è¡çªã—ã¦ã„ãŸãªã‚‰
 				if (prevFrameCorrect.y == 1)
 				{
 					dir.y = -1.0f;
-					velocity.y = 0.0f;				// ‘¬“xY‚ğ0‚É–ß‚·
+					velocity.y = 0.0f;				// é€Ÿåº¦Yã‚’0ã«æˆ»ã™
 					jumpStrength = ini_jumpStrength;
 					isJump = false;
 				}
 
-				// ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ÆƒRƒ‰ƒCƒ_[‚Ì’†S‚ğ‡‚í‚¹‚é
+				// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ã¨ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸­å¿ƒã‚’åˆã‚ã›ã‚‹
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
-			case OBJECT_TYPE::WIND:
-				//	ƒIƒuƒWƒFƒNƒg‚É“–‚½‚Á‚½‚çtrue
-				isWind = true;
+			case OBJECT_TYPE::WIND_RIGHT:	//	é¢¨ï¼ˆå³å‘ãï¼‰
+				dir_wind.x = 1.0f;
+				dir.x = 1.0f;
+				windStrength = 0.01f;
+				// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ã¨ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ä¸­å¿ƒã‚’åˆã‚ã›ã‚‹
+				this->Bcol.centerX = this->transform.position.x;
+				this->Bcol.centerY = this->transform.position.y;
+				break;
 
-				
+			case OBJECT_TYPE::WIND_UP:		//	é¢¨ï¼ˆä¸Šå‘ãï¼‰
+				dir_wind.y = 1.0f;
+				dir.y = 1.0f;
+				windStrength = 0.01f;
 				break;
 
 			default:
 				break;
 			}
-		}
-	}
-}
-
-void CPlayer::Wind()
-{
-	//	ƒvƒŒƒCƒ„[‚Ìó‘Ô‚ªÜ‚ê‚Ä‚¢‚Ä•—‚ª‚¢‚Ä‚éƒIƒuƒWƒFƒNƒg‚É“–‚½‚Á‚½‚çc
-	if (isWind == true && (State == PState::BREAKLEFT || State == PState::BREAKRIGHT))
-	{
-		//	‰EŒü‚«ƒxƒNƒgƒ‹
-		dir.x = 1.0f;
-
-		//	•—‚ª‹N‚«‚Ä‚é‚æ‚¤‚ÈŒvZ
-		this->transform.position.x += dir.x * velocity.x * 1.1f;
-
-		//	’n–Ê‚É“–‚½‚Á‚½‚çc
-		if (prevFrameCorrect.y == 1)
-		{
-			//	ˆÚ“®‚ğI—¹
-			isWind = false;
 		}
 	}
 }
@@ -402,14 +427,14 @@ void CPlayer::SetState(PState state)
 
 void CPlayer::Draw()
 {
-	// eƒNƒ‰ƒX‚ÌDraw()‚ğ–¾¦“I‚ÉŒÄ‚Ño‚·
-	// ‘S‚Ä‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‹¤’Ê‚Ì•`‰æˆ—‚ğs‚¤
+	// è¦ªã‚¯ãƒ©ã‚¹ã®Draw()ã‚’æ˜ç¤ºçš„ã«å‘¼ã³å‡ºã™
+	// å…¨ã¦ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå…±é€šã®æç”»å‡¦ç†ã‚’è¡Œã†
 	CGameObject::Draw();
 }
 
 CPlayer::~CPlayer()
 {
-	// eƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ–¾¦“I‚ÉŒÄ‚Ño‚·
-	// ’¸“_ƒoƒbƒtƒ@‚Ì‰ğ•ú‚ğs‚¤
+	// è¦ªã‚¯ãƒ©ã‚¹ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’æ˜ç¤ºçš„ã«å‘¼ã³å‡ºã™
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®è§£æ”¾ã‚’è¡Œã†
 	CGameObject::~CGameObject();
 }

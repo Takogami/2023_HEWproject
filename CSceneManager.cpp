@@ -23,13 +23,17 @@ CSceneManager::~CSceneManager()
 	{
 		delete title;
 	}
-	if (result != nullptr)
+	if (select != nullptr)
 	{
-		delete result;
+		delete select;
 	}
 	if (stage != nullptr)
 	{
 		delete stage;
+	}
+	if (result != nullptr)
+	{
+		delete result;
 	}
 }
 
@@ -69,7 +73,13 @@ void CSceneManager::Update()
 		title->Draw();
 		break;
 
-	//	ステージ01
+	// ステージ選択画面
+	case SCENE_ID::SELECT:
+		select->Update();
+		select->Draw();
+		break;
+
+	// ステージ01
 	case SCENE_ID::STAGE_01:
 		stage->Update();
 		stage->Draw();
@@ -93,9 +103,15 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 	switch (_inScene)
 	{
 	case SCENE_ID::TITLE:
-		// もし現在のシーンがTITLEなら、RESULTシーンを解放する
+		// もし現在のシーンがTITLEなら、TITLEシーンを解放する
 		delete title;
 		title = nullptr;
+		break;
+
+	case SCENE_ID::SELECT:
+		// もし現在のシーンがSELECTなら、SELECTシーンを解放する
+		delete select;
+		select = nullptr;
 		break;
 
 	case SCENE_ID::STAGE_01:
@@ -105,7 +121,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 		break;
 
 	case SCENE_ID::RESULT:
-		// もし現在のシーンがRESULTなら、TITLEシーンを解放する
+		// もし現在のシーンがRESULTなら、RESULTシーンを解放する
 		delete result;
 		result = nullptr;
 		break;
@@ -120,6 +136,11 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 	case SCENE_ID::TITLE:
 		// もし新しいシーンがTITLEなら、新しいTITLEシーンを作成する
 		title = new TitleScene();
+		break;
+
+	case SCENE_ID::SELECT:
+		// もし新しいシーンがSELECTなら、新しいSELECTシーンを作成する
+		select = new SelectScene();
 		break;
 
 	case SCENE_ID::STAGE_01:

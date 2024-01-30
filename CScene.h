@@ -4,11 +4,14 @@
 #include <list>
 #include "CPlayer.h"
 #include "CCursor.h"
+#include "CWind.h"
 #include "CCamera.h"
 #include "CTerrainLoader.h"
 #include "CTextureLoader.h"
 #include "CInput.h"
 #include "CDrawString.h"
+#include "CEase.h"
+#include "CTimer.h"
 
 class CScene
 {

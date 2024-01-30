@@ -147,6 +147,7 @@
     <ClCompile Include="CCollision.cpp" />
     <ClCompile Include="CCursor.cpp" />
     <ClCompile Include="CDrawString.cpp" />
+    <ClCompile Include="CEase.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
@@ -156,11 +157,14 @@
     <ClCompile Include="CSmoothing.cpp" />
     <ClCompile Include="CTerrainLoader.cpp" />
     <ClCompile Include="CTextureLoader.cpp" />
+    <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CTransform.cpp" />
+    <ClCompile Include="CWind.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="DirectWrite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
@@ -171,6 +175,7 @@
     <ClInclude Include="CCollision.h" />
     <ClInclude Include="CCursor.h" />
     <ClInclude Include="CDrawString.h" />
+    <ClInclude Include="CEase.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />
@@ -180,11 +185,14 @@
     <ClInclude Include="CSmoothing.h" />
     <ClInclude Include="CTerrainLoader.h" />
     <ClInclude Include="CTextureLoader.h" />
+    <ClInclude Include="CTimer.h" />
     <ClInclude Include="CTransform.h" />
+    <ClInclude Include="CWind.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="DirectWrite.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="SelectScene.h" />
     <ClInclude Include="StageScene.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexShader.h" />
