@@ -125,6 +125,8 @@ private:
 	STATE state;
 	// 開始座標
 	float* startPos;
+	// 変更前データ
+	float startData;
 	// 終了座標
 	float endPos;
 	// 実行時間

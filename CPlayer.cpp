@@ -195,6 +195,52 @@ float CPlayer::Jump()
 	return jumpStrength;
 }
 
+void CPlayer::ReceiveWind()
+{
+	// 左→右
+	if (dir_wind.x == 1.0f)
+	{
+		// 受けている風力を弱める
+		receiveWindPower -= 0.001f;
+		// 受けている風力がなかったら風ベクトルを0に戻す
+		if (receiveWindPower <= 0.0f)
+		{
+			dir_wind.x = 0.0f;
+			receiveWindPower = 0.0f;
+		}
+		// 移動量に風の計算を加える
+		this->transform.position.x += receiveWindPower;
+	}
+	// 右→左
+	else if (dir_wind.x == -1.0f)
+	{
+		// 受けている風力を弱める
+		receiveWindPower -= 0.001f;
+		// 受けている風力がなかったら風ベクトルを0に戻す
+		if (receiveWindPower <= 0.0f)
+		{
+			dir_wind.x = 0.0f;
+			receiveWindPower = 0.0f;
+		}
+		// 移動量に風の計算を加える
+		this->transform.position.x -= receiveWindPower;
+	}
+	// 下→上
+	if (dir_wind.y == 1.0f)
+	{
+		// 受けている風力を弱める
+		receiveWindPower -= 0.001f;
+		// 受けている風力がなかったら風ベクトルを0に戻す
+		if (receiveWindPower <= 0.0f)
+		{
+			dir_wind.y = 0.0f;
+			receiveWindPower = 0.0f;
+		}
+		// 移動量に風の計算を加える
+		this->transform.position.y += receiveWindPower;
+	}
+}
+
 void CPlayer::Update()
 {
 	// 風の影響を受けていないなら向きを戻す
@@ -234,29 +280,8 @@ void CPlayer::Update()
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y += dir.y * velocity.y;
 
-	// 移動量に風の計算を加える
-	if (dir_wind.x == 1.0f)
-	{
-		windStrength -= 0.001f;
-		if (windStrength <= 0.0f)
-		{
-			dir_wind.x = 0.0f;
-			windStrength = 0.0f;
-		}
-		this->transform.position.x += windStrength;
-	}
-	// 
-	if (dir_wind.y == 1.0f)
-	{
-		windStrength -= 0.001f;
-		if (windStrength <= 0.0f)
-		{
-			dir_wind.y = 0.0f;
-			windStrength = 0.0f;
-		}
-		this->transform.position.y += windStrength;
-	}
-
+	// 風の計算を行う
+	ReceiveWind();
 
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
@@ -267,6 +292,7 @@ void CPlayer::Update()
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
 		{
+			// オブジェクトの種類に応じて処理を変える
 			switch ((*it)->GetObjectType())
 			{
 			case OBJECT_TYPE::NORMAL:
@@ -294,18 +320,19 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_RIGHT:	//	風（右向き）
-				dir_wind.x = 1.0f;
+				// 当たった風の強さを取得する
+				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
+				// 当たった風の向きの保存とプレイヤーの移動方向を変更する
 				dir.x = 1.0f;
-				windStrength = 0.01f;
-				// オブジェクトの位置とコライダーの中心を合わせる
-				this->Bcol.centerX = this->transform.position.x;
-				this->Bcol.centerY = this->transform.position.y;
+				dir_wind.x = 1.0f;
 				break;
 
 			case OBJECT_TYPE::WIND_UP:		//	風（上向き）
-				dir_wind.y = 1.0f;
+				// 当たった風の強さを取得する
+				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
+				// 当たった風の向きの保存とプレイヤーの移動方向を変更する
 				dir.y = 1.0f;
-				windStrength = 0.01f;
+				dir_wind.y = 1.0f;
 				break;
 
 			default:

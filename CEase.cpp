@@ -1,8 +1,9 @@
 #include "CEase.h"
 
-void CEase::Init(float * start, float end, float dur, int delay, EASE ease)
+void CEase::Init(float* start, float end, float dur, int delay, EASE ease)
 {
 	startPos = start;
+	startData = *startPos;
 	endPos = end;
 	duration = dur * 60;
 	startTime = delay * 60;
@@ -44,7 +45,7 @@ void CEase::Update()
 			double r = count / duration;
 			r = Easeing(r);
 			// doubleŒ^‚ðfloatŒ^‚É•ÏŠ·‚µ‚Ä•Ô‚·
-			*startPos = (float)(* startPos + (endPos - *startPos) * r);
+			*startPos = (float)(startData+ (endPos - startData) * r);
 		}
 		break;
 
