@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "CGameObject.h"
+#include "CAnimation.h"
 
 enum class PState
 {
@@ -29,6 +30,9 @@ private:
     float jumpStrength = ini_jumpStrength;
     // ジャンプフラグ
     bool isJump = false;
+
+    // アニメーションフラグ
+    bool isanimation = false;
 
     PState State = PState::NORMAL;
 

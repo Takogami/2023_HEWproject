@@ -44,6 +44,10 @@ public:
 	void StopAnimation();
 	// アニメーションの進行状況をリセット
 	void ResetAnimation();
+	// 遷移アニメーション中かを設定
+	void SetIsAnimation(bool anim);
+	// 遷移アニメーションの再生状態を取得
+	bool GetIsAnimation();
 	// 現在のuvを取得
 	FLOAT_XY GetUV();
 
@@ -81,5 +85,7 @@ private:
 	int spritV = 1;
 	// 再生中フラグ
 	bool playing = true;
+	//遷移アニメーションフラグ
+	bool isanim = false;
 };
 

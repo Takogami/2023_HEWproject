@@ -29,6 +29,7 @@ void CAnimation::Update()
 	{
 		//カウンターを戻す
 		animCounter -= animationSpeed;
+		SetIsAnimation(false);
 	}
 	else if (animationTable[(int)anim_pattern][(int)animCounter] == ANIM_FINISH)
 	{
@@ -98,6 +99,16 @@ void CAnimation::ResetAnimation()
 {
 	// カウンターを0に戻す
 	animCounter = 0.0f;
+}
+
+void CAnimation::SetIsAnimation(bool anim)
+{
+	isanim = anim;
+}
+
+bool CAnimation::GetIsAnimation()
+{
+	return isanim;
 }
 
 FLOAT_XY CAnimation::GetUV()
