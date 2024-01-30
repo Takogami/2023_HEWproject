@@ -297,46 +297,46 @@ float CPlayer::Jump()
 
 void CPlayer::ReceiveWind()
 {
-	// �����E
+	// 左から右
 	if (dir_wind.x == 1.0f)
 	{
-		// �󂯂Ă��镗�͂���߂�
+		// 風力を弱める
 		receiveWindPower -= 0.001f;
-		// �󂯂Ă��镗�͂��Ȃ������畗�x�N�g����0�ɖ߂�
+		// 風力が0なら受けている方向を元に戻す
 		if (receiveWindPower <= 0.0f)
 		{
 			dir_wind.x = 0.0f;
 			receiveWindPower = 0.0f;
 		}
-		// �ړ��ʂɕ��̌v�Z��������
+		// 風の計算を移動量に加える
 		this->transform.position.x += receiveWindPower;
 	}
-	// �E����
+	// 右から左
 	else if (dir_wind.x == -1.0f)
 	{
-		// �󂯂Ă��镗�͂���߂�
+		// 風力を弱める
 		receiveWindPower -= 0.001f;
-		// �󂯂Ă��镗�͂��Ȃ������畗�x�N�g����0�ɖ߂�
+		// 風力が0なら受けている方向を元に戻す
 		if (receiveWindPower <= 0.0f)
 		{
 			dir_wind.x = 0.0f;
 			receiveWindPower = 0.0f;
 		}
-		// �ړ��ʂɕ��̌v�Z��������
+		// 風の計算を移動量に加える
 		this->transform.position.x -= receiveWindPower;
 	}
-	// ������
+	// 下から上
 	if (dir_wind.y == 1.0f)
 	{
-		// �󂯂Ă��镗�͂���߂�
+		// 風力を弱める
 		receiveWindPower -= 0.001f;
-		// �󂯂Ă��镗�͂��Ȃ������畗�x�N�g����0�ɖ߂�
+		// 風力が0なら受けている方向を元に戻す
 		if (receiveWindPower <= 0.0f)
 		{
 			dir_wind.y = 0.0f;
 			receiveWindPower = 0.0f;
 		}
-		// �ړ��ʂɕ��̌v�Z��������
+		// 風の計算を移動量に加える
 		this->transform.position.y += receiveWindPower;
 	}
 }
@@ -380,7 +380,7 @@ void CPlayer::Update()
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y += dir.y * velocity.y;
 
-	// ���̌v�Z���s��
+	// 風の計算を行う
 	ReceiveWind();
 
 	// 親クラスのUpdate()を明示的に呼び出す
@@ -392,7 +392,7 @@ void CPlayer::Update()
 	{
 		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
 		{
-			// �I�u�W�F�N�g�̎�ނɉ����ď�����ς���
+			// オブジェクトの種類に応じて処理を変更
 			switch ((*it)->GetObjectType())
 			{
 			case OBJECT_TYPE::NORMAL:
@@ -419,18 +419,18 @@ void CPlayer::Update()
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
-			case OBJECT_TYPE::WIND_RIGHT:	//	���i�E�����j
-				// �����������̋������擾����
+			case OBJECT_TYPE::WIND_RIGHT:
+				// 右向きの風力を取得
 				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
-				// �����������̌����̕ۑ��ƃv���C���[�̈ړ�������ύX����
+				// 風を受けた方向と向き保存
 				dir.x = 1.0f;
 				dir_wind.x = 1.0f;
 				break;
 
-			case OBJECT_TYPE::WIND_UP:		//	���i������j
-				// �����������̋������擾����
+			case OBJECT_TYPE::WIND_UP:
+				// 上向きの風力を取得
 				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
-				// �����������̌����̕ۑ��ƃv���C���[�̈ړ�������ύX����
+				// 風を受けた方向と向き保存
 				dir.y = 1.0f;
 				dir_wind.y = 1.0f;
 				break;
