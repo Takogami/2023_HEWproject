@@ -68,7 +68,7 @@ void SelectScene::Update()
 	}
 
 	// 上移動
-	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 40, 5))
+	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
 	{
 		// 選択中のステージの更新
@@ -82,11 +82,11 @@ void SelectScene::Update()
 			moveEndPos[i] = StageList[i]->transform.position.y - 0.7f;
 			selectMoveUp = true;
 			// イージングの初期化
-			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeInOutSine);
+			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.4f, 0, EASE::easeOutCubic);
 		}
 	}
 	// 下移動
-	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 40, 5))
+	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1))
 		&& stageNum < listNum && !selectMoveUp && !selectMoveDown)
 	{
 		// 選択中のステージの更新
@@ -99,7 +99,7 @@ void SelectScene::Update()
 			moveEndPos[i] = StageList[i]->transform.position.y + 0.7f;
 			selectMoveDown = true;
 			// イージングの初期化
-			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeInOutSine);
+			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutCubic);
 		}
 	}
 
