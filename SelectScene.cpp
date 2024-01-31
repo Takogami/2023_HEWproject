@@ -62,11 +62,6 @@ SelectScene::~SelectScene()
 
 void SelectScene::Update()
 {
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
-	}
-
 	// 上移動
 	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
@@ -100,6 +95,33 @@ void SelectScene::Update()
 			selectMoveDown = true;
 			// イージングの初期化
 			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutBack);
+		}
+	}
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	{
+		switch (userSelect)
+		{
+		case STAGE_NUM::STAGE1:
+			// ステージ1に遷移
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+			break;
+
+		case STAGE_NUM::STAGE2:
+			// ステージ2に遷移
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
+			break;
+
+		case STAGE_NUM::STAGE3:
+			break;
+
+		case STAGE_NUM::STAGE4:
+			break;
+
+		case STAGE_NUM::STAGE5:
+			break;
+
+		default:
+			break;
 		}
 	}
 

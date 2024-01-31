@@ -42,9 +42,9 @@ StageScene::~StageScene()
 
 void StageScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
 
 	// 各オブジェクトの更新

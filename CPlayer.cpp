@@ -18,7 +18,6 @@ void CPlayer::PlayerInput()
 {
 #if USE_CONTROLLER == true
 
-	
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
 	input_stickY = gInput->GetLeftStickY();
@@ -301,43 +300,43 @@ void CPlayer::ReceiveWind()
 	if (dir_wind.x == 1.0f)
 	{
 		// 風力を弱める
-		receiveWindPower -= 0.001f;
+		receiveWindPower.x -= 0.001f;
 		// 風力が0なら受けている方向を元に戻す
-		if (receiveWindPower <= 0.0f)
+		if (receiveWindPower.x <= 0.0f)
 		{
 			dir_wind.x = 0.0f;
-			receiveWindPower = 0.0f;
+			receiveWindPower.x = 0.0f;
 		}
 		// 風の計算を移動量に加える
-		this->transform.position.x += receiveWindPower;
+		this->transform.position.x += receiveWindPower.x;
 	}
 	// 右から左
 	else if (dir_wind.x == -1.0f)
 	{
 		// 風力を弱める
-		receiveWindPower -= 0.001f;
+		receiveWindPower.x -= 0.001f;
 		// 風力が0なら受けている方向を元に戻す
-		if (receiveWindPower <= 0.0f)
+		if (receiveWindPower.x <= 0.0f)
 		{
 			dir_wind.x = 0.0f;
-			receiveWindPower = 0.0f;
+			receiveWindPower.x = 0.0f;
 		}
 		// 風の計算を移動量に加える
-		this->transform.position.x -= receiveWindPower;
+		this->transform.position.x -= receiveWindPower.x;
 	}
 	// 下から上
 	if (dir_wind.y == 1.0f)
 	{
 		// 風力を弱める
-		receiveWindPower -= 0.001f;
+		receiveWindPower.y -= 0.001f;
 		// 風力が0なら受けている方向を元に戻す
-		if (receiveWindPower <= 0.0f)
+		if (receiveWindPower.y <= 0.0f)
 		{
 			dir_wind.y = 0.0f;
-			receiveWindPower = 0.0f;
+			receiveWindPower.y = 0.0f;
 		}
 		// 風の計算を移動量に加える
-		this->transform.position.y += receiveWindPower;
+		this->transform.position.y += receiveWindPower.y;
 	}
 }
 
@@ -421,7 +420,7 @@ void CPlayer::Update()
 
 			case OBJECT_TYPE::WIND_RIGHT:
 				// 右向きの風力を取得
-				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
+				receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
 				// 風を受けた方向と向き保存
 				dir.x = 1.0f;
 				dir_wind.x = 1.0f;
@@ -429,7 +428,7 @@ void CPlayer::Update()
 
 			case OBJECT_TYPE::WIND_UP:
 				// 上向きの風力を取得
-				receiveWindPower = ((CWind*)(*it))->GetWindStrength();
+				receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
 				// 風を受けた方向と向き保存
 				dir.y = 1.0f;
 				dir_wind.y = 1.0f;

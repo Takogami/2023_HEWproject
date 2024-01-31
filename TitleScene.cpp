@@ -71,12 +71,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
-	}
-
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		//CCursor‚Å‚Ì—ñ‹“Œ^‚ÌScene‚ðŽæ“¾‚·‚é
 		cursorPoint = player2->GetCursorPoint();

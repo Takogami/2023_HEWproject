@@ -49,7 +49,7 @@ private:
     // 受けている風の方向ベクトル
     DirectX::XMFLOAT3 dir_wind = { 0.0f, 0.0f, 0.0f };
     // 受けている風力
-    float receiveWindPower = 0.0f;
+    FLOAT_XY receiveWindPower = { 0.0f, 0.0f };
 
     /* メソッド */
 
