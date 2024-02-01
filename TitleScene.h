@@ -19,10 +19,16 @@ private:
 	CGameObject* player3;
 	CGameObject* player4;
 	CGameObject* player5;
+	CGameObject* bg;
+	CGameObject* Title;
+	CEase* ease;
 
 	ID3D11Buffer* vertexBufferCharacter;
+	ID3D11Buffer* vertexBufferObject;
 
 	CCursor_Point cursorPoint;
+
+	bool flg;
 
 public:
 	// コンストラクタ

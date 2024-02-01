@@ -26,7 +26,7 @@ void CEase::Update()
 	switch (state)
 	{
 	case STATE::WAIT:
-		//ŠJn‚Ü‚¿
+		//é–‹å§‹ã¾ã¡
 		if (count > startTime)
 		{
 			count = 0;
@@ -35,7 +35,7 @@ void CEase::Update()
 		break;
 
 	case STATE::UPDATE:
-		//”•ÏˆÙ
+		//æ•°å¤‰ç•°
 		if (count > duration)
 		{
 			state = STATE::END;
@@ -44,7 +44,7 @@ void CEase::Update()
 		{
 			double r = count / duration;
 			r = Easeing(r);
-			// doubleŒ^‚ğfloatŒ^‚É•ÏŠ·‚µ‚Ä•Ô‚·
+			// doubleå‹ã‚’floatå‹ã«å¤‰æ›ã—ã¦è¿”ã™
 			*startPos = (float)(startData+ (endPos - startData) * r);
 		}
 		break;

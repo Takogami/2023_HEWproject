@@ -357,7 +357,7 @@ void CPlayer::Update()
 		// 向きを戻す
 		dir.y = -1.0f;
 	}
-
+  
 	// プレイヤー操作関連の入力処理
 	PlayerInput();
 
@@ -401,7 +401,6 @@ void CPlayer::Update()
 			case OBJECT_TYPE::NORMAL:
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
-
 				// 天井にぶつかっていたならジャンプ力を0にする
 				if (prevFrameCorrect.y == -1)
 				{
@@ -419,7 +418,7 @@ void CPlayer::Update()
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
 				break;
-
+          
 			case OBJECT_TYPE::WIND_RIGHT:
 				// 右向きの風力を取得
 				receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
@@ -436,6 +435,18 @@ void CPlayer::Update()
 				dir_wind.y = 1.0f;
 				break;
 
+			case OBJECT_TYPE::DAMEGE_TILE:
+				if (this->dir.x == 1.0f)
+				{
+					this->Ddir.x = -1.0f;
+				}
+
+				else if (this->dir.x == -1.0f)
+				{
+					this->Ddir.x = 1.0f;
+				}
+				break;
+          
 			default:
 				break;
 			}
@@ -451,6 +462,14 @@ PState CPlayer::GetState()
 void CPlayer::SetState(PState state)
 {
 	State = state;
+}
+
+void CPlayer::Rknoc(DirectX::XMFLOAT3)
+{
+}
+
+void CPlayer::Lknoc(DirectX::XMFLOAT3)
+{
 }
 
 void CPlayer::Draw()

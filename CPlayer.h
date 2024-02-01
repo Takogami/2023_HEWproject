@@ -41,6 +41,16 @@ private:
     CORRECT_DIR prevFrameCorrect = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
+
+    Cdamagetile* Dtile;
+
+    /* メソッド */
+
+    void PlayerInput(); // 入力処理
+    float Jump();       // ジャンプ力を返す
+
+public:
+    /* メンバ変数 */
     // 移動速度
     DirectX::XMFLOAT2 velocity;
     // 方向ベクトル
@@ -48,8 +58,17 @@ private:
 
     // 受けている風の方向ベクトル
     DirectX::XMFLOAT3 dir_wind = { 0.0f, 0.0f, 0.0f };
+
+    // ダメージを受けた時の方向ベクトル
+    DirectX::XMFLOAT3 Ddir = { 0,0,0 };
+
     // 受けている風力
     FLOAT_XY receiveWindPower = { 0.0f, 0.0f };
+
+    //吹っ飛ぶ力
+    float Sumash = 0.0f;
+
+
 
     /* メソッド */
 
@@ -59,6 +78,9 @@ private:
     float Jump();
     // 風を受けたときの処理
     void ReceiveWind();
+    
+    void Rknoc(DirectX::XMFLOAT3);
+    void Lknoc(DirectX::XMFLOAT3);
 
 public:
     /* メソッド */
@@ -80,5 +102,6 @@ public:
 
     // デストラクタ
     ~CPlayer() override;
+
 };
 
