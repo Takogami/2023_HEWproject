@@ -17,6 +17,9 @@ class SelectScene :
 private:
 	CCamera* Cam;
 
+	// 背景
+	CGameObject* bg;
+
 	// 使うオブジェクトのリスト
 	// まとめてUpdateとDrawを行うために使用
 	std::list<CGameObject*>Objects;

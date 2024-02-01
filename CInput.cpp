@@ -50,6 +50,15 @@ bool CInput::IsControllerButtonRepeat(WORD button, int cCount, int cTime)
 	{
 		//Pressˆ—‚ÉˆÚs‚·‚é
 		IsControllerButtonPressed(button);
+		//‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚È‚¢‚È‚çfalse‚ğ•Ô‚·
+		if (!IsControllerButtonPressed(button))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 	else
 	{

@@ -74,7 +74,7 @@ public:
 
 	//アニメーションの初期化
 	//引数1:初期の再生状態 引数2:横方向の分割数 引数3:初期アニメーションパターン 引数4:初期スピード
-	void InitAnimParameter(bool iniPlaying, int spritU, ANIM_PATTERN pattern, float sp);
+	void InitAnimParameter(bool iniPlaying, int spritU, int spritV, ANIM_PATTERN pattern, float sp);
 	// アニメーションのスピードを設定
 	void SetAnimationSpeed(float sp);
 	// アニメーションのパターンを設定

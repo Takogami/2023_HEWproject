@@ -6,25 +6,33 @@ SelectScene::SelectScene()
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
 
+	// 背景の設定
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	bg->transform.position.z = 0.99f;
+	// オブジェクトをリストに登録
+	Objects.push_back(bg);
+
 	// 文字列の設定
 	StageSelect = new CDrawString;
-	StageSelect->SetFont(FontID::KARAKAZE);
-	StageSelect->SetString("ステージをえらんでね");
-	StageSelect->SetPosition({ 0.0f, 50.0f });
-	StageSelect->SetFontSize(100.0f);
-	StageSelect->SetFontColor(1.0f, 1.0f, 1.0f);
+	StageSelect->SetFont(FontID::UZURA);
+	StageSelect->SetString("ステージを選んでね");
+	StageSelect->SetPosition({ 80.0f, 100.0f });
+	StageSelect->SetFontSize(80.0f);
+	StageSelect->SetFontColor(0.0f, 0.0f, 0.0f);
 	StageSelect->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	StageSelect->SetFontStyle(FONT_STYLE::ITALIC);
+	StageSelect->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.3f, 0.0f, 0.4f);
 
-	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS));
+	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.3333333f, 1.0f });
 	Objects.push_back(StagePreview);
-	StagePreview->transform.position = { -1.0f, -0.15f, 0.5f };
-	StagePreview->transform * 1.5f;
+	StagePreview->transform.position = { -0.97f, -0.07f, 0.5f };
+	StagePreview->transform.scale = { 693.0f * 0.003f, 900.0f * 0.003f, 0.5f };
+	StagePreview->InitAnimParameter(false, 3, 1, ANIM_PATTERN::BOOK, 0.1f);
 
-	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM));
+	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
 	Objects.push_back(StagePreview2);
-	StagePreview2->transform.position = { -1.0f, -0.15f, -0.1f };
-	StagePreview2->transform * 1.0f;
+	StagePreview2->transform.position = { -0.8f, 0.76f, 0.0f };
+	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f, 0.5f };
 
 	// 要素を拡張
 	StageList.resize(listNum);
@@ -33,7 +41,7 @@ SelectScene::SelectScene()
 	{
 		StageList[i] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 		StageList[i]->transform.scale = { 1.5f, 0.5f, 1.0f };
-		StageList[i]->transform.position = { 0.9f, 0.0f - (0.7f * i), 0.0f};
+		StageList[i]->transform.position = { 1.0f, 0.0f - (0.7f * i), 0.0f};
 		moveEndPos.resize(StageList.size());
 		Objects.push_back(StageList[i]);
 		// ステージの数だけイージングを作る
@@ -62,13 +70,8 @@ SelectScene::~SelectScene()
 
 void SelectScene::Update()
 {
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
-	}
-
 	// 上移動
-	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 40, 5))
+	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
 	{
 		// 選択中のステージの更新
@@ -82,11 +85,14 @@ void SelectScene::Update()
 			moveEndPos[i] = StageList[i]->transform.position.y - 0.7f;
 			selectMoveUp = true;
 			// イージングの初期化
-			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeInOutSine);
+			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutBack);
 		}
+		StagePreview->SetAnimationPattern(ANIM_PATTERN::BOOK_REVERSE);
+		StagePreview->ResetAnimation();
+		StagePreview->PlayAnimation();
 	}
 	// 下移動
-	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 40, 5))
+	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1))
 		&& stageNum < listNum && !selectMoveUp && !selectMoveDown)
 	{
 		// 選択中のステージの更新
@@ -99,7 +105,37 @@ void SelectScene::Update()
 			moveEndPos[i] = StageList[i]->transform.position.y + 0.7f;
 			selectMoveDown = true;
 			// イージングの初期化
-			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeInOutSine);
+			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeOutBack);
+		}
+		StagePreview->SetAnimationPattern(ANIM_PATTERN::BOOK);
+		StagePreview->ResetAnimation();
+		StagePreview->PlayAnimation();
+	}
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	{
+		switch (userSelect)
+		{
+		case STAGE_NUM::STAGE1:
+			// ステージ1に遷移
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+			break;
+
+		case STAGE_NUM::STAGE2:
+			// ステージ2に遷移
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
+			break;
+
+		case STAGE_NUM::STAGE3:
+			break;
+
+		case STAGE_NUM::STAGE4:
+			break;
+
+		case STAGE_NUM::STAGE5:
+			break;
+
+		default:
+			break;
 		}
 	}
 
@@ -130,7 +166,7 @@ void SelectScene::Update()
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを上移動させる
-			if (StageList[i]->transform.position.y <= moveEndPos[i])
+			if (StageList[i]->transform.position.y <= moveEndPos[i] && selectEase[i]->GetState() == STATE::END)
 			{
 				// 移動が終了しているなら最終座標を代入しておく
 				StageList[i]->transform.position.y = moveEndPos[i];
@@ -138,6 +174,7 @@ void SelectScene::Update()
 				StageList[stageNum - 1]->transform.position.y = 0.0f;
 				// 上移動フラグをおろす
 				selectMoveUp = false;
+				StagePreview->StopAnimation();
 			}
 		}
 		else if (selectMoveDown)
@@ -145,7 +182,7 @@ void SelectScene::Update()
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを下移動させる
-			if (StageList[i]->transform.position.y >= moveEndPos[i])
+			if (StageList[i]->transform.position.y >= moveEndPos[i] && selectEase[i]->GetState() == STATE::END)
 			{
 				// 移動が終了しているなら最終座標を代入しておく
 				StageList[i]->transform.position.y = moveEndPos[i];
@@ -153,6 +190,7 @@ void SelectScene::Update()
 				StageList[stageNum - 1]->transform.position.y = 0.0f;
 				// 上移動フラグをおろす
 				selectMoveDown = false;
+				StagePreview->StopAnimation();
 			}
 		}
 	}

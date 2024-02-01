@@ -37,6 +37,9 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	TITLE,
 	TILE,
 	BG,
+	PLAYER,
+	BOOK,
+	STRING_BG
 };
 
 // CTextureLoaderクラス
@@ -58,6 +61,9 @@ private:
 		L"asset/title.png",
 		L"asset/tile.png",
 		L"asset/bg.png",
+		L"asset/Playeranim3.png",
+		L"asset/book.png",
+		L"asset/stringBg.png",
 	};
 
 	/* メソッド */

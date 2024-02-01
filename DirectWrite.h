@@ -28,6 +28,7 @@ namespace FontList
 	{
 		L"asset/font/851letrogo_007.ttf",
 		L"asset/font/karakaze-R.ttf",
+		L"asset/font/uzura.ttf",
 	};
 }
 
@@ -38,6 +39,7 @@ enum class FontID
 {
 	LETROGO = 0,
 	KARAKAZE,
+	UZURA,
 };
 
 //=============================================================================
