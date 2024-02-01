@@ -24,7 +24,7 @@ private:
     // 重力
     const float gravity = 0.97f / 200;
     // ジャンプ開始時(初期状態)のジャンプの強さ
-    const float ini_jumpStrength = 13.0f / 800;
+    const float ini_jumpStrength = 10.0f / 500;
     // 速度の限界値
     const float velocityY_limit = 0.0005f;
     // 現在のジャンプの強さ
@@ -41,13 +41,6 @@ private:
     CORRECT_DIR prevFrameCorrect = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
-
-    Cdamagetile* Dtile;
-
-    /* メソッド */
-
-    void PlayerInput(); // 入力処理
-    float Jump();       // ジャンプ力を返す
 
 public:
     /* メンバ変数 */

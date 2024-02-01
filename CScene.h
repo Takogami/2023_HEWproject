@@ -5,6 +5,7 @@
 #include "CPlayer.h"
 #include "CCursor.h"
 #include "CWind.h"
+#include "Cdamagetile.h"
 #include "CCamera.h"
 #include "CTerrainLoader.h"
 #include "CTextureLoader.h"

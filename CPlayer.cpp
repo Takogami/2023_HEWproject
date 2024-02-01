@@ -188,9 +188,13 @@ void CPlayer::PlayerInput()
 				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
 			}
 
-			if (gInput->GetKeyPress(VK_TAB))
+			if (gInput->GetKeyTrigger(VK_TAB))
 			{
 				isJump = true;
+				//--------------------------------
+				//無限ジャンプ不可にしたい場合は下の１行を消してください
+				jumpStrength = ini_jumpStrength;
+				//--------------------------------
 			}
 		}
 		break;
@@ -290,7 +294,8 @@ float CPlayer::Jump()
 	// ジャンプ力を重力に従って更新
 	jumpStrength = jumpStrength - gravity;
 	velocity.y -= jumpStrength;
-	if (jumpStrength <= 0.0f) {
+	if (jumpStrength <= 0.0f)
+	{
 		jumpStrength = 0.0f;
 		isJump = false;
 	}
@@ -418,7 +423,7 @@ void CPlayer::Update()
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
 				break;
-          
+
 			case OBJECT_TYPE::WIND_RIGHT:
 				// 右向きの風力を取得
 				receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
@@ -446,7 +451,7 @@ void CPlayer::Update()
 					this->Ddir.x = 1.0f;
 				}
 				break;
-          
+
 			default:
 				break;
 			}
