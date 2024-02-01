@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "CGameObject.h"
 #include "CTimer.h"
+#include "Cdamagetile.h"
 
 enum class PState
 {
@@ -35,6 +36,8 @@ private:
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
 
+    Cdamagetile* Dtile;
+
     /* メソッド */
 
     void PlayerInput(); // 入力処理
@@ -51,8 +54,17 @@ public:
 
     // 受けている風の方向ベクトル
     DirectX::XMFLOAT3 dir_wind = { 0.0f, 0.0f, 0.0f };
+
+    // ダメージを受けた時の方向ベクトル
+    DirectX::XMFLOAT3 Ddir = { 0,0,0 };
+
     // 受けている風力
     float windStrength = 0.0f;
+
+    //吹っ飛ぶ力
+    float Sumash = 0.0f;
+
+
 
     /* メソッド */
 
@@ -63,8 +75,12 @@ public:
     PState GetState();
     void SetState(PState state);
 
+    void Rknoc(DirectX::XMFLOAT3);
+    void Lknoc(DirectX::XMFLOAT3);
+
     void Update() override;
     void Draw() override;
     ~CPlayer() override;
+
 };
 

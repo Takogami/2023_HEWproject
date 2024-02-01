@@ -10,13 +10,31 @@ TitleScene::TitleScene()
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
 
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	// オブジェクトをリストに登録
+	Objects.push_back(bg);
+
+	Title = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TITLE), { 1.0f ,1.0f });
+	Objects.push_back(Title);
 	// プレイヤーの実体化と初期化
 	player = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::CHAR1), {0.33f ,0.25f});
+
+
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	//自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	player->transform * 0.5f;
+
+	// 背景の設定
+	bg->SetUseingCamera(Cam);
+	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	bg->transform.position.z = 0.99f;
+
+	Title->SetUseingCamera(Cam);
+	Title->transform.scale = { 1271.0f * 0.0021f , 299.0f * 0.0021f, 1.0f};
+	Title->transform.position.z = 0.98f;
+	Title->transform.position.y = 0.5f;
 
 	//プレイヤーの実体化と初期化
 	player2 = new CCursor(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO));
@@ -50,6 +68,11 @@ TitleScene::TitleScene()
 	//自身の投影にカメラを使用しない
 	player5->transform * 0.5f;
 	player5->transform.position = { 0.0f, -0.9f };
+
+	ease = new CEase();
+	ease->Init(&Title->transform.scale.x, 1271.0f * 0.0021f * 1.3f, 1.0f, 0.0f, EASE::easeInBounce);
+
+	flg = true;
 
 }
 
@@ -101,6 +124,19 @@ void TitleScene::Update()
 
 	// カメラのアップデート
 	Cam->Update();
+	ease->Update();
+
+	if (ease->GetState() == STATE::END && flg == true)
+	{
+		ease->Init(&Title->transform.scale.x, 1271.0f * 0.0021f * 1.0f, 1.0f, 0.0f, EASE::easeInBounce);
+		flg = false;
+	}
+	else if (ease->GetState() == STATE::END && flg == false)
+	{
+		ease->Init(&Title->transform.scale.x, 1271.0f * 0.0021f * 1.3f, 1.0f, 0.0f, EASE::easeInBounce);
+		flg = true;
+	}
+
 
 	// 各オブジェクトの更新
 	for (auto it = Objects.begin(); it != Objects.end(); it++)

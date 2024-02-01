@@ -3,6 +3,7 @@
 void CEase::Init(float * start, float end, float dur, int delay, EASE ease)
 {
 	startPos = start;
+	this->start = *start;
 	endPos = end;
 	duration = dur * 60;
 	startTime = delay * 60;
@@ -44,7 +45,7 @@ void CEase::Update()
 			double r = count / duration;
 			r = Easeing(r);
 			// doubleŒ^‚ğfloatŒ^‚É•ÏŠ·‚µ‚Ä•Ô‚·
-			*startPos = (float)(* startPos + (endPos - *startPos) * r);
+			*startPos = (float)(start + (endPos - start) * r);
 		}
 		break;
 

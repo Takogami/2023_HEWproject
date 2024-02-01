@@ -85,6 +85,21 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			if (map_data[i][j] == 4)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CGameObject (vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TILE), { 1.0f, 1.0f }, OBJECT_TYPE::DAMEGE_TILE));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す
 		x_tile = ORIGIN_TILE_POS_X;

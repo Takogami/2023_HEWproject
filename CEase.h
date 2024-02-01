@@ -133,6 +133,9 @@ private:
 	int count;
 	// 開始までの時間(フレーム)
 	int startTime;
+
+	float start;
+
 	// イージング関数ポインタ
 	EaseAdress Easeing = &easeInSine;
 

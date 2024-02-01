@@ -34,6 +34,8 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	STAGE,
 	NUM,
 	WINDRIGHT_POS,	//	風の起こる位置（右向き）
+	TITLE,
+	TILE,
 	BG,
 };
 
@@ -53,6 +55,8 @@ private:
 		L"asset/Madoka_Magika_(Logo).png",
 		L"asset/suuji.png",
 		L"asset/Fade.png",	//	試しでテクスチャ読み込み(風の右向き)
+		L"asset/title.png",
+		L"asset/tile.png",
 		L"asset/bg.png",
 	};
 
