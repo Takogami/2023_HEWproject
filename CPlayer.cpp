@@ -18,6 +18,7 @@ void CPlayer::PlayerInput()
 {
 #if USE_CONTROLLER == true
 
+	
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
 	input_stickY = gInput->GetLeftStickY();
@@ -286,12 +287,15 @@ void CPlayer::PlayerInput()
 
 float CPlayer::Jump()
 {
-	// 向きを上にする
-	dir.y = 1.0f;
 	// ジャンプ力を重力に従って更新
-	jumpStrength -= gravity;
+	jumpStrength = jumpStrength - gravity;
+	velocity.y -= jumpStrength;
+	if (jumpStrength <= 0.0f) {
+		jumpStrength = 0.0f;
+		isJump = false;
+	}
 	// 計算したジャンプ力を適応
-	return jumpStrength;
+	return velocity.y;
 }
 
 void CPlayer::ReceiveWind()
@@ -377,7 +381,7 @@ void CPlayer::Update()
 
 	// ベクトルに速度をかけて位置を変更
 	this->transform.position.x += dir.x * velocity.x;
-	this->transform.position.y += dir.y * velocity.y;
+	this->transform.position.y -= velocity.y;
 
 	// 風の計算を行う
 	ReceiveWind();
@@ -401,13 +405,11 @@ void CPlayer::Update()
 				// 天井にぶつかっていたならジャンプ力を0にする
 				if (prevFrameCorrect.y == -1)
 				{
-					dir.y = -1.0f;		// 向きを下にする
 					jumpStrength = 0;	// ジャンプ力を0にする
 				}
 				// 重力によって地面に衝突していたなら
 				if (prevFrameCorrect.y == 1)
 				{
-					dir.y = -1.0f;
 					velocity.y = 0.0f;				// 速度Yを0に戻す
 					jumpStrength = ini_jumpStrength;
 					isJump = false;

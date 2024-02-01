@@ -21,6 +21,8 @@ enum class ANIM_PATTERN
 	BREAKRIGHT,	//右に折れる
 	FIXLEFT,	//左に起き上がる
 	FIXRIGHT,	//右に起き上がる
+	BOOK,		//本の動き
+	BOOK_REVERSE,
 };
 
 class CAnimation
@@ -65,7 +67,8 @@ private:
 		{ 9,  10, 11,	ANIM_STOP},
 		{ 8,  7,  6,	ANIM_STOP},
 		{ 11, 10, 9,	ANIM_STOP},
-
+		{ 0, 1, 2, 0, ANIM_STOP},
+		{ 0, 2, 1, 0, ANIM_STOP},
 
 	};
 

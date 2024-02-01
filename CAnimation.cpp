@@ -92,7 +92,7 @@ void CAnimation::PlayAnimation()
 void CAnimation::StopAnimation()
 {
 	// アニメーションの再生状態フラグを下げる
-	//playing = false;
+	playing = false;
 }
 
 void CAnimation::ResetAnimation()
