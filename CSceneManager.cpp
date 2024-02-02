@@ -8,7 +8,9 @@ CSceneManager* CSceneManager::instance = nullptr;
 CSceneManager::CSceneManager()
 {
 	title = nullptr;
-	stage = nullptr;
+	stage1 = nullptr;
+	stage2 = nullptr;
+	select = nullptr;
 	result = nullptr;
 
 	// デフォルトのシーンを初期化します
@@ -27,9 +29,13 @@ CSceneManager::~CSceneManager()
 	{
 		delete select;
 	}
-	if (stage != nullptr)
+	if (stage1 != nullptr)
 	{
-		delete stage;
+		delete stage1;
+	}
+	if (stage2 != nullptr)
+	{
+		delete stage2;
 	}
 	if (result != nullptr)
 	{
@@ -80,12 +86,18 @@ void CSceneManager::Update()
 		break;
 
 	// ステージ01
-	case SCENE_ID::STAGE_01:
-		stage->Update();
-		stage->Draw();
+	case SCENE_ID::STAGE_1:
+		stage1->Update();
+		stage1->Draw();
 		break;
 
-	// リザルト
+	// ステージ02
+	case SCENE_ID::STAGE_2:
+		stage2->Update();
+		stage2->Draw();
+		break;
+
+		// リザルト
 	case SCENE_ID::RESULT:
 		result->Update();
 		result->Draw();
@@ -114,10 +126,16 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 		select = nullptr;
 		break;
 
-	case SCENE_ID::STAGE_01:
+	case SCENE_ID::STAGE_1:
 		// もし現在のシーンがSTAGE_01なら、STAGE_01シーンを解放する
-		delete stage;
-		stage = nullptr;
+		delete stage1;
+		stage1 = nullptr;
+		break;
+
+	case SCENE_ID::STAGE_2:
+		// もし現在のシーンがRESULTなら、RESULTシーンを解放する
+		delete stage2;
+		stage2 = nullptr;
 		break;
 
 	case SCENE_ID::RESULT:
@@ -143,9 +161,14 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 		select = new SelectScene();
 		break;
 
-	case SCENE_ID::STAGE_01:
+	case SCENE_ID::STAGE_1:
 		// もし新しいシーンがSTAGE_01なら、新しいSTAGE_01シーンを作成する
-		stage = new StageScene();
+		stage1 = new StageScene();
+		break;
+
+	case SCENE_ID::STAGE_2:
+		// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
+		stage2 = new StageScene2();
 		break;
 
 	case SCENE_ID::RESULT:

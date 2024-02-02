@@ -44,7 +44,7 @@ void StageScene::Update()
 {
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}
 
 	// 各オブジェクトの更新

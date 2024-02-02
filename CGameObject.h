@@ -31,7 +31,7 @@ enum class OBJECT_TYPE
 	PLAYER,		// プレイヤーオブジェクト
 	WIND_RIGHT,	// 風オブジェクト（右向き）
 	WIND_UP,	// 風オブジェクト（上向き）
-	DAMEGE_TILE	//ダメージを受ける床
+	DAMAGE_TILE	//ダメージを受ける床
 };
 
 //CGameObjectクラス

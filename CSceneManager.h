@@ -1,16 +1,18 @@
 #pragma once
 
 #include "TitleScene.h"
-#include "ResultScene.h"
 #include "StageScene.h"
+#include "StageScene2.h"
 #include "SelectScene.h"
+#include "ResultScene.h"
 
 //	シーンの種類（列挙型）
 enum class SCENE_ID
 {
 	TITLE,
 	SELECT,
-	STAGE_01,
+	STAGE_1,
+	STAGE_2,
 	RESULT,
 };
 
@@ -21,9 +23,10 @@ private:
 	static CSceneManager* instance;
 
 	TitleScene* title;						//タイトルシーンクラス
-	StageScene* stage;						//ステージシーンクラス
-	ResultScene* result;					//リザルトシーンクラス
-	SelectScene* select;
+	StageScene* stage1;						//ステージシーン1クラス
+	StageScene2* stage2;					//ステージシーン2クラス
+	SelectScene* select;					//セレクトシーンクラス
+	ResultScene* result;
 
 	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
 

@@ -1,5 +1,4 @@
 #include "CScene.h"
-#include "ResultScene.h"
 
 // staticメンバ変数を定義
 std::vector<std::vector<int>> CScene::map_data;
@@ -89,7 +88,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 4)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TILE), { 1.0f, 1.0f }, OBJECT_TYPE::DAMEGE_TILE));
+				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TILE), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_TILE));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする

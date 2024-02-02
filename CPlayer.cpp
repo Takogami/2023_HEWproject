@@ -441,7 +441,7 @@ void CPlayer::Update()
 				dir_wind.y = 1.0f;
 				break;
 
-			case OBJECT_TYPE::DAMEGE_TILE:
+			case OBJECT_TYPE::DAMAGE_TILE:
 				if (this->dir.x == 1.0f)
 				{
 					this->Ddir.x = -1.0f;
@@ -451,10 +451,6 @@ void CPlayer::Update()
 				{
 					this->Ddir.x = 1.0f;
 				}
-				break;
-
-			case OBJECT_TYPE::GAMEOVER:		//	�Q�[���I�[�o�[�V�[��
-				isScene = true;
 				break;
 
 			default:

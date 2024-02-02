@@ -27,9 +27,6 @@
     <ClCompile Include="CGame.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CGameObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="CTransform.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -51,7 +48,7 @@
     <ClCompile Include="CScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ResultScene.cpp">
+    <ClCompile Include="StageScene2.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
@@ -96,6 +93,12 @@
     <ClCompile Include="Cdamagetile.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="direct3d.h">
@@ -137,7 +140,7 @@
     <ClInclude Include="CScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ResultScene.h">
+    <ClInclude Include="StageScene2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="TitleScene.h">
@@ -180,6 +183,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Cdamagetile.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
