@@ -13,9 +13,10 @@ StageScene::StageScene()
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
-	player->transform * 0.1f;
+	player->transform * 0.2f;
+	player->transform.position.z = -0.3f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.1f, 0.1f };
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_2, Cam);
@@ -41,9 +42,9 @@ StageScene::~StageScene()
 
 void StageScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
 
 	// 各オブジェクトの更新
@@ -51,9 +52,6 @@ void StageScene::Update()
 	{
 		(*it)->Update();
 	}
-
-	//	風起きる関数
-	player->WindUp();
 
 	Cam->cameraPos.x = player->transform.position.x;
 	Cam->Update();

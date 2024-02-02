@@ -1,19 +1,24 @@
 #pragma once
 #include "CPlayer.h"
 
-class CWind
+class CWind :
+    public CGameObject
 {
 private:
+    // 風の強さ(初期値 : 0.01f)
+    float windStrength = 0.01f;
 
 public:
+    // コンストラクタ
+    CWind(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type);
+    // デストラクタ
+    ~CWind() override;
 
-    CWind();    //  コンストラクタ
-    ~CWind();   //  デストラクタ
-
-    //  更新
-    void Update();
-
-    //  右向きの風（引数：）
-    void Wind_Right(CPlayer* palyerStatus, float windPower);
+    // 更新
+    void Update() override;
+    // 風の強さを設定
+    void SetWindStrangth(float power);
+    // 風の強さを返す
+    float GetWindStrength() { return windStrength; }
 };
 

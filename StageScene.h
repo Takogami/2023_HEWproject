@@ -12,9 +12,6 @@ private:
 
 	CPlayer* player;
 
-	//	風起こすオブジェクト
-	CGameObject* wind;
-
 	ID3D11Buffer* vertexBufferCharacter;
 
 public:

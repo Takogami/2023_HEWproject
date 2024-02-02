@@ -125,6 +125,8 @@ private:
 	STATE state;
 	// 開始座標
 	float* startPos;
+	// 変更前データ
+	float startData;
 	// 終了座標
 	float endPos;
 	// 実行時間
@@ -133,6 +135,9 @@ private:
 	int count;
 	// 開始までの時間(フレーム)
 	int startTime;
+
+	float start;
+
 	// イージング関数ポインタ
 	EaseAdress Easeing = &easeInSine;
 

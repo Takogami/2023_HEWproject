@@ -20,19 +20,18 @@
 #include "CTransform.h"
 #include "CCollision.h"
 #include "CAnimation.h"
-#include "CTimer.h"
 
 /* CCameraクラスの前方宣言 */
 class CCamera;
-class CWind;
 
 // オブジェクトの種類
 enum class OBJECT_TYPE
 {
-	NORMAL,	// 通常オブジェクト
-	PLAYER,	// プレイヤーオブジェクト
+	NORMAL,		// 通常オブジェクト
+	PLAYER,		// プレイヤーオブジェクト
 	WIND_RIGHT,	// 風オブジェクト（右向き）
 	WIND_UP,	// 風オブジェクト（上向き）
+	DAMEGE_TILE	//ダメージを受ける床
 };
 
 //CGameObjectクラス
@@ -54,18 +53,9 @@ protected:
 
 public:
 	/* メンバ変数 */
-
-	bool isWind_right = false;	//	風のオブジェクトに当たったかどうか
-	bool isWind_up = false;
-
-	//	風の強さ
-	float wind_power = 0.1f;
-
 	CTransform transform;								// 仮想世界の中の位置座標,スケール,回転率
 	DirectX::XMFLOAT4 materialDiffuse = { 1,1,1,1 };	// マテリアル色の設定
 	BoxCollider Bcol = { 0.0f, 0.0f, 0.0f, 0.0f };		// Boxコライダーパラメータ
-	
-	CWind* wind;	//	風のクラス
 
 	/* メソッド */
 
@@ -84,7 +74,7 @@ public:
 
 	//アニメーションの初期化
 	//引数1:初期の再生状態 引数2:横方向の分割数 引数3:初期アニメーションパターン 引数4:初期スピード
-	void InitAnimParameter(bool iniPlaying, int spritU, ANIM_PATTERN pattern, float sp);
+	void InitAnimParameter(bool iniPlaying, int spritU, int spritV, ANIM_PATTERN pattern, float sp);
 	// アニメーションのスピードを設定
 	void SetAnimationSpeed(float sp);
 	// アニメーションのパターンを設定

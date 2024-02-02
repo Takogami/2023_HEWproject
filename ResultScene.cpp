@@ -12,7 +12,7 @@ ResultScene::ResultScene()
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.33f ,0.1f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -22,7 +22,7 @@ ResultScene::ResultScene()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
-	player->InitAnimParameter(true, 10, ANIM_PATTERN::TEST, 0.05f);
+	player->InitAnimParameter(true, 3, 10, ANIM_PATTERN::NO_ANIM, 0.1f);
 
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
@@ -80,7 +80,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
 	}
