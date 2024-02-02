@@ -1,6 +1,7 @@
 #include "CPlayer.h"
 #include "CScene.h"
 #include "CWind.h"
+#include "CSceneManager.h"
 
 // コントローラーを使う場合はtrueを指定
 #define USE_CONTROLLER (false)
@@ -272,6 +273,10 @@ void CPlayer::Update()
 				time->InitTimer(3, TIMER_MODE::COUNT_DOWN);
 				break;
 
+			case OBJECT_TYPE::GAMEOVER:		//	ゲームオーバーシーン
+				isScene = true;
+				break;
+
 			default:
 				break;
 			}
@@ -307,6 +312,11 @@ void CPlayer::WindUp()
 		{
 			isWind_up = false;
 		}
+
+	if (isScene)
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::GAMEOVER);
+		 Stashed changes
 	}
 }
 
