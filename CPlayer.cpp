@@ -1,6 +1,7 @@
 #include "CPlayer.h"
 #include "CScene.h"
 #include "CWind.h"
+#include "CSceneManager.h"
 
 // コントローラーを使う場合はtrueを指定
 #define USE_CONTROLLER (false)
@@ -450,6 +451,10 @@ void CPlayer::Update()
 				{
 					this->Ddir.x = 1.0f;
 				}
+				break;
+
+			case OBJECT_TYPE::GAMEOVER:		//	�Q�[���I�[�o�[�V�[��
+				isScene = true;
 				break;
 
 			default:
