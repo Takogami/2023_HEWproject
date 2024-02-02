@@ -6,12 +6,14 @@
 // アニメーション終端
 #define ANIM_LOOP	(-1)	// アニメーションをループ
 #define ANIM_STOP	(-2)	// アニメーションをストップ
+#define ANIM_FINISH	(-3)	// アニメーションを終了
 
 // アニメーションパターン列挙型
 enum class ANIM_PATTERN
 {
 	NO_ANIM = 0,
 	TEST,
+	BOOK,
 };
 
 class CAnimation
@@ -42,6 +44,7 @@ private:
 	{
 		{ 0, ANIM_LOOP },
 		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ANIM_LOOP},
+		{ 0, 2, 4, 0, ANIM_STOP},
 	};
 
 	// アニメーションスピード

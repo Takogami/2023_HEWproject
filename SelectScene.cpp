@@ -16,10 +16,10 @@ SelectScene::SelectScene()
 	StageSelect->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
 	StageSelect->SetFontStyle(FONT_STYLE::ITALIC);
 
-	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS));
+	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.2f,1.0f });
 	Objects.push_back(StagePreview);
 	StagePreview->transform.position = { -1.0f, -0.15f, 0.5f };
-	StagePreview->transform * 1.5f;
+	StagePreview->transform * 2.5f; 
 
 	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM));
 	Objects.push_back(StagePreview2);
@@ -62,9 +62,25 @@ SelectScene::~SelectScene()
 
 void SelectScene::Update()
 {
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN))
+	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) || gInput->GetKeyTrigger(VK_RETURN)) && !selectMoveUp && !selectMoveDown)
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		switch (stageNum)
+		{
+		case 1:
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+			break;
+		case 2:
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		default:
+			break;
+		}
 	}
 
 	// 上移動
@@ -84,6 +100,8 @@ void SelectScene::Update()
 			// イージングの初期化
 			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeInOutSine);
 		}
+		// 本のアニメーションを再生
+		StagePreview->InitAnimParameter(true, 5, ANIM_PATTERN::BOOK, 0.10f);
 	}
 	// 下移動
 	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 40, 5))
@@ -101,6 +119,8 @@ void SelectScene::Update()
 			// イージングの初期化
 			selectEase[i]->Init(&StageList[i]->transform.position.y, moveEndPos[i], 0.5f, 0, EASE::easeInOutSine);
 		}
+		// 本のアニメーションを再生
+		StagePreview->InitAnimParameter(true, 5, ANIM_PATTERN::BOOK, 0.10f);
 	}
 
 	for(int i = 0; i < StageList.size(); i++)

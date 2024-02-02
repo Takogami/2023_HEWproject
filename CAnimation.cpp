@@ -27,6 +27,11 @@ void CAnimation::Update()
 	// 終端がストップなら
 	else if (animationTable[(int)anim_pattern][(int)animCounter] == ANIM_STOP)
 	{
+		animCounter -= animationSpeed;
+	}
+	// 終端がフィニッシュなら
+	else if (animationTable[(int)anim_pattern][(int)animCounter] == ANIM_FINISH)
+	{
 		// 再生状態フラグを下げる
 		playing = false;
 	}

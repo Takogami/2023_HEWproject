@@ -22,7 +22,7 @@ ResultScene::ResultScene()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
-	player->InitAnimParameter(true, 10, ANIM_PATTERN::TEST, 0.05f);
+	player->InitAnimParameter(true, 3, ANIM_PATTERN::TEST, 0.05f);
 
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
