@@ -117,12 +117,12 @@ void SelectScene::Update()
 		{
 		case STAGE_NUM::STAGE1:
 			// ステージ1に遷移
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_2);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_1);
 			break;
 
 		case STAGE_NUM::STAGE2:
 			// ステージ2に遷移
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_1);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_2);
 			break;
 
 		case STAGE_NUM::STAGE3:

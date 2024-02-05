@@ -12,6 +12,14 @@ enum class CCursor_Point
     EXIT,
 };
 
+//別名で関連付ける
+enum class CCursor_PointResult
+{
+    RETRY = (int)CCursor_Point::STAGE,
+    SELECT = (int)CCursor_Point::OPTION,
+    TITLE = (int)CCursor_Point::EXIT,
+};
+
 class CCursor :
     public CGameObject
 {
@@ -19,7 +27,6 @@ private:
     /* メンバ変数 */
 
     int scene_count = 0;
-
 
 public:
     /* メンバ変数 */
@@ -32,6 +39,9 @@ public:
     CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex);
     void Update() override;
     void Draw() override;
+
+    //タイトル画面でのポイント位置を取得
     CCursor_Point GetCursorPoint()const;
+
     ~CCursor() override;
 };

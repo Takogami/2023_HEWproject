@@ -14,21 +14,21 @@ private:
 	// まとめてUpdateとDrawを行うために使用
 	std::list<CGameObject*>Objects;
 
-	CGameObject* player;
-	CCursor* player2;
-	CGameObject* player3;
-	CGameObject* player4;
-	CGameObject* player5;
+	CCursor* cursor;
+	CGameObject* goToSelect;
+	CGameObject* goToOption;
+	CGameObject* exitGame;
 	CGameObject* bg;
 	CGameObject* Title;
-	CEase* ease;
+
+	// タイトルのイージング
+	CEase* titleEase;
+	bool TitleEaseFg = false;
 
 	ID3D11Buffer* vertexBufferCharacter;
 	ID3D11Buffer* vertexBufferObject;
 
 	CCursor_Point cursorPoint;
-
-	bool flg;
 
 public:
 	// コンストラクタ
