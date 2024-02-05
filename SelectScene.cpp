@@ -31,7 +31,7 @@ SelectScene::SelectScene()
 
 	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
 	Objects.push_back(StagePreview2);
-	StagePreview2->transform.position = { -0.8f, 0.76f, 0.0f };
+	StagePreview2->transform.position = { -0.8f, 0.76f, 0.4f };
 	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f, 0.5f };
 
 	// 要素を拡張
@@ -39,8 +39,8 @@ SelectScene::SelectScene()
 	// ステージのオブジェクトの生成と初期化
 	for (int i = 0; i < StageList.size(); i++)
 	{
-		StageList[i] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
-		StageList[i]->transform.scale = { 1.5f, 0.5f, 1.0f };
+		StageList[i] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
+		StageList[i]->transform.scale = { 646.0f * 0.0025f, 277.0f * 0.0025f, 1.0f };
 		StageList[i]->transform.position = { 1.0f, 0.0f - (0.7f * i), 0.0f};
 		moveEndPos.resize(StageList.size());
 		Objects.push_back(StageList[i]);
@@ -145,8 +145,8 @@ void SelectScene::Update()
 		if (StageList[i]->transform.position.y == 0.0f)
 		{
 			// 大きさを等倍に
-			StageList[i]->transform.scale.x = 1.5f * 1.0f;
-			StageList[i]->transform.scale.y = 0.5f * 1.0f;
+			StageList[i]->transform.scale.x = 646.0f * 0.0025f * 1.0f;
+			StageList[i]->transform.scale.y = 277.0f * 0.0025f * 1.0f;
 			// 不透明にする
 			StageList[i]->materialDiffuse.w = 1.0f;
 		}
@@ -154,8 +154,8 @@ void SelectScene::Update()
 		else
 		{
 			// 縮小する
-			StageList[i]->transform.scale.x = 1.5f * 0.8f;
-			StageList[i]->transform.scale.y = 0.5f * 0.8f;
+			StageList[i]->transform.scale.x = 646.0f * 0.0025f * 0.8f;
+			StageList[i]->transform.scale.y = 277.0f * 0.0025f * 0.8f;
 			// 不透明度を下げる
 			StageList[i]->materialDiffuse.w = 0.7f;
 		}

@@ -8,12 +8,6 @@ enum class RESULT_STATE
 	CLEAR,
 };
 
-enum class RESULT_SELECT
-{
-	CONTINUE = 1,	//	コンテニュー
-	TITLE,			//	タイトルシーン
-};
-
 class ResultScene :
     public CScene
 {
@@ -24,7 +18,7 @@ private:
 	CGameObject* goToSelect;
 	CGameObject* goToTitle;
 
-	CCursor_PointResult cursorPoint;
+	CCursor_PointResult cursorPoint = CCursor_PointResult::RETRY;
 
 public:
 	CCamera* Cam;
@@ -35,11 +29,6 @@ public:
 
 	// オブジェクトの描画
 	ID3D11Buffer* vertexBufferObject;
-
-	// 選択中のステージ番号
-	int stageNum = 1;
-	// 選択中のステージ
-	RESULT_SELECT userSelect = RESULT_SELECT::CONTINUE;
 
 	// ステージのプレビュー
 	CGameObject* GameOverObj;

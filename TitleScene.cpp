@@ -26,43 +26,44 @@ TitleScene::TitleScene()
 	Title->transform.position.y = 0.55f;
 
 	//プレイヤーの実体化と初期化
-	cursor = new CCursor(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO));
+	cursor = new CCursor(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
 	// オブジェクトをリストに登録
 	Objects.push_back(cursor);
-	cursor->transform * 0.15f;
+	cursor->transform.scale = { 186.0f * 0.0017f, 54.0f * 0.0017f, 1.0f };
+	cursor->transform.rotation = -30.0f;
 	cursor->transform.position = { -0.424f, -0.3f };
 	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
 
 	//プレイヤーの実体化と初期化
-	goToSelect = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	goToSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(goToSelect);
 	goToSelect->transform * 0.5f;
 	goToSelect->transform.position = { 0.0f, -0.3f };
 
 	//プレイヤーの実体化と初期化
-	goToOption = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	goToOption = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(goToOption);
 	goToOption->transform * 0.5f;
 	goToOption->transform.position = { 0.0f, -0.6f };
 
 	//プレイヤーの実体化と初期化
-	exitGame = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	exitGame = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(exitGame);
 	exitGame->transform * 0.5f;
 	exitGame->transform.position = { 0.0f, -0.9f };
 
 	titleEase = new CEase();
-	titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0.0f, EASE::easeOutBounce);
+	titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0, EASE::easeOutBounce);
 }
 
 // デスストラクタ
 TitleScene::~TitleScene()
 {
 	// 頂点バッファの解放
-	SAFE_RELEASE(vertexBufferCharacter);
+	SAFE_RELEASE(vertexBufferObject);
 
 	// 各オブジェクトのメモリ解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -105,12 +106,12 @@ void TitleScene::Update()
 
 	if (titleEase->GetState() == STATE::END && TitleEaseFg)
 	{
-		titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0.0f, EASE::easeOutBounce);
+		titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0, EASE::easeOutBounce);
 		TitleEaseFg = false;
 	}
 	else if (titleEase->GetState() == STATE::END && !TitleEaseFg)
 	{
-		titleEase->Init(&Title->transform.position.y, 0.55f, 1.0f, 0.0f, EASE::easeInOutQuint);
+		titleEase->Init(&Title->transform.position.y, 0.55f, 1.0f, 0, EASE::easeInOutQuint);
 		TitleEaseFg = true;
 	}
 

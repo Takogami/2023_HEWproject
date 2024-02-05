@@ -25,10 +25,9 @@ private:
 	CEase* titleEase;
 	bool TitleEaseFg = false;
 
-	ID3D11Buffer* vertexBufferCharacter;
 	ID3D11Buffer* vertexBufferObject;
 
-	CCursor_Point cursorPoint;
+	CCursor_Point cursorPoint = CCursor_Point::STAGE;
 
 public:
 	// コンストラクタ

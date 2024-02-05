@@ -11,29 +11,27 @@ ResultScene::ResultScene()
 	GameOverObj->transform.position = { -0.5f, 0.0f, 0.5f };
 	GameOverObj->transform.scale = { 512.0f * 0.0045f, 512.0f * 0.0045f, 1.0f };
 
-	//プレイヤーの実体化と初期化
-	cursor = new CCursor(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO));
+	// カーソルの実体化と初期化
+	cursor = new CCursor(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
 	// オブジェクトをリストに登録
 	Objects.push_back(cursor);
-	cursor->transform * 0.15f;
+	cursor->transform.scale = { 186.0f * 0.0017f, 54.0f * 0.0017f, 1.0f };
 	cursor->transform.position = { 0.524f, 0.2f };
+	cursor->transform.rotation = -30.0f;
 	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
 
-	//プレイヤーの実体化と初期化
 	retry = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(retry);
 	retry->transform * 0.5f;
 	retry->transform.position = { 0.9f, 0.2f };
 
-	//プレイヤーの実体化と初期化
 	goToSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(goToSelect);
 	goToSelect->transform * 0.5f;
 	goToSelect->transform.position = { 0.9f, -0.1f };
 
-	//プレイヤーの実体化と初期化
 	goToTitle = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(goToTitle);
@@ -75,7 +73,7 @@ void ResultScene::Update()
 		// カーソルのポイント位置で遷移先のシーンを変更
 		switch (cursorPoint)
 		{
-		case CCursor_PointResult::RETRY:	// リトライ
+		case CCursor_PointResult::RETRY:	// コンティニュー
 			// 前回のステージに遷移する
 			switch (loadScene)
 			{
