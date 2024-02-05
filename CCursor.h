@@ -28,17 +28,21 @@ private:
 
     int scene_count = 0;
 
+    // 初期位置
+    FLOAT_XY ini_position = { 0.0f, 0.0f };
+    // カーソルの動く距離
+    float moveDistance = 0.3f;
+
 public:
-    /* メンバ変数 */
-
-    // 方向ベクトル
-    DirectX::XMFLOAT3 dir = { 0.0f, 0.0f, 0.0f };
-
     /* メソッド */
 
     CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex);
     void Update() override;
     void Draw() override;
+
+    // カーソルの初期化
+    // 引数1 : 初期位置 引数2 : 動く距離
+    void Init(FLOAT_XY ini_pos, float move = 0.3f);
 
     //タイトル画面でのポイント位置を取得
     CCursor_Point GetCursorPoint()const;

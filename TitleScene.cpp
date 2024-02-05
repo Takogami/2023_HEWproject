@@ -31,6 +31,7 @@ TitleScene::TitleScene()
 	Objects.push_back(cursor);
 	cursor->transform * 0.15f;
 	cursor->transform.position = { -0.424f, -0.3f };
+	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
 
 	//ƒvƒŒƒCƒ„[‚ÌŽÀ‘Ì‰»‚Æ‰Šú‰»
 	goToSelect = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));

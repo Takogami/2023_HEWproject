@@ -22,18 +22,7 @@ void CCursor::Update()
 	scene_count %= SCENE_COUNT;
 
 	// カーソルの位置決め
-	switch (scene_count)
-	{
-	case 0://ステージ選択時
-		this->transform.position.y = -0.3f;// y=0.3 = ステージのカーソルのy座標
-		break;
-	case 1://オプション選択時
-		this->transform.position.y = -0.6f;// y=0.6 = オプションのカーソルのy座標
-		break;
-	case 2://ゲーム終了選択時
-		this->transform.position.y = -0.9f;// y=0.9 = ゲーム終了のカーソルのy座標
-		break;
-	}
+	this->transform.position.y = ini_position.y - moveDistance * scene_count;
 
 	gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A);
 
@@ -45,6 +34,12 @@ void CCursor::Draw()
 	// 親クラスのDraw()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の描画処理を行う
 	CGameObject::Draw();
+}
+
+void CCursor::Init(FLOAT_XY ini_pos, float move)
+{
+	ini_position = ini_pos;
+	moveDistance = move;
 }
 
 //CCursorでの列挙型のSceneを取得する
