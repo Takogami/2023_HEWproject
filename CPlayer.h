@@ -35,14 +35,16 @@ private:
     // アニメーションフラグ
     bool isanimation = false;
 
+    //  風を受けるフラグ
+    bool isWindRight = false;   //  右向き
+    bool isWindUp = false;      //  上向き
+
     CSmoothing* smoothing;
 
     bool nockf = false;
-    
     float moveF = 0.0f;
-
     float flameCounter = 0.0f;
-
+    
     // プレイヤーの状態
     PState State = PState::NORMAL;
 
