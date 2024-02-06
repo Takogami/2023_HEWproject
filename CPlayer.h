@@ -34,6 +34,10 @@ private:
     // アニメーションフラグ
     bool isanimation = false;
 
+    //  風を受けるフラグ
+    bool isWindRight = false;   //  右向き
+    bool isWindUp = false;      //  上向き
+
     // プレイヤーの状態
     PState State = PState::NORMAL;
 

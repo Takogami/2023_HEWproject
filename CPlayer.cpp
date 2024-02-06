@@ -178,6 +178,7 @@ void CPlayer::PlayerInput()
 					SetState(PState::FALL);// 倒れた状態
 					SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
 					anim->SetIsAnimation(true);
+					isWindUp = true;	//	下からの風を受ける
 				}
 				else
 				{
@@ -210,6 +211,8 @@ void CPlayer::PlayerInput()
 					SetState(PState::NORMAL);// 通常状態
 					SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 					anim->SetIsAnimation(true);
+					isWindUp = false;	//	下からの風を受けない
+					isWindRight = false;	//	風を受けない
 				}
 				else
 				{
@@ -223,6 +226,7 @@ void CPlayer::PlayerInput()
 					SetState(PState::BREAKLEFT);// 左に折れる状態
 					SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 					anim->SetIsAnimation(true);
+					isWindRight = true;	//	風を受ける
 				}
 				else
 				{
@@ -255,6 +259,7 @@ void CPlayer::PlayerInput()
 					SetState(PState::FALL);// 倒れた状態
 					SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
 					anim->SetIsAnimation(true);
+					isWindRight = false;	//	風を受けない
 				}
 				else
 				{
@@ -426,19 +431,32 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_RIGHT:
-				// 右向きの風力を取得
-				receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
-				// 風を受けた方向と向き保存
-				dir.x = 1.0f;
-				dir_wind.x = 1.0f;
+				//	アニメーションが終わったら……
+				if (anim->GetIsAnimation() == false && isWindRight)
+				{
+					// 右向きの風力を取得
+					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
+					// 風を受けた方向と向き保存
+					dir.x = 1.0f;
+					dir_wind.x = 1.0f;
+
+				}
 				break;
 
 			case OBJECT_TYPE::WIND_UP:
-				// 上向きの風力を取得
-				receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
-				// 風を受けた方向と向き保存
-				dir.y = 1.0f;
-				dir_wind.y = 1.0f;
+
+				if (anim->GetIsAnimation() == false && isWindUp)
+				{
+					// 上向きの風力を取得
+					receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
+					// 風を受けた方向と向き保存
+					dir.y = 1.0f;
+					dir_wind.y = 1.0f;
+
+					//	上に上がってる時に「WIND_RIGHT」があったら
+					//	trueにしてそのまま飛んでいく
+					isWindRight = true;
+				}
 				break;
 
 			case OBJECT_TYPE::DAMAGE_TILE:
