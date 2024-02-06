@@ -61,6 +61,37 @@ void ResultScene::SetPrevStage(int prev)
 
 void ResultScene::Update()
 {
+	// 結果に応じて更新処理を変える
+	switch (state)
+	{
+	case RESULT_STATE::GAMEOVER:
+		// ゲームオーバー画面の更新
+		UpdateGameOver();
+		break;
+
+	case RESULT_STATE::CLEAR:
+		// クリア画面の更新
+		UpdateClear();
+		break;
+
+	default:
+
+		break;
+	}
+
+	// 各オブジェクトの描画
+	for (auto it = Objects.begin(); it != Objects.end(); it++)
+	{
+		(*it)->Update();
+	}
+}
+
+void ResultScene::UpdateClear()
+{
+}
+
+void ResultScene::UpdateGameOver()
+{
 	// 前回のシーンからリトライで読み込むシーンを決定
 	// int型で設定されたものをSCENE_ID型に変換する
 	SCENE_ID loadScene = (SCENE_ID)prevScene;
@@ -101,12 +132,6 @@ void ResultScene::Update()
 		default:
 			break;
 		}
-	}
-
-	// 各オブジェクトの描画
-	for (auto it = Objects.begin(); it != Objects.end(); it++)
-	{
-		(*it)->Update();
 	}
 }
 

@@ -20,6 +20,14 @@ private:
 
 	CCursor_PointResult cursorPoint = CCursor_PointResult::RETRY;
 
+	// ゲームオーバーであるかクリアであるかを識別
+	RESULT_STATE state = RESULT_STATE::GAMEOVER;
+
+	// クリア画面の更新
+	void UpdateClear();
+	// ゲームオーバー画面の更新
+	void UpdateGameOver();
+
 public:
 	CCamera* Cam;
 
@@ -36,7 +44,6 @@ public:
 	// リザルト遷移前のステージが何だったか
 	int prevScene = 0;
 
-public:
 	ResultScene();
 	~ResultScene() override;
 
