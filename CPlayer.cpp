@@ -10,13 +10,22 @@
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
 	// 初期スピード設定
-	SetMoveSpeed(0.05f);
+	SetMoveSpeed(0.03f);
+	smoothing = new CSmoothing();
 	// 重力を初期値とする
 	velocity.y = gravity;
+
+	nockf = false;
+
+	test = true;
 }
 
 void CPlayer::PlayerInput()
 {
+	if (nockf)
+	{
+		return;
+	}
 #if USE_CONTROLLER == true
 
 	
@@ -292,7 +301,6 @@ void CPlayer::PlayerInput()
 		break;
 	}
 #endif
-
 }
 
 float CPlayer::Jump()
@@ -368,6 +376,10 @@ void CPlayer::Update()
 		// 向きを戻す
 		dir.y = -1.0f;
 	}
+	if (Ddir.x == 0.0f)
+	{
+		dir.x = 0.0f;
+	}
   
 	// プレイヤー操作関連の入力処理
 	PlayerInput();
@@ -390,12 +402,40 @@ void CPlayer::Update()
 	// ジャンプ中ならジャンプ力の更新処理を行う
 	velocity.y = isJump ? Jump() : velocity.y += gravity;
 
+	//ノックバックオブジェクトに当たったのなら以下の処理をする
+	if (nockf)
+	{
+		//プレイヤーがノックバックした先にカメラを追従させる
+		smoothing->Update();
+		//プレイヤーがすぐ入力できないようにするためのフレームカウンター
+		flameCounter++;
+		//---------------------------------------------------------//
+		//プレイヤーを点滅させる
+		if (this->materialDiffuse.w == 1.0f)
+		{
+			this->materialDiffuse.w = 0.2f;
+		}
+		else if (this->materialDiffuse.w == 0.2f)
+		{
+			this->materialDiffuse.w = 1.0f;
+		}
+		//-----------------------------------------------------------//
+		//プレイヤーが入力できない時間を作ってる
+		if (flameCounter == 20)
+		{
+			nockf = false;
+			flameCounter = 0.0f;
+		}
+		//---------------------------------------------------------//
+	}
+
 	// ベクトルに速度をかけて位置を変更
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y -= velocity.y;
 
 	// 風の計算を行う
 	ReceiveWind();
+
 
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
@@ -444,7 +484,6 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_UP:
-
 				if (anim->GetIsAnimation() == false && isWindUp)
 				{
 					// 上向きの風力を取得
@@ -460,15 +499,28 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::DAMAGE_TILE:
-				if (this->dir.x == 1.0f)
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+
+				//プレイヤーのノックバックの処理
+				if (!nockf)
 				{
-					this->Ddir.x = -1.0f;
+					//吹っ飛ばす計算式（右）
+					if (0.0f > dir.x)
+					{
+						moveF = this->transform.position.x + 0.3f;
+					}
+					//吹っ飛ばす計算式（左）
+					else if (0.0f < dir.x)
+					{
+						moveF = this->transform.position.x - 0.3f;
+					}
+					//追従カメラの初期化
+					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.3f);
+					nockf = true;
 				}
 
-				else if (this->dir.x == -1.0f)
-				{
-					this->Ddir.x = 1.0f;
-				}
 				break;
 
 			default:
@@ -490,10 +542,12 @@ void CPlayer::SetState(PState state)
 
 void CPlayer::Rknoc(DirectX::XMFLOAT3)
 {
+
 }
 
 void CPlayer::Lknoc(DirectX::XMFLOAT3)
 {
+
 }
 
 void CPlayer::Draw()
@@ -505,6 +559,7 @@ void CPlayer::Draw()
 
 CPlayer::~CPlayer()
 {
+	delete smoothing;
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う
 	CGameObject::~CGameObject();

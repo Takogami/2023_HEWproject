@@ -45,6 +45,64 @@ CORRECT_DIR CCollision::CorrectPosition(BoxCollider& moveObject, BoxCollider& ho
 	return correct_dir;
 }
 
+float CCollision::DtestCorrectPosition(BoxCollider& moveObject, BoxCollider& holdObject ,bool T)
+{
+	// x,yそれぞれめり込んでいる長さを計算
+	float overlapX = ((moveObject.sizeX / 2) + (holdObject.sizeX / 2)) - std::abs(moveObject.centerX - holdObject.centerX);
+	float overlapY = ((moveObject.sizeY / 2) + (holdObject.sizeY / 2)) - std::abs(moveObject.centerY - holdObject.centerY);
+
+	bool XRflg = false;
+	bool XLflg = false;
+
+	// コライダーを補正する
+	if (overlapY < overlapX)
+	{
+
+		// Y軸方向にめり込んでいる場合
+		if (moveObject.centerY < holdObject.centerY)
+		{
+			moveObject.centerY -= overlapY ;
+			
+			
+		}
+		else
+		{
+			moveObject.centerY += overlapY ;
+			
+		}
+
+	}
+	//本来のめり込み計算の補正と少し違うので0.002分を＋してあげる
+	else if ((overlapX + 0.002f) < overlapY) {
+		// X軸方向にめり込んでいる場合
+		if (moveObject.centerX < holdObject.centerX)
+		{
+			XLflg = true;
+			moveObject.centerX -= overlapX;
+			//if (XLflg == true)
+			//{
+			//	moveObject.centerX -= 0.2f;
+			//	T = false;
+			//}
+		}
+		else if (moveObject.centerX > holdObject.centerX)
+		{
+			XRflg = true;
+			moveObject.centerX += overlapX;
+			/*if (XRflg == true)
+			{
+				moveObject.centerX += 0.2f;
+				T = false;
+
+			}*/
+
+		}
+
+	}
+	T = true;
+	return moveObject.centerX;
+}
+
 bool CCollision::TestBoxCollision(BoxCollider& obj1, BoxCollider& obj2)
 {
 	// 中心点間の距離

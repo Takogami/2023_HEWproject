@@ -40,7 +40,9 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	PLAYER,
 	BOOK,
 	STRING_BG,
-	GAMEOVER
+	GAMEOVER,
+	SELECT_FLAME,
+	CURSOR,
 };
 
 // CTextureLoaderクラス
@@ -66,6 +68,8 @@ private:
 		L"asset/book.png",
 		L"asset/stringBg.png",
 		L"asset/GameOver.png",
+		L"asset/selectFlame.png",
+		L"asset/cursor.png",
 	};
 
 	/* メソッド */

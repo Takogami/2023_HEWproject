@@ -7,12 +7,6 @@ CSceneManager* CSceneManager::instance = nullptr;
 // コンストラクタ
 CSceneManager::CSceneManager()
 {
-	title = nullptr;
-	stage1 = nullptr;
-	stage2 = nullptr;
-	select = nullptr;
-	result = nullptr;
-
 	// デフォルトのシーンを初期化します
 	ChangeScene(SCENE_ID::TITLE);
 }
@@ -97,7 +91,7 @@ void CSceneManager::Update()
 		stage2->Draw();
 		break;
 
-		// リザルト
+	// リザルト
 	case SCENE_ID::RESULT:
 		result->Update();
 		result->Draw();
@@ -146,6 +140,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 	}
 
 	// 2. 新しいシーンの識別子を設定する
+	// リトライ時に読み込むシーンとして現在のシーンを保存する
+	SCENE_ID retryLoadScene = NowScene;
 	NowScene = _inScene;
 
 	// 3. 新しいシーンのリソースを作成し設定する
@@ -174,6 +170,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 	case SCENE_ID::RESULT:
 		// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
 		result = new ResultScene();
+		// 前のシーンをリザルトシーンに設定
+		result->SetPrevStage((int)retryLoadScene);
 		break;
 	}
 }

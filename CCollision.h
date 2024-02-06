@@ -35,5 +35,7 @@ public:
 	// à íuï‚ê≥
 	static CORRECT_DIR CorrectPosition(BoxCollider& obj1, BoxCollider& obj2);
 
+	static float DtestCorrectPosition(BoxCollider& obj1, BoxCollider& obj2, bool T);
+
 };
 

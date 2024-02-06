@@ -10,19 +10,30 @@ Cdamagetile::~Cdamagetile()
 	CGameObject::~CGameObject();
 }
 
-void Cdamagetile::knockback(CPlayer* a, float back)
+void Cdamagetile::knockbackR(CPlayer* a , float s)
 {
-	if (a->dir.x >= 0.0f)
+	if (a->Ddir.x == -1.0f)
 	{
-		a->transform.position.x -= a->dir.x * back;
+		s -= 0.001f;
+		if (damageknock <= 0.0f)
+		{
+			a->Ddir.x = 0.0f;
+			s = 0.0f;
+		}
 	}
-	else if (a->dir.x <= 0.0f)
-	{
-		a->transform.position.x += a->dir.x * back;
-	}
+	a->transform.position.x -= s;
 }
 
-float Cdamagetile::Getback(CPlayer* a)
+void Cdamagetile::knockbackL(CPlayer* a , float s)
 {
-	return a->transform.position.x;
+	if (a->Ddir.x == 1.0f)
+	{
+		s -= 0.001f;
+		if (s <= 0.0f)
+		{
+			a->Ddir.x = 0.0f;
+			s = 0.0f;
+		}
+	}
+	a->transform.position.x += s;
 }
