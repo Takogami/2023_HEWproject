@@ -1,10 +1,11 @@
 #pragma once
 #include "CScene.h"
 
-enum class SELECT_NUM
+// リザルト画面の状態
+enum class RESULT_STATE
 {
-	CONTINUE = 1,	//	コンテニュー
-	TITLE,			//	タイトルシーン
+	GAMEOVER,
+	CLEAR,
 };
 
 class ResultScene :
@@ -12,6 +13,20 @@ class ResultScene :
 {
 private:
 
+	CCursor* cursor;
+	CGameObject* retry;
+	CGameObject* goToSelect;
+	CGameObject* goToTitle;
+
+	CCursor_PointResult cursorPoint = CCursor_PointResult::RETRY;
+
+	// ゲームオーバーであるかクリアであるかを識別
+	RESULT_STATE state = RESULT_STATE::GAMEOVER;
+
+	// クリア画面の更新
+	void UpdateClear();
+	// ゲームオーバー画面の更新
+	void UpdateGameOver();
 
 public:
 	CCamera* Cam;
@@ -23,32 +38,18 @@ public:
 	// オブジェクトの描画
 	ID3D11Buffer* vertexBufferObject;
 
-	// 選択を促す文章
-	CDrawString* StageSelect;
-
-	// 選択中のステージ番号
-	int stageNum = 1;
-	// 選択中のステージ
-	SELECT_NUM userSelect = SELECT_NUM::CONTINUE;
-
 	// ステージのプレビュー
-	CGameObject* StagePreview;
+	CGameObject* GameOverObj;
 
-	// ステージの選択オブジェクトのリスト
-	std::vector<CGameObject*> StageList;
-	// ステージリストの数
-	const int listNum = 2;
-	// 動きの終了位置
-	std::vector<float> moveEndPos;
-	// 動きの開始管理フラグ
-	bool selectMoveUp = false;
-	bool selectMoveDown = false;
-	// ステージ選択のイージング
-	std::vector<CEase*> selectEase;
+	// リザルト遷移前のステージが何だったか
+	int prevScene = 0;
 
-public:
 	ResultScene();
 	~ResultScene() override;
+
+	// リザルト遷移前のステージの設定
+	// ※SCENE_ID型が相互インクルードで使えないためint型で指定してください
+	void SetPrevStage(int prev);
 
 	/* ------CSceneの関数のオーバーライド------ */
 	void Update() override;

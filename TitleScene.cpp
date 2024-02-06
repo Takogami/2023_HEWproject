@@ -1,8 +1,6 @@
 /* インクルード */
 #include "TitleScene.h"
 #include "CSceneManager.h"
-#include "CCursor.h"
-//extern enum Cursor_Point cursor;
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -16,15 +14,6 @@ TitleScene::TitleScene()
 
 	Title = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TITLE), { 1.0f ,1.0f });
 	Objects.push_back(Title);
-	// プレイヤーの実体化と初期化
-	player = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::CHAR1), {0.33f ,0.25f});
-
-
-	// オブジェクトをリストに登録
-	Objects.push_back(player);
-	//自身の投影に使うカメラの設定
-	player->SetUseingCamera(Cam);
-	player->transform * 0.5f;
 
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
@@ -34,53 +23,47 @@ TitleScene::TitleScene()
 	Title->SetUseingCamera(Cam);
 	Title->transform.scale = { 1271.0f * 0.0021f , 299.0f * 0.0021f, 1.0f};
 	Title->transform.position.z = 0.98f;
-	Title->transform.position.y = 0.5f;
+	Title->transform.position.y = 0.55f;
 
 	//プレイヤーの実体化と初期化
-	player2 = new CCursor(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO));
+	cursor = new CCursor(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
 	// オブジェクトをリストに登録
-	Objects.push_back(player2);
-	//自身の投影にカメラを使用しない
-	//player2->SetUseingCamera(Cam);
-	player2->transform * 0.15f;
-	player2->transform.position = { -0.424f, -0.3f };
+	Objects.push_back(cursor);
+	cursor->transform.scale = { 186.0f * 0.0017f, 54.0f * 0.0017f, 1.0f };
+	cursor->transform.rotation = -30.0f;
+	cursor->transform.position = { -0.424f, -0.3f };
+	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
 
 	//プレイヤーの実体化と初期化
-	player3 = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	goToSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
-	Objects.push_back(player3);
-	//自身の投影にカメラを使用しない
-	player3->transform * 0.5f;
-	player3->transform.position = { 0.0f, -0.3f };
+	Objects.push_back(goToSelect);
+	goToSelect->transform * 0.5f;
+	goToSelect->transform.position = { 0.0f, -0.3f };
 
 	//プレイヤーの実体化と初期化
-	player4 = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	goToOption = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
-	Objects.push_back(player4);
-	//自身の投影にカメラを使用しない
-	player4->transform * 0.5f;
-	player4->transform.position = { 0.0f, -0.6f };
+	Objects.push_back(goToOption);
+	goToOption->transform * 0.5f;
+	goToOption->transform.position = { 0.0f, -0.6f };
 
 	//プレイヤーの実体化と初期化
-	player5 = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
+	exitGame = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
-	Objects.push_back(player5);
-	//自身の投影にカメラを使用しない
-	player5->transform * 0.5f;
-	player5->transform.position = { 0.0f, -0.9f };
+	Objects.push_back(exitGame);
+	exitGame->transform * 0.5f;
+	exitGame->transform.position = { 0.0f, -0.9f };
 
-	ease = new CEase();
-	ease->Init(&Title->transform.scale.x, 1271.0f * 0.0021f * 1.3f, 1.0f, 0.0f, EASE::easeInBounce);
-
-	flg = true;
-
+	titleEase = new CEase();
+	titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0, EASE::easeOutBounce);
 }
 
 // デスストラクタ
 TitleScene::~TitleScene()
 {
 	// 頂点バッファの解放
-	SAFE_RELEASE(vertexBufferCharacter);
+	SAFE_RELEASE(vertexBufferObject);
 
 	// 各オブジェクトのメモリ解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -97,7 +80,7 @@ void TitleScene::Update()
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		//CCursorでの列挙型のSceneを取得する
-		cursorPoint = player2->GetCursorPoint();
+		cursorPoint = cursor->GetCursorPoint();
 
 		switch (cursorPoint)
 		{
@@ -119,17 +102,17 @@ void TitleScene::Update()
 
 	// カメラのアップデート
 	Cam->Update();
-	ease->Update();
+	titleEase->Update();
 
-	if (ease->GetState() == STATE::END && flg == true)
+	if (titleEase->GetState() == STATE::END && TitleEaseFg)
 	{
-		ease->Init(&Title->transform.scale.x, 1271.0f * 0.0021f * 1.0f, 1.0f, 0.0f, EASE::easeInBounce);
-		flg = false;
+		titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0, EASE::easeOutBounce);
+		TitleEaseFg = false;
 	}
-	else if (ease->GetState() == STATE::END && flg == false)
+	else if (titleEase->GetState() == STATE::END && !TitleEaseFg)
 	{
-		ease->Init(&Title->transform.scale.x, 1271.0f * 0.0021f * 1.3f, 1.0f, 0.0f, EASE::easeInBounce);
-		flg = true;
+		titleEase->Init(&Title->transform.position.y, 0.55f, 1.0f, 0, EASE::easeInOutQuint);
+		TitleEaseFg = true;
 	}
 
 

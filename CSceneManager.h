@@ -22,11 +22,13 @@ private:
 	// 唯一のインスタンスを格納するためのポインタ
 	static CSceneManager* instance;
 
-	TitleScene* title;						//タイトルシーンクラス
-	StageScene* stage1;						//ステージシーン1クラス
-	StageScene2* stage2;					//ステージシーン2クラス
-	SelectScene* select;					//セレクトシーンクラス
-	ResultScene* result;
+	TitleScene* title = nullptr;			//タイトルシーンクラス
+	StageScene* stage1 = nullptr;			//ステージシーン1クラス
+	StageScene2* stage2 = nullptr;			//ステージシーン2クラス
+	SelectScene* select = nullptr;			//セレクトシーンクラス
+	ResultScene* result = nullptr;			//リザルトシーンクラス
+
+	std::list<CScene*> scenes;
 
 	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
 
