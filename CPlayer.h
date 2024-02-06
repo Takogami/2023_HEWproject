@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "CGameObject.h"
+#include "CSmoothing.h"
 
 enum class PState
 {
@@ -34,6 +35,14 @@ private:
     // アニメーションフラグ
     bool isanimation = false;
 
+    CSmoothing* smoothing;
+
+    bool nockf = false;
+    
+    float moveF = 0.0f;
+
+    float flameCounter = 0.0f;
+
     // プレイヤーの状態
     PState State = PState::NORMAL;
 
@@ -41,6 +50,8 @@ private:
     CORRECT_DIR prevFrameCorrect = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
+
+    bool test = false;
 
 public:
     /* メンバ変数 */
@@ -60,7 +71,6 @@ public:
 
     //吹っ飛ぶ力
     float Sumash = 0.0f;
-
 
 
     /* メソッド */
@@ -87,6 +97,8 @@ public:
     PState GetState();
     // 状態の設定
     void SetState(PState state);
+
+    void testknoc(CPlayer p);
 
     // 更新
     void Update() override;

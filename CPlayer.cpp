@@ -10,13 +10,22 @@
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
 	// 初期スピード設定
-	SetMoveSpeed(0.05f);
+	SetMoveSpeed(0.03f);
+	smoothing = new CSmoothing();
 	// 重力を初期値とする
 	velocity.y = gravity;
+
+	nockf = false;
+
+	test = true;
 }
 
 void CPlayer::PlayerInput()
 {
+	if (nockf)
+	{
+		return;
+	}
 #if USE_CONTROLLER == true
 
 	
@@ -123,171 +132,171 @@ void CPlayer::PlayerInput()
 	old_input_stickX= input_stickX;
 	old_input_stickY= input_stickY;
 #else
-	switch (State)
-	{
-	case PState::NORMAL:// 通常状態の処理
-		//SetAnimationPattern(ANIM_PATTERN::NO_ANIM);
-		//else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
-		//{
-		//	if (!gInput->GetKeyPress(VK_DOWN))
-		//	{
-		//		//dir.y = 1.0f;
-		//		prevFrameDir.y = dir.y;
-		//	}
-		//	else
-		//	{
-		//		dir.y = prevFrameDir.y;
-		//	}
-		//}
-		if (anim->GetIsAnimation() == false)
+		switch (State)
 		{
-			if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
+		case PState::NORMAL:// 通常状態の処理
+			//SetAnimationPattern(ANIM_PATTERN::NO_ANIM);
+			//else if (gInput->GetKeyPress(VK_UP) && prevFrameCorrect.y != -1)
+			//{
+			//	if (!gInput->GetKeyPress(VK_DOWN))
+			//	{
+			//		//dir.y = 1.0f;
+			//		prevFrameDir.y = dir.y;
+			//	}
+			//	else
+			//	{
+			//		dir.y = prevFrameDir.y;
+			//	}
+			//}
+			if (anim->GetIsAnimation() == false)
 			{
-				if (!gInput->GetKeyPress(VK_RIGHT))
+				if (gInput->GetKeyPress(VK_LEFT) && prevFrameCorrect.x != 1)
 				{
-					dir.x = -1.0f;
-					prevFrameDir.x = dir.x;
-					SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
+					if (!gInput->GetKeyPress(VK_RIGHT))
+					{
+						dir.x = -1.0f;
+						prevFrameDir.x = dir.x;
+						SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
+					}
+					else
+					{
+						dir.x = prevFrameDir.x;
+					}
 				}
-				else
+				else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
 				{
-					dir.x = prevFrameDir.x;
+					//dir.y = prevFrameDir.y;
+					if (!gInput->GetKeyPress(VK_LEFT))
+					{
+						dir.x = 1.0f;
+						prevFrameDir.x = dir.x;
+						SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
+					}
+					else
+					{
+						dir.x = prevFrameDir.x;
+					}
 				}
-			}
-			else if (gInput->GetKeyPress(VK_RIGHT) && prevFrameCorrect.x != -1)
-			{
-				//dir.y = prevFrameDir.y;
-				if (!gInput->GetKeyPress(VK_LEFT))
+				if (gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y == 1)
 				{
-					dir.x = 1.0f;
-					prevFrameDir.x = dir.x;
-					SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
-				}
-				else
-				{
-					dir.x = prevFrameDir.x;
-				}
-			}
-			if (gInput->GetKeyPress(VK_DOWN) && prevFrameCorrect.y == 1)
-			{
-				if (!gInput->GetKeyPress(VK_UP))
-				{
-					/*dir.y = -1.0f;
-					prevFrameDir.y = dir.y;*/
+					if (!gInput->GetKeyPress(VK_UP))
+					{
+						/*dir.y = -1.0f;
+						prevFrameDir.y = dir.y;*/
 
-					SetState(PState::FALL);// 倒れた状態
-					SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
-					anim->SetIsAnimation(true);
+						SetState(PState::FALL);// 倒れた状態
+						SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
+						anim->SetIsAnimation(true);
+					}
+					else
+					{
+						/*dir.y = prevFrameDir.y;*/
+					}
 				}
-				else
+				else if (!gInput->GetKeyPress(VK_RIGHT) && !gInput->GetKeyPress(VK_LEFT) && !gInput->GetKeyPress(VK_UP) && !gInput->GetKeyPress(VK_DOWN))
 				{
-					/*dir.y = prevFrameDir.y;*/
+					SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+				}
+
+				if (gInput->GetKeyTrigger(VK_TAB))
+				{
+					isJump = true;
+					//--------------------------------
+					//無限ジャンプ不可にしたい場合は下の１行を消してください
+					jumpStrength = ini_jumpStrength;
+					//--------------------------------
 				}
 			}
-			else if (!gInput->GetKeyPress(VK_RIGHT) && !gInput->GetKeyPress(VK_LEFT) && !gInput->GetKeyPress(VK_UP) && !gInput->GetKeyPress(VK_DOWN))
-			{
-				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
-			}
+			break;
 
-			if (gInput->GetKeyTrigger(VK_TAB))
+		case PState::FALL:// 倒れた状態の処理
+			if (anim->GetIsAnimation() == false)
 			{
-				isJump = true;
-				//--------------------------------
-				//無限ジャンプ不可にしたい場合は下の１行を消してください
-				jumpStrength = ini_jumpStrength;
-				//--------------------------------
+				if (gInput->GetKeyPress(VK_UP))
+				{
+					if (!gInput->GetKeyPress(VK_DOWN))
+					{
+						SetState(PState::NORMAL);// 通常状態
+						SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
+						anim->SetIsAnimation(true);
+					}
+					else
+					{
+
+					}
+				}
+				if (gInput->GetKeyTrigger(VK_LEFT))
+				{
+					if (!gInput->GetKeyTrigger(VK_RIGHT))
+					{
+						SetState(PState::BREAKLEFT);// 左に折れる状態
+						SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
+						anim->SetIsAnimation(true);
+					}
+					else
+					{
+
+					}
+				}
+				else if (gInput->GetKeyTrigger(VK_RIGHT))
+				{
+					if (!gInput->GetKeyTrigger(VK_LEFT))
+					{
+						SetState(PState::BREAKRIGHT);// 右に折れる状態
+						SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
+						anim->SetIsAnimation(true);
+					}
+					else
+					{
+
+					}
+				}
 			}
+			break;
+
+		case PState::BREAKLEFT:
+			if (anim->GetIsAnimation() == false)
+			{
+				if (gInput->GetKeyTrigger(VK_RIGHT))
+				{
+					if (!gInput->GetKeyTrigger(VK_LEFT))
+					{
+						SetState(PState::FALL);// 倒れた状態
+						SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
+						anim->SetIsAnimation(true);
+					}
+					else
+					{
+
+					}
+				}
+			}
+			break;
+
+		case PState::BREAKRIGHT:
+			if (anim->GetIsAnimation() == false)
+			{
+				if (gInput->GetKeyTrigger(VK_LEFT))
+				{
+					if (!gInput->GetKeyTrigger(VK_RIGHT))
+					{
+						SetState(PState::FALL);// 倒れた状態
+						SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
+						anim->SetIsAnimation(true);
+					}
+					else
+					{
+
+					}
+				}
+			}
+			break;
+
+		default:
+			break;
 		}
-		break;
-
-	case PState::FALL:// 倒れた状態の処理
-		if (anim->GetIsAnimation() == false)
-		{
-			if (gInput->GetKeyPress(VK_UP))
-			{
-				if (!gInput->GetKeyPress(VK_DOWN))
-				{
-					SetState(PState::NORMAL);// 通常状態
-					SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
-					anim->SetIsAnimation(true);
-				}
-				else
-				{
-
-				}
-			}
-			if (gInput->GetKeyTrigger(VK_LEFT))
-			{
-				if (!gInput->GetKeyTrigger(VK_RIGHT))
-				{
-					SetState(PState::BREAKLEFT);// 左に折れる状態
-					SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
-					anim->SetIsAnimation(true);
-				}
-				else
-				{
-
-				}
-			}
-			else if (gInput->GetKeyTrigger(VK_RIGHT))
-			{
-				if (!gInput->GetKeyTrigger(VK_LEFT))
-				{
-					SetState(PState::BREAKRIGHT);// 右に折れる状態
-					SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
-					anim->SetIsAnimation(true);
-				}
-				else
-				{
-
-				}
-			}
-		}
-		break;
-
-	case PState::BREAKLEFT:
-		if (anim->GetIsAnimation() == false)
-		{
-			if (gInput->GetKeyTrigger(VK_RIGHT))
-			{
-				if (!gInput->GetKeyTrigger(VK_LEFT))
-				{
-					SetState(PState::FALL);// 倒れた状態
-					SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
-					anim->SetIsAnimation(true);
-				}
-				else
-				{
-
-				}
-			}
-		}
-		break;
-
-	case PState::BREAKRIGHT:
-		if (anim->GetIsAnimation() == false)
-		{
-			if (gInput->GetKeyTrigger(VK_LEFT))
-			{
-				if (!gInput->GetKeyTrigger(VK_RIGHT))
-				{
-					SetState(PState::FALL);// 倒れた状態
-					SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
-					anim->SetIsAnimation(true);
-				}
-				else
-				{
-
-				}
-			}
-		}
-		break;
-
-	default:
-		break;
-	}
+	
 #endif
-
 }
 
 float CPlayer::Jump()
@@ -363,6 +372,10 @@ void CPlayer::Update()
 		// 向きを戻す
 		dir.y = -1.0f;
 	}
+	if (Ddir.x == 0.0f)
+	{
+		dir.x = 0.0f;
+	}
   
 	// プレイヤー操作関連の入力処理
 	PlayerInput();
@@ -385,12 +398,40 @@ void CPlayer::Update()
 	// ジャンプ中ならジャンプ力の更新処理を行う
 	velocity.y = isJump ? Jump() : velocity.y += gravity;
 
+	//ノックバックオブジェクトに当たったのなら以下の処理をする
+	if (nockf)
+	{
+		//プレイヤーがノックバックした先にカメラを追従させる
+		smoothing->Update();
+		//プレイヤーがすぐ入力できないようにするためのフレームカウンター
+		flameCounter++;
+		//---------------------------------------------------------//
+		//プレイヤーを点滅させる
+		if (this->materialDiffuse.w == 1.0f)
+		{
+			this->materialDiffuse.w = 0.2f;
+		}
+		else if (this->materialDiffuse.w == 0.2f)
+		{
+			this->materialDiffuse.w = 1.0f;
+		}
+		//-----------------------------------------------------------//
+		//プレイヤーが入力できない時間を作ってる
+		if (flameCounter == 20)
+		{
+			nockf = false;
+			flameCounter = 0.0f;
+		}
+		//---------------------------------------------------------//
+	}
+
 	// ベクトルに速度をかけて位置を変更
 	this->transform.position.x += dir.x * velocity.x;
 	this->transform.position.y -= velocity.y;
 
 	// 風の計算を行う
 	ReceiveWind();
+
 
 	// 親クラスのUpdate()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の更新処理を行う
@@ -435,22 +476,35 @@ void CPlayer::Update()
 
 			case OBJECT_TYPE::WIND_UP:
 				// 上向きの風力を取得
-				receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
+				 receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
 				// 風を受けた方向と向き保存
 				dir.y = 1.0f;
 				dir_wind.y = 1.0f;
 				break;
 
 			case OBJECT_TYPE::DAMAGE_TILE:
-				if (this->dir.x == 1.0f)
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+
+				//プレイヤーのノックバックの処理
+				if (!nockf)
 				{
-					this->Ddir.x = -1.0f;
+					//吹っ飛ばす計算式（右）
+					if (0.0f > dir.x)
+					{
+						moveF = this->transform.position.x + 0.3f;
+					}
+					//吹っ飛ばす計算式（左）
+					else if (0.0f < dir.x)
+					{
+						moveF = this->transform.position.x - 0.3f;
+					}
+					//追従カメラの初期化
+					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.3f);
+					nockf = true;
 				}
 
-				else if (this->dir.x == -1.0f)
-				{
-					this->Ddir.x = 1.0f;
-				}
 				break;
 
 			default:
@@ -472,10 +526,12 @@ void CPlayer::SetState(PState state)
 
 void CPlayer::Rknoc(DirectX::XMFLOAT3)
 {
+
 }
 
 void CPlayer::Lknoc(DirectX::XMFLOAT3)
 {
+
 }
 
 void CPlayer::Draw()
@@ -487,6 +543,7 @@ void CPlayer::Draw()
 
 CPlayer::~CPlayer()
 {
+	delete smoothing;
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う
 	CGameObject::~CGameObject();
