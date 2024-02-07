@@ -9,6 +9,9 @@ CSceneManager::CSceneManager()
 {
 	// デフォルトのシーンを初期化します
 	ChangeScene(SCENE_ID::TITLE);
+
+	// eventManagerの唯一のインスタンスを生成
+	eventManager = CEventManager::GetInstance();
 }
 
 // デストラクタ
