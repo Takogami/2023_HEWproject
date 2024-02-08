@@ -137,14 +137,9 @@ void ResultScene::UpdateGameOver()
 
 void ResultScene::Draw()
 {
-	D3D_ClearScreen();
-
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
 	}
-
-	// 画面更新
-	D3D_UpdateScreen();
 }

@@ -16,13 +16,10 @@ TitleScene::TitleScene()
 	Objects.push_back(Title);
 
 	// 背景の設定
-	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
-	bg->transform.position.z = 0.99f;
+	bg->transform.position.z = 0.1f;
 
-	Title->SetUseingCamera(Cam);
 	Title->transform.scale = { 1271.0f * 0.0021f , 299.0f * 0.0021f, 1.0f};
-	Title->transform.position.z = 0.98f;
 	Title->transform.position.y = 0.55f;
 
 	//プレイヤーの実体化と初期化
@@ -39,21 +36,21 @@ TitleScene::TitleScene()
 	// オブジェクトをリストに登録
 	Objects.push_back(goToSelect);
 	goToSelect->transform * 0.5f;
-	goToSelect->transform.position = { 0.0f, -0.3f };
+	goToSelect->transform.position = { 0.0f, -0.3f};
 
 	//プレイヤーの実体化と初期化
 	goToOption = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(goToOption);
 	goToOption->transform * 0.5f;
-	goToOption->transform.position = { 0.0f, -0.6f };
+	goToOption->transform.position = { 0.0f, -0.6f};
 
 	//プレイヤーの実体化と初期化
 	exitGame = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
 	// オブジェクトをリストに登録
 	Objects.push_back(exitGame);
 	exitGame->transform * 0.5f;
-	exitGame->transform.position = { 0.0f, -0.9f };
+	exitGame->transform.position = { 0.0f, -0.9f};
 
 	titleEase = new CEase();
 	titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0, EASE::easeOutBounce);
@@ -125,15 +122,10 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	D3D_ClearScreen();
-
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
 	}
-
-	// 画面更新
-	D3D_UpdateScreen();
 }
 

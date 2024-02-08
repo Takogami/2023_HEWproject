@@ -14,6 +14,9 @@ private:
 
 	ID3D11Buffer* vertexBufferCharacter;
 
+	// シーン遷移中か判定するフラグ
+	bool changeSceneFlg = false;
+
 public:
 	StageScene();
 	~StageScene();

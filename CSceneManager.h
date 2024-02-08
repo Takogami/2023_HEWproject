@@ -6,7 +6,7 @@
 #include "SelectScene.h"
 #include "ResultScene.h"
 
-//	シーンの種類（列挙型）
+// シーンの種類（列挙型）
 enum class SCENE_ID
 {
 	TITLE,
@@ -16,23 +16,37 @@ enum class SCENE_ID
 	RESULT,
 };
 
+// フェード状態
+enum class FADE_STATE
+{
+	NO_FADE,
+	FADE_IN,
+	FADE_OUT,
+};
+
 class CSceneManager
 {
 private:
 	// 唯一のインスタンスを格納するためのポインタ
 	static CSceneManager* instance;
 
-	TitleScene* title = nullptr;			//タイトルシーンクラス
-	StageScene* stage1 = nullptr;			//ステージシーン1クラス
-	StageScene2* stage2 = nullptr;			//ステージシーン2クラス
-	SelectScene* select = nullptr;			//セレクトシーンクラス
-	ResultScene* result = nullptr;			//リザルトシーンクラス
+	TitleScene* title = nullptr;			//タイトルシーン
+	StageScene* stage1 = nullptr;			//ステージシーン1
+	StageScene2* stage2 = nullptr;			//ステージシーン2
+	SelectScene* select = nullptr;			//セレクトシーン
+	ResultScene* result = nullptr;			//リザルトシーン
 
-	CEventManager* eventManager;
+	// フェード用
+	CGameObject* fade;
+	ID3D11Buffer* vertexBuffer;
 
-	std::list<CScene*> scenes;
+	CGameManager* GameManager;
 
-	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
+	SCENE_ID NowScene = SCENE_ID::TITLE;		// 現在のシーンの状態
+	SCENE_ID NewScene = SCENE_ID::TITLE;		// 新しいのシーン
+	SCENE_ID retryLoadScene = SCENE_ID::TITLE;	// リトライ時に読み込むシーン
+
+	FADE_STATE fadeState = FADE_STATE::NO_FADE;
 
 	CSceneManager();
 	~CSceneManager();

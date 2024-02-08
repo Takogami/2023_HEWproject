@@ -19,6 +19,7 @@ StageScene2::StageScene2()
 	player->SetUseingCamera(Cam);
 	// スケールの設定
 	player->transform * 0.2f;
+	player->transform.position.z = -0.1f;
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
@@ -27,7 +28,7 @@ StageScene2::StageScene2()
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = {1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f};
-	bg->transform.position.z = 0.99f;
+	bg->transform.position.z = 0.4f;
 
 	// スムージングの実体化
 	camSmooth = new CSmoothing;
@@ -100,7 +101,8 @@ void StageScene2::Update()
 
 void StageScene2::Draw()
 {
-	D3D_ClearScreen();
+	// 地形の描画
+	DrawTerrain();
 
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -108,13 +110,7 @@ void StageScene2::Draw()
 		(*it)->Draw();
 	}
 
-	// 地形の描画
-	DrawTerrain();
-
 	// 文字列の描画
 	drawStringTest->Draw();
 	drawStringTest2->Draw();
-
-	// 画面更新
-	D3D_UpdateScreen();
 }
