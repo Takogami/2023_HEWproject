@@ -1,5 +1,6 @@
 #include "StageScene.h"
 #include "CSceneManager.h"	// シーン切り替えのためにインクルード
+#include "CGameManager.h"
 
 StageScene::StageScene()
 {
@@ -7,16 +8,21 @@ StageScene::StageScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::TAKO), { 0.33f ,0.25f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::BLOCK), { 0.33f ,0.25f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
 	player->transform * 0.2f;
-	player->transform.position.z = -0.3f;
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
+
+	// ゲームマネージャの初期化
+	CGameManager::GetInstance()->Init();
+
+	// シーン遷移フラグの初期化
+	changeSceneFlg = false;
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_2, Cam);
@@ -42,9 +48,10 @@ StageScene::~StageScene()
 
 void StageScene::Update()
 {
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	// テスト用ダメージ追加
+	if (gInput->GetKeyTrigger(VK_DELETE))
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		CGameManager::GetInstance()->AddDamage(1);
 	}
 
 	// 各オブジェクトの更新
@@ -53,14 +60,22 @@ void StageScene::Update()
 		(*it)->Update();
 	}
 
+	// タイムアップ、またはHPが0で強制シーン遷移
+	if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP || 
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP && !changeSceneFlg)
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		changeSceneFlg = true;
+	}
+
+	CGameManager::GetInstance()->Update();
+
 	Cam->cameraPos.x = player->transform.position.x;
 	Cam->Update();
 }
 
 void StageScene::Draw()
 {
-	D3D_ClearScreen();
-
 	// 地形の描画
 	DrawTerrain();
 
@@ -70,6 +85,5 @@ void StageScene::Draw()
 		(*it)->Draw();
 	}
 
-	// 画面更新
-	D3D_UpdateScreen();
+	CGameManager::GetInstance()->Draw();
 }

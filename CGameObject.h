@@ -48,6 +48,7 @@ protected:
 
 	CCamera* useCamera;					//描画に使用するカメラのポインタ
 	CAnimation* anim;					//アニメーションクラス
+	bool anim_switch = false;			//アニメーションの行うかのフラグ
 
 	OBJECT_TYPE objectType = OBJECT_TYPE::NORMAL; // 1: 壁や床, 2: 敵 など
 

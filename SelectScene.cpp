@@ -9,9 +9,9 @@ SelectScene::SelectScene()
 	// 背景の設定
 	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
-	bg->transform.position.z = 0.99f;
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
+
 
 	// 文字列の設定
 	StageSelect = new CDrawString;
@@ -25,14 +25,9 @@ SelectScene::SelectScene()
 
 	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.3333333f, 1.0f });
 	Objects.push_back(StagePreview);
-	StagePreview->transform.position = { -0.97f, -0.07f, 0.5f };
+	StagePreview->transform.position = { -0.97f, -0.07f, -0.1f };
 	StagePreview->transform.scale = { 693.0f * 0.003f, 900.0f * 0.003f, 0.5f };
 	StagePreview->InitAnimParameter(false, 3, 1, ANIM_PATTERN::BOOK, 0.1f);
-
-	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
-	Objects.push_back(StagePreview2);
-	StagePreview2->transform.position = { -0.8f, 0.76f, 0.4f };
-	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f, 0.5f };
 
 	// 要素を拡張
 	StageList.resize(listNum);
@@ -41,12 +36,17 @@ SelectScene::SelectScene()
 	{
 		StageList[i] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
 		StageList[i]->transform.scale = { 646.0f * 0.0025f, 277.0f * 0.0025f, 1.0f };
-		StageList[i]->transform.position = { 1.0f, 0.0f - (0.7f * i), 0.0f};
+		StageList[i]->transform.position = { 1.0f, 0.0f - (0.7f * i), -0.1f };
 		moveEndPos.resize(StageList.size());
 		Objects.push_back(StageList[i]);
 		// ステージの数だけイージングを作る
 		selectEase.push_back(new CEase);
 	}
+
+	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
+	Objects.push_back(StagePreview2);
+	StagePreview2->transform.position = { -0.8f, 0.76f, -0.2f };
+	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f, 0.5f };
 }
 
 SelectScene::~SelectScene()
@@ -204,8 +204,6 @@ void SelectScene::Update()
 
 void SelectScene::Draw()
 {
-	D3D_ClearScreen();
-
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
@@ -213,7 +211,4 @@ void SelectScene::Draw()
 	}
 
 	StageSelect->Draw();
-
-	// 画面更新
-	D3D_UpdateScreen();
 }

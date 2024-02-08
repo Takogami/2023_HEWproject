@@ -65,7 +65,11 @@ void CGameObject::Update()
 	// アニメーションの更新
 	anim->Update();
 	// uv移動量を取得
-	uv = anim->GetUV();
+	if (anim_switch)
+	{
+		// アニメーションを行うオブジェクトなら、animから移動量を獲得
+		uv = anim->GetUV();
+	}
 
 	//ここにUpdate処理を記述する
 	//共通処理以外は継承先にoverrideして記述すること
@@ -127,6 +131,7 @@ void CGameObject::SetUseingCamera(CCamera* setCamera)
 
 void CGameObject::InitAnimParameter(bool iniPlaying, int spritU, int spritV, ANIM_PATTERN pattern, float sp)
 {
+	anim_switch = true;
 	// 初期状態で再生するか設定
 	if (iniPlaying)
 	{

@@ -13,7 +13,7 @@
 #include "CDrawString.h"
 #include "CEase.h"
 #include "CTimer.h"
-#include "CEventManager.h"
+#include "CGameManager.h"
 
 class CScene
 {
