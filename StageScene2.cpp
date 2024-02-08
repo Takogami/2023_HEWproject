@@ -12,7 +12,7 @@ StageScene2::StageScene2()
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.33f ,0.1f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -22,7 +22,7 @@ StageScene2::StageScene2()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
-	player->InitAnimParameter(true, 3, 10, ANIM_PATTERN::NO_ANIM, 0.1f);
+	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.1f);
 
 	// 背景の設定
 	bg->SetUseingCamera(Cam);

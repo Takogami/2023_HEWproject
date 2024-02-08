@@ -4,7 +4,7 @@
 #include "CSceneManager.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (false)
+#define USE_CONTROLLER (true)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
@@ -66,6 +66,7 @@ void CPlayer::PlayerInput()
 				SetState(PState::FALL);// 倒れる
 				SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
 				anim->SetIsAnimation(true);
+				isWindUp = true;	//	下からの風を受ける
 			}
 			// Aボタン入力でとりあえずのジャンプ操作
 			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
@@ -78,29 +79,43 @@ void CPlayer::PlayerInput()
 	case PState::FALL:// 倒れた状態
 		if (anim->GetIsAnimation() == false)
 		{
-			if ((input_stickY > 0.0f) && (old_input_stickY <= 0.0f))
+			if ((input_stickY > 0.0f) && (old_input_stickY >= 0.0f))
 			{
 				SetState(PState::NORMAL);// 通常状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 				anim->SetIsAnimation(true);
+				isWindUp = false;	//	下からの風を受けない
+				isWindRight = false;	//	風を受けない
 			}
 			if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
 			{
 				SetState(PState::BREAKLEFT);// 左に折れる
 				SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 				anim->SetIsAnimation(true);
+				isWindRight = true;	//	風を受ける
+				isWindUp = false;	//	上向きの風を受けない
 			}
 			if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
 			{
 				SetState(PState::BREAKRIGHT);// 右に折れる
 				SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
 				anim->SetIsAnimation(true);
+				isWindUp = false;	//	上向きの風を受けない
 			}
 			// Bボタン入力でとりあえずのジャンプ操作
 			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
 			{
 				isJump = true;
 				/*	this->transform.position.y = -0.2f;*/
+
+				//ジャンプアニメーション
+				SetAnimationPattern(ANIM_PATTERN::JAMP);
+				anim->SetIsAnimation(true);
+			}
+
+			if (prevFrameCorrect.y == 1 && !anim->GetIsAnimation())
+			{
+				SetAnimationPattern(ANIM_PATTERN::FALL);
 			}
 		}
 		break;
@@ -112,6 +127,8 @@ void CPlayer::PlayerInput()
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
 				anim->SetIsAnimation(true);
+				isWindRight = false;	//	風を受けない
+				isWindUp = true;
 			}
 		}
 		break;
@@ -123,6 +140,7 @@ void CPlayer::PlayerInput()
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
 				anim->SetIsAnimation(true);
+				isWindUp = true;
 			}
 		}
 		break;
@@ -157,9 +175,11 @@ void CPlayer::PlayerInput()
 					dir.x = -1.0f;
 					prevFrameDir.x = dir.x;
 					SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
+
 				}
 				else
 				{
+					fly = false;
 					dir.x = prevFrameDir.x;
 				}
 			}
@@ -187,25 +207,17 @@ void CPlayer::PlayerInput()
 					SetState(PState::FALL);// 倒れた状態
 					SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
 					anim->SetIsAnimation(true);
-					isWindUp = true;	//	下からの風を受ける
+					isWindUp = true;
 				}
 				else
 				{
 					/*dir.y = prevFrameDir.y;*/
 				}
 			}
+
 			else if (!gInput->GetKeyPress(VK_RIGHT) && !gInput->GetKeyPress(VK_LEFT) && !gInput->GetKeyPress(VK_UP) && !gInput->GetKeyPress(VK_DOWN))
 			{
 				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
-			}
-
-			if (gInput->GetKeyTrigger(VK_TAB))
-			{
-				isJump = true;
-				//--------------------------------
-				//無限ジャンプ不可にしたい場合は下の１行を消してください
-				jumpStrength = ini_jumpStrength;
-				//--------------------------------
 			}
 		}
 		break;
@@ -236,6 +248,7 @@ void CPlayer::PlayerInput()
 					SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 					anim->SetIsAnimation(true);
 					isWindRight = true;	//	風を受ける
+					isWindUp = false;	//	上向きの風を受けない
 				}
 				else
 				{
@@ -249,11 +262,29 @@ void CPlayer::PlayerInput()
 					SetState(PState::BREAKRIGHT);// 右に折れる状態
 					SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
 					anim->SetIsAnimation(true);
+					isWindUp = false;	//	上向きの風を受けない
 				}
 				else
 				{
 
 				}
+			}
+
+			else if (gInput->GetKeyTrigger(VK_TAB))
+			{
+				isJump = true;
+				//--------------------------------
+				//無限ジャンプ不可にしたい場合は下の１行を消してください
+				jumpStrength = ini_jumpStrength;
+				//--------------------------------
+
+				SetAnimationPattern(ANIM_PATTERN::JAMP);
+				anim->SetIsAnimation(true);
+			}
+
+			if (prevFrameCorrect.y == 1 && !anim->GetIsAnimation())
+			{
+				SetAnimationPattern(ANIM_PATTERN::FALL);
 			}
 		}
 		break;
@@ -269,6 +300,7 @@ void CPlayer::PlayerInput()
 					SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
 					anim->SetIsAnimation(true);
 					isWindRight = false;	//	風を受けない
+					isWindUp = true;
 				}
 				else
 				{
@@ -288,6 +320,7 @@ void CPlayer::PlayerInput()
 					SetState(PState::FALL);// 倒れた状態
 					SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
 					anim->SetIsAnimation(true);
+					isWindUp = true;
 				}
 				else
 				{
@@ -484,8 +517,9 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_UP:
-				if (anim->GetIsAnimation() == false && isWindUp)
+				if (!anim->GetIsAnimation() && isWindUp)
 				{
+					SetAnimationPattern(ANIM_PATTERN::FLAYING);
 					// 上向きの風力を取得
 					receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
 					// 風を受けた方向と向き保存
@@ -496,6 +530,9 @@ void CPlayer::Update()
 					//	trueにしてそのまま飛んでいく
 					isWindRight = true;
 				}
+
+				if (prevFrameCorrect.y == 1)
+					ANIM_STOP;
 				break;
 
 			case OBJECT_TYPE::DAMAGE_TILE:

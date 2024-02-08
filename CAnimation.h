@@ -13,6 +13,7 @@ enum class ANIM_PATTERN
 {
 	NO_ANIM = 0,
 	TEST,
+
 	LEFTWALK,	//左に歩く
 	RIGHTWALK,	//右に歩く
 	FALLDOWN,	//倒れる
@@ -21,6 +22,10 @@ enum class ANIM_PATTERN
 	BREAKRIGHT,	//右に折れる
 	FIXLEFT,	//左に起き上がる
 	FIXRIGHT,	//右に起き上がる
+	JAMP,		//飛ぶ瞬間
+	FLAYING,	//飛んでる状態		
+	FALL,		//倒れている状態
+
 	BOOK,		//本の動き
 	BOOK_REVERSE,
 };
@@ -59,16 +64,21 @@ private:
 	{
 		{ 0, ANIM_STOP },
 		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ANIM_LOOP},
-		{ 5,  4,  3, 4, ANIM_LOOP},
-		{ 0,  1,  2, 1, ANIM_LOOP},
-		{ 12, 13, 14,	ANIM_STOP},
-		{ 15, 16, 17,	ANIM_STOP},
-		{ 6,  7,  8,	ANIM_STOP},
-		{ 9,  10, 11,	ANIM_STOP},
-		{ 8,  7,  6,	ANIM_STOP},
-		{ 11, 10, 9,	ANIM_STOP},
-		{ 0, 1, 2, 0, ANIM_STOP},
-		{ 0, 2, 1, 0, ANIM_STOP},
+
+		{ 9, 8, 7, 6, 5, 6, 7, 8, ANIM_LOOP},	//左に歩く
+		{ 0, 1, 2, 3, 4, 3, 2, 1, ANIM_LOOP},	//右に歩く
+		{ 20, 21, 22, 23, 24, ANIM_STOP},	//倒れる
+		{ 25, 26, 27, 28, 29, ANIM_STOP},	//起き上がる
+		{ 10, 11, 12, 13, 14, ANIM_STOP},	//左に折れる
+		{ 15, 16, 17, 18, 19, ANIM_STOP},	//右に折れる
+		{ 14, 13, 12, 11, 10, ANIM_STOP},	//左に起き上がる
+		{ 19, 18, 17, 16, 15, ANIM_STOP},	//右に起き上がる
+		{ 40, 41, 42, 43, 44, 43, 42, 41, 40, ANIM_STOP},	//ジャンプ
+		{ 45, 46, 47, 48, 49, 48, 47, 46, ANIM_LOOP},	//飛んでる状態
+		{ 10, ANIM_STOP },	//倒れている状態
+
+		{ 0, 1, 2, 0, ANIM_STOP},	//本の動き
+		{ 0, 2, 1, 0, ANIM_STOP},	
 
 	};
 

@@ -55,6 +55,9 @@ private:
 
     bool test = false;
 
+    //  アニメーションお試し
+    bool fly = false;
+
 public:
     /* メンバ変数 */
     // 移動速度
