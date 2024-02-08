@@ -149,6 +149,7 @@
     <ClCompile Include="Cdamagetile.cpp" />
     <ClCompile Include="CDrawString.cpp" />
     <ClCompile Include="CEase.cpp" />
+    <ClCompile Include="CEventManager.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
+    <ClCompile Include="xa2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAnimation.h" />
@@ -179,6 +181,7 @@
     <ClInclude Include="Cdamagetile.h" />
     <ClInclude Include="CDrawString.h" />
     <ClInclude Include="CEase.h" />
+    <ClInclude Include="CEventManager.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="ResultScene.h" />
@@ -201,6 +204,7 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="WICTextureLoader.h" />
+    <ClInclude Include="xa2.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">

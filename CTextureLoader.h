@@ -29,7 +29,6 @@ typedef struct
 
 enum class TEX_ID	// テクスチャ識別子列挙型
 {
-	CHAR1,
 	TAKO,
 	STAGE,
 	NUM,
@@ -41,6 +40,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	BOOK,
 	STRING_BG,
 	GAMEOVER,
+	GAMEOVER_STRING,
 	SELECT_FLAME,
 	CURSOR,
 };
@@ -56,7 +56,6 @@ private:
 	std::list<TEX_INFO> texList;			// テクスチャ情報のリスト
 	std::list<const wchar_t*> pathList =	// パスのリスト
 	{
-		L"asset/char01.png",
 		L"asset/Tako.jpg",
 		L"asset/Madoka_Magika_(Logo).png",
 		L"asset/suuji.png",
@@ -68,8 +67,15 @@ private:
 		L"asset/book.png",
 		L"asset/stringBg.png",
 		L"asset/GameOver.png",
+		L"asset/GameOverString.png",
 		L"asset/selectFlame.png",
 		L"asset/cursor.png",
+		L"asset/heart.png",
+		L"asset/heart_half.png",
+		L"asset/heart_half2.png",
+		L"asset/heart_enpty.png",
+		L"asset/timer.png",
+		L"asset/scoreBoard.png",
 	};
 
 	/* メソッド */

@@ -28,6 +28,8 @@ private:
 	SelectScene* select = nullptr;			//セレクトシーンクラス
 	ResultScene* result = nullptr;			//リザルトシーンクラス
 
+	CEventManager* eventManager;
+
 	std::list<CScene*> scenes;
 
 	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
