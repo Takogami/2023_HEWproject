@@ -10,6 +10,7 @@ CSceneManager::CSceneManager()
 	title = nullptr;
 	stage = nullptr;
 	result = nullptr;
+	stage2 = nullptr;
 
 	// デフォルトのシーンを初期化します
 	ChangeScene(SCENE_ID::TITLE);
@@ -34,6 +35,10 @@ CSceneManager::~CSceneManager()
 	if (result != nullptr)
 	{
 		delete result;
+	}
+	if (stage2 != nullptr)
+	{
+		delete stage2;
 	}
 }
 
@@ -90,6 +95,13 @@ void CSceneManager::Update()
 		result->Update();
 		result->Draw();
 		break;
+
+	// ステージ02
+	case SCENE_ID::STAGE_02:
+		stage2->Update();
+		stage2->Draw();
+		break;
+
 	}
 }
 
@@ -125,6 +137,11 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 		delete result;
 		result = nullptr;
 		break;
+	case SCENE_ID::STAGE_02:
+		// もし現在のシーンがSTAGE_02なら、STAGE_02シーンを解放する
+		delete stage2;
+		stage2 = nullptr;
+		break;
 	}
 
 	// 2. 新しいシーンの識別子を設定する
@@ -151,6 +168,10 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 	case SCENE_ID::RESULT:
 		// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
 		result = new ResultScene();
+		break;
+	case SCENE_ID::STAGE_02:
+		// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
+		stage2 = new Stage2Scene();
 		break;
 	}
 }

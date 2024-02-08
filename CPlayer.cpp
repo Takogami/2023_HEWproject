@@ -105,6 +105,14 @@ void CPlayer::PlayerInput()
 		{
 			isJump = true;
 		}
+		if (prevFrameCorrect.x != 0)
+		{
+
+			SetState(PState::FALL);
+			transform.scale.y *= 0.1f;
+			this->Bcol.sizeY *= 0.1f;
+			transform.position.y -= 0.1f;
+		}
 		break;
 
 	case PState::FALL:

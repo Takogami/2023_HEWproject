@@ -27,14 +27,23 @@ CORRECT_DIR CCollision::CorrectPosition(BoxCollider& moveObject, BoxCollider& ho
 
 	}
 	//–{—ˆ‚Ì‚ß‚è‚İŒvZ‚Ì•â³‚Æ­‚µˆá‚¤‚Ì‚Å0.002•ª‚ğ{‚µ‚Ä‚ ‚°‚é
-	else if ((overlapX + 0.002f) < overlapY) {
+	else if ((abs(overlapX) + 0.002f) > abs(overlapX)) 
+	{
 		// X²•ûŒü‚É‚ß‚è‚ñ‚Å‚¢‚éê‡
 		if (moveObject.centerX < holdObject.centerX)
 		{
 			moveObject.centerX -= overlapX;
 			correct_dir.x = -1;
 		}
-		else if (moveObject.centerX > holdObject.centerX)
+		else // if (moveObject.centerX > holdObject.centerX)
+		{
+			moveObject.centerX += overlapX;
+			correct_dir.x = 1;
+		}
+	}
+	if ((overlapX + 0.002f) < overlapX)
+	{
+		//if (moveObject.centerX > holdObject.centerX)
 		{
 			moveObject.centerX += overlapX;
 			correct_dir.x = 1;

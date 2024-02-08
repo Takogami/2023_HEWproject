@@ -148,6 +148,7 @@
     <ClCompile Include="CCursor.cpp" />
     <ClCompile Include="CDrawString.cpp" />
     <ClCompile Include="CEase.cpp" />
+    <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CInput.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SelectScene.cpp" />
+    <ClCompile Include="Stage2Scene.cpp" />
     <ClCompile Include="StageScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
@@ -176,6 +178,7 @@
     <ClInclude Include="CCursor.h" />
     <ClInclude Include="CDrawString.h" />
     <ClInclude Include="CEase.h" />
+    <ClInclude Include="CEnemy.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
     <ClInclude Include="CInput.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="Stage2Scene.h" />
     <ClInclude Include="StageScene.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexShader.h" />

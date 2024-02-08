@@ -36,6 +36,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	WINDRIGHT_POS,	//	風の起こる位置（右向き）
 	BG,
 	BOOK,
+	ENEMY,
 };
 
 // CTextureLoaderクラス
@@ -56,6 +57,7 @@ private:
 		L"asset/Fade.png",	//	試しでテクスチャ読み込み(風の右向き)
 		L"asset/bg.png",
 		L"asset/book.png",
+		L"asset/bg.png",
 	};
 
 	/* メソッド */

@@ -19,6 +19,7 @@ enum class TERRAIN_ID
 {
 	STAGE_1,
 	STAGE_2,
+	STAGE_3,
 };
 
 // CStageCreateクラス
@@ -34,6 +35,7 @@ private:
 	{
 		"stage1_data.csv",
 		"stage2_data.csv",
+		"stage3_data.csv",
 	};
 	// 文字列連結で完成させたパスの情報を格納
 	std::vector<std::string> path;

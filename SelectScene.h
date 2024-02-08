@@ -5,8 +5,8 @@
 enum class STAGE_NUM
 {
 	STAGE1 = 1,
-	STAGE2,
-	STAGE3,
+	STAGE2 = 2,
+	STAGE3 = 3,
 	STAGE4,
 	STAGE5,
 };

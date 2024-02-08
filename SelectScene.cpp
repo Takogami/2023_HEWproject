@@ -73,6 +73,7 @@ void SelectScene::Update()
 			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_01);
 			break;
 		case 3:
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_02);
 			break;
 		case 4:
 			break;
