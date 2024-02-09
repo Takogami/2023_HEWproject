@@ -136,44 +136,6 @@ void CGameManager::Update()
 			state = GAME_STATE::TIME_UP;
 		}
 
-		// 体力のUI管理
-		if (playerHP == 5)
-		{
-			UI_hp[2]->TextureCutout(1, 0);
-			UI_breakHeart_R[2]->materialDiffuse.w = 1.0f;
-			breakHeart_R_ease[2]->Update();
-		}
-		if (playerHP == 4)
-		{
-			UI_hp[2]->TextureCutout(2, 0);
-			UI_breakHeart_L[2]->materialDiffuse.w = 1.0f;
-			breakHeart_L_ease[2]->Update();
-		}
-		if (playerHP == 3)
-		{
-			UI_hp[1]->TextureCutout(1, 0);
-			UI_breakHeart_R[1]->materialDiffuse.w = 1.0f;
-			breakHeart_R_ease[1]->Update();
-		}
-		if (playerHP == 2)
-		{
-			UI_hp[1]->TextureCutout(2, 0);
-			UI_breakHeart_L[1]->materialDiffuse.w = 1.0f;
-			breakHeart_L_ease[1]->Update();
-		}
-		if (playerHP == 1)
-		{
-			UI_hp[0]->TextureCutout(1, 0);
-			UI_breakHeart_R[0]->materialDiffuse.w = 1.0f;
-			breakHeart_R_ease[0]->Update();
-		}
-		if (playerHP == 0)
-		{
-			UI_hp[0]->TextureCutout(2, 0);
-			UI_breakHeart_L[0]->materialDiffuse.w = 1.0f;
-			breakHeart_L_ease[0]->Update();
-		}
-
 		break;
 
 	case GAME_STATE::TIME_UP:
@@ -188,6 +150,44 @@ void CGameManager::Update()
 
 	// タイマーの更新
 	gameTime->Update();
+
+	// 体力のUI管理
+	if (playerHP <= 5)
+	{
+		UI_hp[2]->TextureCutout(1, 0);
+		UI_breakHeart_R[2]->materialDiffuse.w = 1.0f;
+		breakHeart_R_ease[2]->Update();
+	}
+	if (playerHP <= 4)
+	{
+		UI_hp[2]->TextureCutout(2, 0);
+		UI_breakHeart_L[2]->materialDiffuse.w = 1.0f;
+		breakHeart_L_ease[2]->Update();
+	}
+	if (playerHP <= 3)
+	{
+		UI_hp[1]->TextureCutout(1, 0);
+		UI_breakHeart_R[1]->materialDiffuse.w = 1.0f;
+		breakHeart_R_ease[1]->Update();
+	}
+	if (playerHP <= 2)
+	{
+		UI_hp[1]->TextureCutout(2, 0);
+		UI_breakHeart_L[1]->materialDiffuse.w = 1.0f;
+		breakHeart_L_ease[1]->Update();
+	}
+	if (playerHP <= 1)
+	{
+		UI_hp[0]->TextureCutout(1, 0);
+		UI_breakHeart_R[0]->materialDiffuse.w = 1.0f;
+		breakHeart_R_ease[0]->Update();
+	}
+	if (playerHP <= 0)
+	{
+		UI_hp[0]->TextureCutout(2, 0);
+		UI_breakHeart_L[0]->materialDiffuse.w = 1.0f;
+		breakHeart_L_ease[0]->Update();
+	}
 
 	// ゲーム関連UIの更新
 	for (auto it = Objects.begin(); it != Objects.end(); it++)

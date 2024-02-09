@@ -44,8 +44,8 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	SELECT_FLAME,
 	CURSOR,
 	HEART,
-	HALF_HEART_R,
 	HALF_HEART_L,
+	HALF_HEART_R,
 	TIMER,
 	SCORE_BOARD,
 };
@@ -77,7 +77,7 @@ private:
 		L"asset/cursor.png",
 		L"asset/heart.png",
 		L"asset/heart_half.png",
-		L"asset/heart_half_left.png",
+		L"asset/heart_half_right.png",
 		L"asset/timer.png",
 		L"asset/scoreBoard.png",
 	};
