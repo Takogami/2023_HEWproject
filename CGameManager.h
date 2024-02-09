@@ -46,6 +46,9 @@ private:
 	// ハートが落ちる演出のイージング
 	CEase* breakHeart_R_ease[3];
 	CEase* breakHeart_L_ease[3];
+	// ハートの透明度を変更したかのフラグ
+	bool heartAlpha_R[3] = { false };
+	bool heartAlpha_L[3] = { false };
 
 	// オブジェクトのリスト
 	std::list<CGameObject*> Objects;
@@ -57,6 +60,9 @@ private:
 	CGameManager();
 	// デストラクタ
 	~CGameManager();
+
+	// 体力UIの更新
+	void UpdateUIhp();
 
 	//アプリケーション終了時にコールバックとして呼び出す(シングルトンの解放)
 	static void CleanupSingleton();

@@ -42,6 +42,7 @@ public:
     /* ÉÅÉ\ÉbÉh */
 
     CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv ={ 1.0f ,1.0f }, OBJECT_TYPE type = OBJECT_TYPE::NORMAL);
+    void CursorInput();
     void Update() override;
     void Draw() override;
 

@@ -24,12 +24,18 @@ class CInput
 	//１フレーム前のキー入力状態の記憶領域
 	bool oldKeyState[256] = { false };
 
+	// 入力をロックするかのフラグ
+	bool inputLock = false;
+
 	//	デッドゾーンの閾値
 	const float DEADZONE_THRESHOLD = 0.2f;
 
 public:
 	//メンバ関数
 	CInput();  // コンストラクタを追加
+
+	// 入力を受け付けるかどうかを設定
+	void InputLock(bool lock);
 
 	//キーが押されたのを記録する関数
 	void SetKeyDownState(int key);

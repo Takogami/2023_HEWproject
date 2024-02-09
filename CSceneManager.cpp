@@ -77,6 +77,16 @@ CSceneManager* CSceneManager::GetInstance()
 // Update & Draw
 void CSceneManager::Update()
 {
+	// フェードが実行中は入力を受け付けないようにする
+	if (fadeState != FADE_STATE::NO_FADE)
+	{
+		gInput->InputLock(true);
+	}
+	else
+	{
+		gInput->InputLock(false);
+	}
+
 	//フェードイン時
 	if (fadeState == FADE_STATE::FADE_IN)
 	{
@@ -170,6 +180,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 
 		// ステージを読み込んでいたなら解放する
 		CScene::DestroyStage();
+		// ゲームマネージャの初期化
+		CGameManager::GetInstance()->Init();
 
 		switch (_inScene)
 		{

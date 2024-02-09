@@ -74,6 +74,9 @@ TitleScene::~TitleScene()
 
 void TitleScene::Update()
 {
+	// カーソルの入力処理を実行
+	cursor->CursorInput();
+
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		//CCursorでの列挙型のSceneを取得する

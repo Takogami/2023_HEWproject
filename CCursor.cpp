@@ -8,7 +8,7 @@ CCursor::CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 	curEase = new CEase;
 }
 
-void CCursor::Update()
+void CCursor::CursorInput()
 {
 	// 移動入力
 	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN) || gInput->GetKeyTrigger(VK_DOWN)))
@@ -17,7 +17,7 @@ void CCursor::Update()
 	}
 	else if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_UP) || gInput->GetKeyTrigger(VK_UP))
 	{
-		scene_count += SCENE_COUNT-1;// 上に1つ進める
+		scene_count += SCENE_COUNT - 1;// 上に1つ進める
 	}
 
 	// タイトルの選択項目数を超過した場合に数を合わせる
@@ -26,7 +26,10 @@ void CCursor::Update()
 
 	// カーソルの位置決め
 	this->transform.position.y = ini_position.y - moveDistance * scene_count;
+}
 
+void CCursor::Update()
+{
 	// イージングの処理
 	curEase->Update();
 	if (curEase->GetState() == STATE::END)

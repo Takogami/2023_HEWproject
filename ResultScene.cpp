@@ -96,6 +96,9 @@ void ResultScene::UpdateGameOver()
 	// intŒ^‚ÅÝ’è‚³‚ê‚½‚à‚Ì‚ðSCENE_IDŒ^‚É•ÏŠ·‚·‚é
 	SCENE_ID loadScene = (SCENE_ID)prevScene;
 
+	// ƒJ[ƒ\ƒ‹‚Ì“ü—Íˆ—‚ðŽÀs
+	cursor->CursorInput();
+
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		// CCursor‚Å‚Ì—ñ‹“Œ^‚ÌScene‚ðŽæ“¾‚·‚é

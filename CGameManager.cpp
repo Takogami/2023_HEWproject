@@ -25,33 +25,27 @@ CGameManager::CGameManager()
 	UI_hpBoard->transform.position = { -1.6f, 0.85f, -0.4f };
 	UI_hpBoard->transform.scale = { 1101.0f * 0.0007f, 750.0f * 0.0007f, 1.0f };
 
+	// hpのUIの実体化
 	for (int i = 0; i < 3; i++)
 	{
 		UI_hp[i] = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::HEART), {0.333333f, 1.0f});
 		Objects.push_back(UI_hp[i]);
 		UI_hp[i]->transform.position = { -1.78f + ((286.0f * 0.00065f + 0.01f) * i), 0.84f, -0.45f};
 		UI_hp[i]->transform.scale = { 286.0f * 0.00065f, 252.0f * 0.00065f, 1.0f };
-	}
-	for (int i = 0; i < 3; i++)
-	{
+
+		breakHeart_R_ease[i] = new CEase;
 		UI_breakHeart_R[i] = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::HALF_HEART_R));
 		Objects.push_back(UI_breakHeart_R[i]);
-		UI_breakHeart_R[i]->transform.position = { -1.74f + ((286.0f * 0.00065f + 0.01f) * i), 0.84f, -0.46f };
 		UI_breakHeart_R[i]->transform.scale = { 155.0f * 0.00065f, 252.0f * 0.00065f, 1.0f };
-		UI_breakHeart_R[i]->materialDiffuse.w = 0.0f;
-		breakHeart_R_ease[i] = new CEase;
-		breakHeart_R_ease[i]->Init(&UI_breakHeart_R[i]->transform.position.y, UI_breakHeart_R[i]->transform.position.y - 0.3f, 1.0f, 0, EASE::easeOutBounce);
-	}
-	for (int i = 0; i < 3; i++)
-	{
+
+		breakHeart_L_ease[i] = new CEase;
 		UI_breakHeart_L[i] = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::HALF_HEART_L));
 		Objects.push_back(UI_breakHeart_L[i]);
-		UI_breakHeart_L[i]->transform.position = { -1.821f + ((286.0f * 0.00065f + 0.01f) * i), 0.84f, -0.47f };
-		UI_breakHeart_L[i]->transform.scale = { 155.0f * 0.00065f, 252.0f * 0.00065f, 1.0f };
-		UI_breakHeart_L[i]->materialDiffuse.w = 0.0f;
-		breakHeart_L_ease[i] = new CEase;
-		breakHeart_L_ease[i]->Init(&UI_breakHeart_L[i]->transform.position.y, UI_breakHeart_L[i]->transform.position.y - 0.3f, 1.0f, 0, EASE::easeOutBounce);
+		UI_breakHeart_L[i]->transform.scale = { 161.0f * 0.00065f, 252.0f * 0.00065f, 1.0f };
 	}
+
+	// 実体化の後、初期化を行う
+	this->Init();
 }
 
 CGameManager::~CGameManager()
@@ -62,10 +56,163 @@ CGameManager::~CGameManager()
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferUI);
 
+	for (int i = 0; i < 3; i++)
+	{
+
+	}
 	// 各オブジェクトの解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		delete (*it);
+	}
+}
+
+void CGameManager::UpdateUIhp()
+{
+	// 体力のUI管理
+	if (playerHP <= 5)
+	{
+		UI_hp[2]->TextureCutout(1, 0);
+		// ハーフハートが透明なら不透明に戻す
+		if (!heartAlpha_R[2])
+		{
+			// 半分のハートの透明度を0に
+			UI_breakHeart_R[2]->materialDiffuse.w = 1.0f;
+			heartAlpha_R[2] = true;
+		}
+		// すでに不透明なら徐々に透明にする
+		else
+		{
+			UI_breakHeart_R[2]->materialDiffuse.w =
+				UI_breakHeart_R[2]->materialDiffuse.w > 0.0f ?
+				UI_breakHeart_R[2]->materialDiffuse.w -= 0.02f : UI_breakHeart_R[2]->materialDiffuse.w;
+		}
+		// ハートのイージングの更新
+		breakHeart_R_ease[2]->Update();
+		// 回転率を変更する
+		UI_breakHeart_R[2]->transform.rotation =
+			UI_breakHeart_R[2]->transform.rotation > -45.0f ?
+			UI_breakHeart_R[2]->transform.rotation - 2.0f : UI_breakHeart_R[2]->transform.rotation;
+	}
+	if (playerHP <= 4)
+	{
+		UI_hp[2]->TextureCutout(2, 0);
+		// ハーフハートが透明なら不透明に戻す
+		if (!heartAlpha_L[2])
+		{
+			// 半分のハートの透明度を0に
+			UI_breakHeart_L[2]->materialDiffuse.w = 1.0f;
+			heartAlpha_L[2] = true;
+		}
+		// すでに不透明なら徐々に透明にする
+		else
+		{
+			UI_breakHeart_L[2]->materialDiffuse.w =
+				UI_breakHeart_L[2]->materialDiffuse.w > 0.0f ?
+				UI_breakHeart_L[2]->materialDiffuse.w -= 0.02f : UI_breakHeart_L[2]->materialDiffuse.w;
+		}
+		// ハートのイージングの更新
+		breakHeart_L_ease[2]->Update();
+		// 回転率を変更する
+		UI_breakHeart_L[2]->transform.rotation =
+			UI_breakHeart_L[2]->transform.rotation < 45.0f ?
+			UI_breakHeart_L[2]->transform.rotation + 2.0f : UI_breakHeart_L[2]->transform.rotation;
+	}
+	if (playerHP <= 3)
+	{
+		UI_hp[1]->TextureCutout(1, 0);
+		// ハーフハートが透明なら不透明に戻す
+		if (!heartAlpha_R[1])
+		{
+			// 半分のハートの透明度を0に
+			UI_breakHeart_R[1]->materialDiffuse.w = 1.0f;
+			heartAlpha_R[1] = true;
+		}
+		// すでに不透明なら徐々に透明にする
+		else
+		{
+			UI_breakHeart_R[1]->materialDiffuse.w =
+				UI_breakHeart_R[1]->materialDiffuse.w > 0.0f ?
+				UI_breakHeart_R[1]->materialDiffuse.w -= 0.02f : UI_breakHeart_R[1]->materialDiffuse.w;
+		}
+		// ハートのイージングの更新
+		breakHeart_R_ease[1]->Update();
+		// 回転率を変更する
+		UI_breakHeart_R[1]->transform.rotation =
+			UI_breakHeart_R[1]->transform.rotation > -45.0f ?
+			UI_breakHeart_R[1]->transform.rotation - 2.0f : UI_breakHeart_R[1]->transform.rotation;
+	}
+	if (playerHP <= 2)
+	{
+		UI_hp[1]->TextureCutout(2, 0);
+		// ハーフハートが透明なら不透明に戻す
+		if (!heartAlpha_L[1])
+		{
+			// 半分のハートの透明度を0に
+			UI_breakHeart_L[1]->materialDiffuse.w = 1.0f;
+			heartAlpha_L[1] = true;
+		}
+		// すでに不透明なら徐々に透明にする
+		else
+		{
+			UI_breakHeart_L[1]->materialDiffuse.w =
+				UI_breakHeart_L[1]->materialDiffuse.w > 0.0f ?
+				UI_breakHeart_L[1]->materialDiffuse.w -= 0.02f : UI_breakHeart_L[1]->materialDiffuse.w;
+		}
+		// ハートのイージングの更新
+		breakHeart_L_ease[1]->Update();
+		// 回転率を変更する
+		UI_breakHeart_L[1]->transform.rotation =
+			UI_breakHeart_L[1]->transform.rotation < 45.0f ?
+			UI_breakHeart_L[1]->transform.rotation + 2.0f : UI_breakHeart_L[1]->transform.rotation;
+	}
+	if (playerHP <= 1)
+	{
+		UI_hp[0]->TextureCutout(1, 0);
+		// ハーフハートが透明なら不透明に戻す
+		if (!heartAlpha_R[0])
+		{
+			// 半分のハートの透明度を0に
+			UI_breakHeart_R[0]->materialDiffuse.w = 1.0f;
+			heartAlpha_R[0] = true;
+		}
+		// すでに不透明なら徐々に透明にする
+		else
+		{
+			UI_breakHeart_R[0]->materialDiffuse.w =
+				UI_breakHeart_R[0]->materialDiffuse.w > 0.0f ?
+				UI_breakHeart_R[0]->materialDiffuse.w -= 0.02f : UI_breakHeart_R[0]->materialDiffuse.w;
+		}
+		// ハートのイージングの更新
+		breakHeart_R_ease[0]->Update();
+		// 回転率を変更する
+		UI_breakHeart_R[0]->transform.rotation =
+			UI_breakHeart_R[0]->transform.rotation > -45.0f ?
+			UI_breakHeart_R[0]->transform.rotation - 2.0f : UI_breakHeart_R[0]->transform.rotation;
+	}
+	if (playerHP <= 0)
+	{
+		UI_hp[0]->TextureCutout(2, 0);
+		// ハーフハートが透明なら不透明に戻す
+		if (!heartAlpha_L[0])
+		{
+			// 半分のハートの透明度を0に
+			UI_breakHeart_L[0]->materialDiffuse.w = 1.0f;
+			heartAlpha_L[0] = true;
+		}
+		// すでに不透明なら徐々に透明にする
+		else
+		{
+			UI_breakHeart_L[0]->materialDiffuse.w =
+				UI_breakHeart_L[0]->materialDiffuse.w > 0.0f ?
+				UI_breakHeart_L[0]->materialDiffuse.w -= 0.02f : UI_breakHeart_L[2]->materialDiffuse.w;
+		}
+		// ハートのイージングの更新
+		breakHeart_L_ease[0]->Update();
+		// 回転率を変更する
+		UI_breakHeart_L[0]->transform.rotation =
+			UI_breakHeart_L[0]->transform.rotation < 45.0f ?
+			UI_breakHeart_L[0]->transform.rotation + 2.0f : UI_breakHeart_L[0]->transform.rotation;
 	}
 }
 
@@ -103,16 +250,38 @@ void CGameManager::Init()
 	gameTime->InitTimer(50, TIMER_MODE::COUNT_DOWN);
 	// プレイヤーの体力を初期化
 	playerHP = PLAYER_HP;
+
 	// UIの初期化
 	for (int i = 0; i < 3; i++)
 	{
 		// 切り抜き位置を元に戻す
 		UI_hp[i]->TextureCutout(0, 0);
+		// ダメージ演出用のハーフハートの初期化
+		// 位置の初期化
+		UI_breakHeart_L[i]->transform.position = { -1.821f + ((286.0f * 0.00065f + 0.01f) * i), 0.84f, -0.47f };
+		UI_breakHeart_R[i]->transform.position = { -1.74f + ((286.0f * 0.00065f + 0.01f) * i), 0.84f, -0.46f };
+		// 回転率の初期化
+		UI_breakHeart_L[i]->transform.rotation = 0.0f;
+		UI_breakHeart_R[i]->transform.rotation = 0.0f;
+		// 透明度の初期化
+		UI_breakHeart_L[i]->materialDiffuse.w = 0.0f;
+		UI_breakHeart_R[i]->materialDiffuse.w = 0.0f;
+		// イージングの初期化
+		breakHeart_L_ease[i]->Init(&UI_breakHeart_L[i]->transform.position.y, UI_breakHeart_L[i]->transform.position.y - 0.3f, 0.7f, 0, EASE::easeOutBounce);
+		breakHeart_R_ease[i]->Init(&UI_breakHeart_R[i]->transform.position.y, UI_breakHeart_R[i]->transform.position.y - 0.3f, 0.7f, 0, EASE::easeOutBounce);
+		// 落下フラグの初期化
+		heartAlpha_L[i] = false;
+		heartAlpha_R[i] = false;
 	}
 }
 
 void CGameManager::Update()
 {
+	// タイマーの更新
+	gameTime->Update();
+	// 体力UIの管理
+	UpdateUIhp();
+
 	// ゲームの進行状況に応じて更新処理を変更
 	switch (state)
 	{
@@ -146,47 +315,6 @@ void CGameManager::Update()
 
 	default:
 		break;
-	}
-
-	// タイマーの更新
-	gameTime->Update();
-
-	// 体力のUI管理
-	if (playerHP <= 5)
-	{
-		UI_hp[2]->TextureCutout(1, 0);
-		UI_breakHeart_R[2]->materialDiffuse.w = 1.0f;
-		breakHeart_R_ease[2]->Update();
-	}
-	if (playerHP <= 4)
-	{
-		UI_hp[2]->TextureCutout(2, 0);
-		UI_breakHeart_L[2]->materialDiffuse.w = 1.0f;
-		breakHeart_L_ease[2]->Update();
-	}
-	if (playerHP <= 3)
-	{
-		UI_hp[1]->TextureCutout(1, 0);
-		UI_breakHeart_R[1]->materialDiffuse.w = 1.0f;
-		breakHeart_R_ease[1]->Update();
-	}
-	if (playerHP <= 2)
-	{
-		UI_hp[1]->TextureCutout(2, 0);
-		UI_breakHeart_L[1]->materialDiffuse.w = 1.0f;
-		breakHeart_L_ease[1]->Update();
-	}
-	if (playerHP <= 1)
-	{
-		UI_hp[0]->TextureCutout(1, 0);
-		UI_breakHeart_R[0]->materialDiffuse.w = 1.0f;
-		breakHeart_R_ease[0]->Update();
-	}
-	if (playerHP <= 0)
-	{
-		UI_hp[0]->TextureCutout(2, 0);
-		UI_breakHeart_L[0]->materialDiffuse.w = 1.0f;
-		breakHeart_L_ease[0]->Update();
 	}
 
 	// ゲーム関連UIの更新

@@ -18,9 +18,6 @@ StageScene::StageScene()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
 
-	// ゲームマネージャの初期化
-	CGameManager::GetInstance()->Init();
-
 	// シーン遷移フラグの初期化
 	changeSceneFlg = false;
 
