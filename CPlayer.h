@@ -37,6 +37,7 @@ private:
 
     //  風を受けるフラグ
     bool isWindRight = false;   //  右向き
+    bool isWindLeft = false;    //  左向き
     bool isWindUp = false;      //  上向き
 
     CSmoothing* smoothing;
