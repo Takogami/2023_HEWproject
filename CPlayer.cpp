@@ -4,7 +4,7 @@
 #include "CSceneManager.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (false)
+#define USE_CONTROLLER (true)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
@@ -86,7 +86,6 @@ void CPlayer::PlayerInput()
 				anim->SetIsAnimation(true);
 				isWindUp = false;	//	下からの風を受けない
 				isWindRight = false;	//	風を受けない
-				isWindLeft = false;
 			}
 			if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
 			{
@@ -102,7 +101,6 @@ void CPlayer::PlayerInput()
 				SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
 				anim->SetIsAnimation(true);
 				isWindUp = false;	//	上向きの風を受けない
-				isWindLeft = true;
 			}
 			// Bボタン入力でとりあえずのジャンプ操作
 			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
@@ -142,7 +140,6 @@ void CPlayer::PlayerInput()
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
 				anim->SetIsAnimation(true);
-				isWindLeft = false;
 				isWindUp = true;
 			}
 		}
@@ -235,7 +232,6 @@ void CPlayer::PlayerInput()
 					SetState(PState::NORMAL);// 通常状態
 					SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 					anim->SetIsAnimation(true);
-					isWindLeft = false;
 					isWindUp = false;	//	下からの風を受けない
 					isWindRight = false;	//	風を受けない
 				}
@@ -266,7 +262,6 @@ void CPlayer::PlayerInput()
 					SetState(PState::BREAKRIGHT);// 右に折れる状態
 					SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
 					anim->SetIsAnimation(true);
-					isWindLeft = true;
 					isWindUp = false;	//	上向きの風を受けない
 				}
 				else
@@ -325,7 +320,6 @@ void CPlayer::PlayerInput()
 					SetState(PState::FALL);// 倒れた状態
 					SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
 					anim->SetIsAnimation(true);
-					isWindLeft = false;
 					isWindUp = true;
 				}
 				else
@@ -522,18 +516,6 @@ void CPlayer::Update()
 				}
 				break;
 
-			case OBJECT_TYPE::WIND_LEFT:
-				if (anim->GetIsAnimation() == false && isWindLeft)
-				{
-					// 右向きの風力を取得
-					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
-					// 風を受けた方向と向き保存
-					dir.x = -1.0f;
-					dir_wind.x = -1.0f;
-
-				}
-				break;
-
 			case OBJECT_TYPE::WIND_UP:
 				if (!anim->GetIsAnimation() && isWindUp)
 				{
@@ -547,7 +529,6 @@ void CPlayer::Update()
 					//	上に上がってる時に「WIND_RIGHT」があったら
 					//	trueにしてそのまま飛んでいく
 					isWindRight = true;
-					isWindLeft = true;
 				}
 
 				if (prevFrameCorrect.y == 1)
@@ -565,15 +546,15 @@ void CPlayer::Update()
 					//吹っ飛ばす計算式（右）
 					if (0.0f > dir.x)
 					{
-						moveF = this->transform.position.x + 0.05f;
+						moveF = this->transform.position.x + 0.3f;
 					}
 					//吹っ飛ばす計算式（左）
 					else if (0.0f < dir.x)
 					{
-						moveF = this->transform.position.x - 0.05f;
+						moveF = this->transform.position.x - 0.3f;
 					}
 					//追従カメラの初期化
-					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
+					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.3f);
 					nockf = true;
 				}
 

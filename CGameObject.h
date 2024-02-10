@@ -30,7 +30,6 @@ enum class OBJECT_TYPE
 	NORMAL,		// 通常オブジェクト
 	PLAYER,		// プレイヤーオブジェクト
 	WIND_RIGHT,	// 風オブジェクト（右向き）
-	WIND_LEFT,	//風オブジェクト（左向き）
 	WIND_UP,	// 風オブジェクト（上向き）
 	DAMAGE_TILE	//ダメージを受ける床
 };
