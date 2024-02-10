@@ -3,6 +3,8 @@
 #include "TitleScene.h"
 #include "StageScene.h"
 #include "StageScene2.h"
+#include "StageScene3.h"
+#include "StageScene4.h"
 #include "SelectScene.h"
 #include "ResultScene.h"
 
@@ -13,6 +15,8 @@ enum class SCENE_ID
 	SELECT,
 	STAGE_1,
 	STAGE_2,
+	STAGE_3,
+	STAGE_4,
 	RESULT,
 };
 
@@ -25,6 +29,8 @@ private:
 	TitleScene* title = nullptr;			//タイトルシーンクラス
 	StageScene* stage1 = nullptr;			//ステージシーン1クラス
 	StageScene2* stage2 = nullptr;			//ステージシーン2クラス
+	StageScene3* stage3 = nullptr;			//ステージシーン3クラス
+	StageScene4* stage4 = nullptr;			//ステージシーン4クラス
 	SelectScene* select = nullptr;			//セレクトシーンクラス
 	ResultScene* result = nullptr;			//リザルトシーンクラス
 
