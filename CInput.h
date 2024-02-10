@@ -27,6 +27,15 @@ class CInput
 	// 入力をロックするかのフラグ
 	bool inputLock = false;
 
+	// 振動パラメータ
+	XINPUT_VIBRATION vibrationPalam;
+	// バイブレーションが行われているかのフラグ
+	bool vibrationFlg = false;
+	// バイブレーションが始まって経過した時間
+	int NowVibrationFlame = 0;
+	// 振動させる時間(フレーム単位)
+	int vibrationFlame = 0;
+
 	//	デッドゾーンの閾値
 	const float DEADZONE_THRESHOLD = 0.2f;
 
@@ -76,6 +85,9 @@ public:
 	float GetRightStickXWithDeadzone();
 	//	コントローラーの右スティックのY軸の値を取得する（デッドゾーン考慮）
 	float GetRightStickYWithDeadzone();
+	// コントローラーの振動
+	// 引数1 : 振動させる時間(フレーム単位) 引数2 : 振動の強さ(0~65535まで)
+	void ControllerVibration(int vibration, int vibStrength);
 };
 
 //唯一の実体変数のextern宣言

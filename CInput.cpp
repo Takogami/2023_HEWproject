@@ -129,6 +129,23 @@ void CInput::Update()
 
 	// 更新処理で今の状態を保存
 	oldState = state;
+
+	// 振動がONになっているなら更新
+	if (vibrationFlg)
+	{
+		NowVibrationFlame++;
+		// バイブレーションを設定されたフレーム数だけ行ったならバイブレーションを止める
+		if (NowVibrationFlame > vibrationFlame)
+		{
+			// 振動パラメータを0に設定
+			vibrationPalam.wLeftMotorSpeed = 0;	// 左側のモーターの速度 (0から65535まで)
+			vibrationPalam.wRightMotorSpeed = 0;// 右側のモーターの速度 (0から65535まで)
+			// 振動を停止
+			XInputSetState(0, &vibrationPalam);
+			// フラグを下げる
+			vibrationFlg = false;
+		}
+	}
 }
 
 float CInput::GetLeftStickX()
@@ -278,4 +295,26 @@ float CInput::GetRightStickYWithDeadzone()
 	{
 		return 0.0f;
 	}
+}
+
+void CInput::ControllerVibration(int vibration, int vibStrength)
+{
+	ZeroMemory(&vibrationPalam, sizeof(XINPUT_VIBRATION));
+
+	// 値を0~65535でクランプ
+	vibStrength = vibStrength < 0 ? 0 : vibStrength;
+	vibStrength = vibStrength > 65535 ? 65535 : vibStrength;
+
+	// 振動パラメータを設定
+	vibrationPalam.wLeftMotorSpeed = vibStrength;	// 左側のモーターの速度 (0から65535まで)
+	vibrationPalam.wRightMotorSpeed = vibStrength;	// 右側のモーターの速度 (0から65535まで)
+
+	// 振動させる時間を設定
+	vibrationFlame = vibration;
+	// 振動のパラメータを渡す
+	XInputSetState(0, &vibrationPalam);
+	// 現在のフレームを0に初期化
+	NowVibrationFlame = 0;
+	// 振動フラグを上げる
+	vibrationFlg = true;
 }
