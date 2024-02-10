@@ -171,6 +171,8 @@
     <ClCompile Include="StageScene2.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="StageScene.cpp" />
+    <ClCompile Include="StageScene3.cpp" />
+    <ClCompile Include="StageScene4.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
     <ClCompile Include="xa2.cpp" />
@@ -203,6 +205,8 @@
     <ClInclude Include="StageScene2.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="StageScene.h" />
+    <ClInclude Include="StageScene3.h" />
+    <ClInclude Include="StageScene4.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="WICTextureLoader.h" />

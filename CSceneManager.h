@@ -20,6 +20,13 @@ enum class SCENE_ID
 	RESULT,
 };
 
+enum class FADE_STATE
+{
+	NO_FADE,
+	FADE_IN,
+	FADE_OUT,
+};
+
 class CSceneManager
 {
 private:
@@ -34,11 +41,16 @@ private:
 	SelectScene* select = nullptr;			//セレクトシーンクラス
 	ResultScene* result = nullptr;			//リザルトシーンクラス
 
-	CEventManager* eventManager;
+	CGameManager* gameManager;
 
-	std::list<CScene*> scenes;
+	CGameObject* fade;
+	ID3D11Buffer* vertexBuffer;
 
-	SCENE_ID NowScene = SCENE_ID::TITLE;	//現在のシーンの状態
+	SCENE_ID NowScene = SCENE_ID::TITLE;
+	SCENE_ID NewScene = SCENE_ID::TITLE;
+	SCENE_ID retryLoadScene = SCENE_ID::TITLE;
+
+	FADE_STATE fadeState = FADE_STATE::NO_FADE;
 
 	CSceneManager();
 	~CSceneManager();
@@ -51,5 +63,7 @@ public:
 
 	void Update();							//シーンの管理
 	void ChangeScene(SCENE_ID _inScene);	//シーンの変更
+
+	FADE_STATE GetFadeState() { return fadeState; }
 };
 
