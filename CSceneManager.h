@@ -59,5 +59,8 @@ public:
 
 	void Update();							//シーンの管理
 	void ChangeScene(SCENE_ID _inScene);	//シーンの変更
+
+	// フェードステートを返す
+	FADE_STATE GetFadeState() { return fadeState; }
 };
 

@@ -9,6 +9,7 @@
 class CTimer;
 class CGameObject;
 class CEase;
+class CDrawString;
 
 // ゲームの進行状態
 enum class GAME_STATE
@@ -22,8 +23,6 @@ enum class GAME_STATE
 class CGameManager
 {
 private:
-	// ゲームの時間管理
-	CTimer* gameTime;
 	// プレイヤーのHP
 	int playerHP = PLAYER_HP;
 	// スコア
@@ -49,6 +48,16 @@ private:
 	// ハートの透明度を変更したかのフラグ
 	bool heartAlpha_R[3] = { false };
 	bool heartAlpha_L[3] = { false };
+
+	// 時間表示文字列
+	CDrawString* strTime;
+	// 制限時間
+	int nowTime = 0;
+	// ゲームの時間管理
+	CTimer* gameTime;
+
+	// ステージ表示文字列
+	CDrawString* strStage;
 
 	// オブジェクトのリスト
 	std::list<CGameObject*> Objects;
@@ -81,7 +90,9 @@ public:
 	// スコアの加算
 	// 引数1 : 加算するスコア
 	void AddScore(int addScore);
-	// スコアの加算
+	// 現在のスコアを取得
+	int GetScore() { return score; }
+	// ダメージの加算
 	// 引数1 : ダメージ値(1~6)
 	void AddDamage(int addDamage);
 

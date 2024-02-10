@@ -58,8 +58,8 @@ void StageScene::Update()
 	}
 
 	// タイムアップ、またはHPが0で強制シーン遷移
-	if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP || 
-		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP && !changeSceneFlg)
+	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP || 
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 		changeSceneFlg = true;

@@ -4,6 +4,8 @@
 #include "CGameObject.h"
 #include "CTextureLoader.h"
 #include "CEase.h"
+#include "CDrawString.h"
+#include "CSceneManager.h"
 
 // インスタンスの初期化
 CGameManager* CGameManager::instance = nullptr;
@@ -43,6 +45,14 @@ CGameManager::CGameManager()
 		Objects.push_back(UI_breakHeart_L[i]);
 		UI_breakHeart_L[i]->transform.scale = { 161.0f * 0.00065f, 252.0f * 0.00065f, 1.0f };
 	}
+
+	strTime = new CDrawString;
+	strTime->SetFont(FontID::UZURA);
+	strTime->SetPosition({ 1355.0f, 65.0f });
+	strTime->SetFontSize(100.0f);
+	strTime->SetFontColor(1.0f, 0.3f, 0.0f);
+	strTime->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
+	strTime->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	// 実体化の後、初期化を行う
 	this->Init();
@@ -247,9 +257,12 @@ void CGameManager::Init()
 	// スコアの初期化
 	score = 0;
 	// タイマーの初期化
-	gameTime->InitTimer(50, TIMER_MODE::COUNT_DOWN);
+	gameTime->InitTimer(180, TIMER_MODE::COUNT_DOWN);
+	nowTime = 180;
 	// プレイヤーの体力を初期化
 	playerHP = PLAYER_HP;
+
+	strTime->SetPosition({ 1355.0f, 65.0f });
 
 	// UIの初期化
 	for (int i = 0; i < 3; i++)
@@ -279,16 +292,30 @@ void CGameManager::Update()
 {
 	// タイマーの更新
 	gameTime->Update();
+
 	// 体力UIの管理
 	UpdateUIhp();
+
+	// 時間描画用の一時変数を宣言
+	std::string comvartStrTime;	// 文字列に変換した時間を格納
+	int digit_rank;				// 現在の時間の桁数を格納
 
 	// ゲームの進行状況に応じて更新処理を変更
 	switch (state)
 	{
 	case GAME_STATE::READY:
-		// タイマーの開始
-		gameTime->StartTimer();
-		state = GAME_STATE::START;
+		// フェードが終了してからタイマーを開始する
+		if (CSceneManager::GetInstance()->GetFadeState() == FADE_STATE::NO_FADE)
+		{
+			// タイマーの開始
+			gameTime->StartTimer();
+			// ゲームステートの変更
+			state = GAME_STATE::START;
+		}
+		// 時間を文字列型に変換
+		comvartStrTime = std::to_string(nowTime);
+		// 時間の文字列をセット
+		strTime->SetString(comvartStrTime);
 		break;
 
 	case GAME_STATE::START:
@@ -297,6 +324,7 @@ void CGameManager::Update()
 		{
 			// 状態をHP0に
 			state = GAME_STATE::ZERO_HP;
+		
 		}
 		// タイムが0になったなら
 		else if (gameTime->GetTimerState() == TIMER_STATE::END)
@@ -304,7 +332,19 @@ void CGameManager::Update()
 			// 状態をタイムアップに
 			state = GAME_STATE::TIME_UP;
 		}
-
+		// 現在のゲーム時間を受け取る
+		nowTime = (int)gameTime->GetTime();
+		// 時間を文字列型に変換
+		comvartStrTime = std::to_string(nowTime);
+		// 時間の文字列をセット
+		strTime->SetString(comvartStrTime);
+		// 文字列の長さから桁数を取得
+		digit_rank = comvartStrTime.length();
+		// 桁数に応じて表示位置を変更する
+		if (digit_rank <= 2)
+		{
+			strTime->SetPosition({ 1355.0f + (54 / digit_rank), 65.0f });
+		}
 		break;
 
 	case GAME_STATE::TIME_UP:
@@ -331,6 +371,9 @@ void CGameManager::Draw()
 	{
 		(*it)->Draw();
 	}
+
+	// 文字の描画
+	strTime->Draw();
 }
 
 void CGameManager::AddScore(int addScore)
