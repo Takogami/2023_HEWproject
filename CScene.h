@@ -3,6 +3,7 @@
 /* インクルード */
 #include <list>
 #include "CPlayer.h"
+#include "CEnemy.h"
 #include "CCursor.h"
 #include "CWind.h"
 #include "Cdamagetile.h"

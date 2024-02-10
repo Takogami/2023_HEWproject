@@ -17,9 +17,6 @@ CSceneManager::CSceneManager()
 	fade = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS));
 	fade->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	fade->transform.position.z = -0.5f;
-
-	// ゲームマネージャ唯一のインスタンスを取得
-	gameManager = CGameManager::GetInstance();
 }
 
 // デストラクタ
@@ -172,7 +169,10 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 	{
 		// ステージを読み込んでいたなら解放する
 		CScene::DestroyStage();
+		// フェードインを設定
 		fadeState = FADE_STATE::FADE_IN;
+		// ゲームマネージャを初期化
+		CGameManager::GetInstance()->Init();
 
 		// 1. 現在のシーンに関連するリソースを解放する
 		switch (_inScene)

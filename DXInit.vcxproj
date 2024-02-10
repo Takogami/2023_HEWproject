@@ -151,6 +151,7 @@
     <ClCompile Include="Cdamagetile.cpp" />
     <ClCompile Include="CDrawString.cpp" />
     <ClCompile Include="CEase.cpp" />
+    <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CGameManager.cpp" />
     <ClCompile Include="CGame.cpp" />
     <ClCompile Include="CGameObject.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Cdamagetile.h" />
     <ClInclude Include="CDrawString.h" />
     <ClInclude Include="CEase.h" />
+    <ClInclude Include="CEnemy.h" />
     <ClInclude Include="CGameManager.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGame.h" />
