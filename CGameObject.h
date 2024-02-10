@@ -32,7 +32,8 @@ enum class OBJECT_TYPE
 	WIND_RIGHT,	// 風オブジェクト（右向き）
 	WIND_LEFT,	//風オブジェクト（左向き）
 	WIND_UP,	// 風オブジェクト（上向き）
-	DAMAGE_TILE	//ダメージを受ける床
+	DAMAGE_TILE,//ダメージを受ける床
+	ENEMY,		// 敵オブジェクト
 };
 
 //CGameObjectクラス
