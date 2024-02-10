@@ -4,6 +4,7 @@
 std::vector<std::vector<int>> CScene::map_data;
 std::list<CGameObject*> CScene::map_object;
 ID3D11Buffer* CScene::vertexBufferMap;
+ID3D11Buffer* CScene::vertexBufferEnemy;
 
 CScene::CScene()
 {
@@ -100,6 +101,24 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			// 敵の生成
+			if (map_data[i][j] == 5)
+			{
+				enemy = new CEnemy(vertexBufferEnemy, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 1.0f, 1.0f }, OBJECT_TYPE::ENEMY);
+				// オブジェクトをリストに登録
+				Objects.push_back(enemy);
+				// 自身の投影に使うカメラの
+				enemy->SetUseingCamera(_useCamera);
+				// スケールの設定
+				enemy->transform.scale.x *= TILE_WIDTH;
+				enemy->transform.scale.y *= TILE_HEIGHT;
+				enemy->transform.position.z = -0.3f;
+				//ポジションの設定
+				enemy->transform.position.x = x_tile;
+				enemy->transform.position.y = y_tile;
+				// コライダーの設定
+				enemy->Bcol = { enemy->transform.position.x, enemy->transform.position.y,TILE_WIDTH, TILE_HEIGHT };
+			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す
 		x_tile = ORIGIN_TILE_POS_X;
@@ -128,6 +147,24 @@ void CScene::DrawTerrain()
 {
 	// 地形オブジェクトの描画
 	for (auto it = map_object.begin(); it != map_object.end(); it++)
+	{
+		(*it)->Draw();
+	}
+}
+
+void CScene::EnemyUpdate()
+{
+	// 各オブジェクトの更新
+	for (auto it = Objects.begin(); it != Objects.end(); it++)
+	{
+		(*it)->Update();
+	}
+}
+
+void CScene::EnemyDraw()
+{
+	// 各オブジェクトの描画
+	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
 	}

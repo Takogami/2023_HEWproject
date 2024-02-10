@@ -118,7 +118,9 @@ void ResultScene::UpdateGameOver()
 			case SCENE_ID::STAGE_2:
 				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_2);
 				break;
-
+			case SCENE_ID::STAGE_3:
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3);
+				break;
 			default:
 				break;
 			}
@@ -145,4 +147,5 @@ void ResultScene::Draw()
 	{
 		(*it)->Draw();
 	}
+
 }

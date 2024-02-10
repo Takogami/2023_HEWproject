@@ -1,31 +1,28 @@
-#include "StageScene.h"
+#include "Stage2Scene.h"
 #include "CSceneManager.h"	// シーン切り替えのためにインクルード
-#include "CGameManager.h"
 
-StageScene::StageScene()
+Stage2Scene::Stage2Scene()
 {
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::BLOCK), { 0.33f ,0.25f });
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 0.33f ,0.25f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
 	player->transform * 0.2f;
+	player->transform.position.z = -0.3f;
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
 
-	// シーン遷移フラグの初期化
-	changeSceneFlg = false;
-
 	// 構成するステージと使用するカメラのポインタを指定
-	CScene::CreateStage(TERRAIN_ID::STAGE_2, Cam);
+	CScene::CreateStage(TERRAIN_ID::STAGE_3, Cam);
 }
 
-StageScene::~StageScene()
+Stage2Scene::~Stage2Scene()
 {
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferCharacter);
@@ -43,12 +40,11 @@ StageScene::~StageScene()
 	CScene::DestroyStage();
 }
 
-void StageScene::Update()
+void Stage2Scene::Update()
 {
-	// テスト用ダメージ追加
-	if (gInput->GetKeyTrigger(VK_DELETE))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_B, 60, 5) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		CGameManager::GetInstance()->AddDamage(1);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}
 
 	// 各オブジェクトの更新
@@ -57,24 +53,22 @@ void StageScene::Update()
 		(*it)->Update();
 	}
 
-	// タイムアップ、またはHPが0で強制シーン遷移
-	if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP || 
-		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP && !changeSceneFlg)
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
-		changeSceneFlg = true;
-	}
-
-	CGameManager::GetInstance()->Update();
+	// 敵の更新
+	EnemyUpdate();
 
 	Cam->cameraPos.x = player->transform.position.x;
 	Cam->Update();
 }
 
-void StageScene::Draw()
+void Stage2Scene::Draw()
 {
+	D3D_ClearScreen();
+
 	// 地形の描画
 	DrawTerrain();
+
+	// 敵の描画
+	EnemyDraw();
 
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -82,6 +76,6 @@ void StageScene::Draw()
 		(*it)->Draw();
 	}
 
-
-	CGameManager::GetInstance()->Draw();
+	// 画面更新
+	D3D_UpdateScreen();
 }

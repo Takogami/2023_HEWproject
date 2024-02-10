@@ -14,6 +14,7 @@
 #include "CEase.h"
 #include "CTimer.h"
 #include "CGameManager.h"
+#include "CEnemy.h"
 
 class CScene
 {
@@ -25,10 +26,15 @@ private:
 	// マップオブジェクト用の頂点バッファ
 	static ID3D11Buffer* vertexBufferMap;
 
+	static ID3D11Buffer* vertexBufferEnemy;
+
+	CEnemy* enemy;
+
 public:
 	/* メンバ変数 */
 	// マップオブジェクト用のリスト
 	static std::list<CGameObject*> map_object;
+	std::list<CGameObject*> Objects;
 
 	/* メソッド */
 
@@ -45,6 +51,12 @@ public:
 
 	// ステージの描画のみを行う
 	void DrawTerrain();
+
+	//敵の更新
+	void EnemyUpdate();
+
+	//敵の描画
+	void EnemyDraw();
 
 	// オーバーライドする用の関数
 	// シーンの更新処理

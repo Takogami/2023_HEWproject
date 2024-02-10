@@ -44,6 +44,10 @@ CSceneManager::~CSceneManager()
 	{
 		delete stage2;
 	}
+	if (stage3 != nullptr)
+	{
+		delete stage3;
+	}
 	if (result != nullptr)
 	{
 		delete result;
@@ -141,6 +145,12 @@ void CSceneManager::Update()
 		stage2->Update();
 		stage2->Draw();
 		break;
+		
+	// ステージ02
+	case SCENE_ID::STAGE_3:
+		stage3->Update();
+		stage3->Draw();
+		break;
 
 	// リザルト
 	case SCENE_ID::RESULT:
@@ -208,6 +218,12 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 			delete stage2;
 			stage2 = nullptr;
 			break;
+			
+		case SCENE_ID::STAGE_3:
+			// もし現在のシーンがRESULTなら、RESULTシーンを解放する
+			delete stage3;
+			stage3 = nullptr;
+			break;
 
 		case SCENE_ID::RESULT:
 			// もし現在のシーンがRESULTなら、RESULTシーンを解放する
@@ -240,6 +256,11 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 		case SCENE_ID::STAGE_2:
 			// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
 			stage2 = new StageScene2();
+			break;
+			
+		case SCENE_ID::STAGE_3:
+			// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
+			stage3 = new Stage2Scene();
 			break;
 
 		case SCENE_ID::RESULT:

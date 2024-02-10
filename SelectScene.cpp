@@ -126,6 +126,7 @@ void SelectScene::Update()
 			break;
 
 		case STAGE_NUM::STAGE3:
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3);
 			break;
 
 		case STAGE_NUM::STAGE4:
@@ -209,6 +210,8 @@ void SelectScene::Draw()
 	{
 		(*it)->Draw();
 	}
-
+	
+	// “G‚Ì•`‰æ
+	EnemyDraw();
 	StageSelect->Draw();
 }

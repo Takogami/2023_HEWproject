@@ -109,7 +109,9 @@ void StageScene2::Draw()
 	{
 		(*it)->Draw();
 	}
-
+	
+	// “G‚Ì•`‰æ
+	EnemyDraw();
 	// •¶Žš—ñ‚Ì•`‰æ
 	drawStringTest->Draw();
 	drawStringTest2->Draw();

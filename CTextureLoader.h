@@ -48,6 +48,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	HALF_HEART_R,
 	TIMER,
 	SCORE_BOARD,
+	ENEMY,
 };
 
 // CTextureLoaderクラス
@@ -80,6 +81,7 @@ private:
 		L"asset/heart_half_right.png",
 		L"asset/timer.png",
 		L"asset/scoreBoard.png",
+		L"asset/Tako.jpg",
 	};
 
 	/* メソッド */

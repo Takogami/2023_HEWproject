@@ -4,7 +4,7 @@
 #include "CSceneManager.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (true)
+#define USE_CONTROLLER (false)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
