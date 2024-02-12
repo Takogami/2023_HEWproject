@@ -36,6 +36,8 @@ private:
 	CEase* enemyEase;
 	CEase* enemyEaseR;
 	CEase* playerFlyEase;
+
+	// 選択のイージング
 	CEase* selectEaseX;
 	CEase* selectEaseY;
 

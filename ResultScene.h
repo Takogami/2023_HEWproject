@@ -23,6 +23,15 @@ private:
 	// ゲームオーバーであるかクリアであるかを識別
 	RESULT_STATE state = RESULT_STATE::GAMEOVER;
 
+	// 選択のイージング
+	CEase* selectEaseX;
+	CEase* selectEaseY;
+
+	// 選択ボタンが押されたかどうかを判定するフラグ
+	bool selectFlg = false;
+	// 選択されたときのイージングが完了しているか判定するフラグ
+	bool selectEnd = false;
+
 	// クリア画面の更新
 	void UpdateClear();
 	// ゲームオーバー画面の更新

@@ -37,6 +37,9 @@ ResultScene::ResultScene()
 	cursor->transform.position = { 0.524f, 0.2f, -0.2f };
 	cursor->transform.rotation = -30.0f;
 	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
+
+	selectEaseX = new CEase;
+	selectEaseY = new CEase;
 }
 
 ResultScene::~ResultScene()
@@ -99,11 +102,11 @@ void ResultScene::UpdateGameOver()
 	// カーソルの入力処理を実行
 	cursor->CursorInput();
 
+	// CCursorでの列挙型のSceneを取得する
+	cursorPoint = (CCursor_PointResult)cursor->GetCursorPoint();
+
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		// CCursorでの列挙型のSceneを取得する
-		cursorPoint = (CCursor_PointResult)cursor->GetCursorPoint();
-
 		// カーソルのポイント位置で遷移先のシーンを変更
 		switch (cursorPoint)
 		{
@@ -135,6 +138,59 @@ void ResultScene::UpdateGameOver()
 		default:
 			break;
 		}
+	}
+
+	// カーソル位置に応じて大きさを変更する
+	switch (cursorPoint)
+	{
+	case CCursor_PointResult::RETRY:
+		// 選択されたなら、ボタンのイージングを起動
+		if (selectFlg)
+		{
+			// イージングの更新
+			selectEaseX->Update();
+			selectEaseY->Update();
+			// 元の大きさに戻るイージングを設定する
+			if (selectEaseX->GetState() == STATE::END && !selectEnd)
+			{
+				// 元の大きさを設定
+				selectEaseX->Init(&retry->transform.scale.x, 1100.0f * 0.0007f, 0.1f, 0, EASE::easeOutCubic);
+				selectEaseY->Init(&retry->transform.scale.y, 447.0f * 0.0007f, 0.1f, 0, EASE::easeOutCubic);
+				// フラグを立てて二重で初期化が行われないようにする
+				selectEnd = true;
+			}
+		}
+		else
+		{
+			retry->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
+		}
+		retry->materialDiffuse.w = 1.0f;
+		goToSelect->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
+		goToSelect->materialDiffuse.w = 0.5f;
+		goToTitle->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
+		goToTitle->materialDiffuse.w = 0.5f;
+		break;
+
+	case CCursor_PointResult::SELECT:
+		goToSelect->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
+		goToSelect->materialDiffuse.w = 1.0f;
+		retry->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
+		retry->materialDiffuse.w = 0.5f;
+		goToTitle->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
+		goToTitle->materialDiffuse.w = 0.5f;
+		break;
+
+	case CCursor_PointResult::TITLE:
+		goToTitle->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
+		goToTitle->materialDiffuse.w = 1.0f;
+		retry->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
+		retry->materialDiffuse.w = 0.5f;
+		goToSelect->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
+		goToSelect->materialDiffuse.w = 0.5f;
+		break;
+
+	default:
+		break;
 	}
 }
 
