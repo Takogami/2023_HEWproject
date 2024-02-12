@@ -102,6 +102,21 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
 
+			if (map_data[i][j] == 20)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TILE), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_TILEY));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 			//	風が起きるオブジェクト生成（左方向）
 			if (map_data[i][j] == 9)
 			{

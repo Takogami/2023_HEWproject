@@ -10,12 +10,14 @@
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
 	// 初期スピード設定
-	SetMoveSpeed(0.03f);
+	SetMoveSpeed(0.02f);
 	smoothing = new CSmoothing();
 	// 重力を初期値とする
 	velocity.y = gravity;
 
 	nockf = false;
+
+	nockT = false;
 
 	test = true;
 }
@@ -404,6 +406,22 @@ void CPlayer::ReceiveWind()
 
 void CPlayer::Update()
 {
+	if (this->materialDiffuse.w != 1.0f && nockT == false)
+	{
+		this->materialDiffuse.w = 1.0f;
+	}
+
+	if (this->GetState() == PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.2f;
+	}
+	else if (this->GetState() != PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.1f;
+	}
+	
+
+
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
 	{
@@ -425,6 +443,7 @@ void CPlayer::Update()
 
 	// 前フレームの補正方向を初期化
 	prevFrameCorrect = { 0 };
+	prevFrameCorrectY = { 0 };
 
 	// 単位ベクトル化(矢印を１にする) = 正規化
 	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// ベクトル計算用の型に入れる
@@ -466,6 +485,36 @@ void CPlayer::Update()
 			flameCounter = 0.0f;
 		}
 		//---------------------------------------------------------//
+	}
+
+	if (nockT == true)
+	{
+
+		if (this->GetState() != PState::NORMAL)
+		{
+			this->SetState(PState::NORMAL);
+			SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
+			anim->SetIsAnimation(true);
+		}
+
+		flameCounter++;
+		//---------------------------------------------------------//
+		//プレイヤーを点滅させる
+		if (this->materialDiffuse.w == 1.0f)
+		{
+			this->materialDiffuse.w = 0.2f;
+		}
+		else if (this->materialDiffuse.w == 0.2f)
+		{
+			this->materialDiffuse.w = 1.0f;
+		}
+		//-----------------------------------------------------------//
+		//プレイヤーが入力できない時間を作ってる
+		if (flameCounter == 20)
+		{
+			nockT = false;
+			flameCounter = 0.0f;
+		}
 	}
 
 	// ベクトルに速度をかけて位置を変更
@@ -553,32 +602,50 @@ void CPlayer::Update()
 				if (prevFrameCorrect.y == 1)
 					ANIM_STOP;
 				break;
-
 			case OBJECT_TYPE::DAMAGE_TILE:
+				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 				// オブジェクトの位置とコライダーの中心を合わせる
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
-
 				//プレイヤーのノックバックの処理
 				if (!nockf)
 				{
 					//吹っ飛ばす計算式（右）
-					if (0.0f > dir.x)
+					if (prevFrameCorrect.x == 1.0f)
 					{
-						moveF = this->transform.position.x + 0.05f;
+						moveF = this->transform.position.x + 0.5f;
+						/*nockT = true;*/
 					}
 					//吹っ飛ばす計算式（左）
-					else if (0.0f < dir.x)
+					if (prevFrameCorrect.x == -1.0f )
 					{
-						moveF = this->transform.position.x - 0.05f;
+						moveF = this->transform.position.x - 0.5f;
 					}
-					//追従カメラの初期化
+					////追従カメラの初期化
 					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
 					nockf = true;
 				}
-
 				break;
-
+			case OBJECT_TYPE::DAMAGE_TILEY:
+				// コライダーの位置を補正し、補正した方向を受け取る
+				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+				// 天井にぶつかっていたならジャンプ力を0にする
+				if (prevFrameCorrectY.y == -1)
+				{
+					jumpStrength = 0;	// ジャンプ力を0にする
+				}
+				// 重力によって地面に
+				if (prevFrameCorrectY.y == 1 && nockT == false)
+				{
+					velocity.y = 0.0f;				// 速度Yを0に戻す
+					jumpStrength = ini_jumpStrength;
+					isJump = false;
+					nockT = true;
+				}
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+				break;
 			default:
 				break;
 			}
