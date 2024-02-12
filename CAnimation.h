@@ -28,6 +28,7 @@ enum class ANIM_PATTERN
 
 	BOOK,		//本の動き
 	BOOK_REVERSE,
+	ENEMY_MOVE,
 };
 
 class CAnimation
@@ -77,8 +78,9 @@ private:
 		{ 45, 46, 47, 48, 49, 48, 47, 46, ANIM_LOOP},	//飛んでる状態
 		{ 10, ANIM_STOP },	//倒れている状態
 
-		{ 0, 1, 2, 0, ANIM_STOP},	//本の動き
-		{ 0, 2, 1, 0, ANIM_STOP},	
+		{ 0, 1, 2, 3, 4, 0, ANIM_STOP},	//本の動き
+		{ 0, 4, 3, 2, 1, 0, ANIM_STOP},	//本逆
+		{ 0, 1, ANIM_LOOP},
 
 	};
 

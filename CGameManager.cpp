@@ -54,6 +54,29 @@ CGameManager::CGameManager()
 	strTime->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
 	strTime->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
 
+	strStage = new CDrawString;
+	strStage->SetFont(FontID::UZURA);
+	strStage->SetString("ステージ");
+	strStage->SetPosition({ 625.0f, 50.0f });
+	strStage->SetFontSize(50.0f);
+	strStage->SetFontColor(0.0f, 0.0f, 0.0f);
+	strStage->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
+	strStage->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
+
+	strBg = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOARD));
+	Objects.push_back(strBg);
+	strBg->transform.position = { 0.0f, 0.93f, -0.2f };
+	strBg->transform.scale = { 772.0f * 0.0013f, 472.0f * 0.0007f, 1.0f };
+
+	stageNum = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
+	// オブジェクトをリストに登録
+	Objects.push_back(stageNum);
+	// スケールの設定
+	stageNum->transform * 0.18f;
+	stageNum->transform.rotation = -10.0f;
+	stageNum->transform.position = { 0.285f, 0.93f, -0.3f };
+	stageNum->TextureCutout(1, 0);
+
 	// 実体化の後、初期化を行う
 	this->Init();
 }
@@ -62,6 +85,10 @@ CGameManager::~CGameManager()
 {
 	// タイマーの解放
 	delete gameTime;
+
+	// 文字列描画の解放
+	delete strTime;
+	delete strStage;
 
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferUI);
@@ -374,6 +401,7 @@ void CGameManager::Draw()
 
 	// 文字の描画
 	strTime->Draw();
+	strStage->Draw();
 }
 
 void CGameManager::AddScore(int addScore)

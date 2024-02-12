@@ -59,6 +59,9 @@ private:
 	// ステージ表示文字列
 	CDrawString* strStage;
 
+	CGameObject* strBg;
+	CGameObject* stageNum;
+
 	// オブジェクトのリスト
 	std::list<CGameObject*> Objects;
 

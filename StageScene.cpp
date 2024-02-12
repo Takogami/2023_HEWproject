@@ -8,7 +8,7 @@ StageScene::StageScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::BLOCK), { 0.33f ,0.25f });
+	player = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
@@ -17,6 +17,7 @@ StageScene::StageScene()
 	player->transform * 0.2f;
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
+	player->InitAnimParameter(true, 10, 1, ANIM_PATTERN::TEST, 0.02f);
 
 	// シーン遷移フラグの初期化
 	changeSceneFlg = false;
@@ -51,18 +52,18 @@ void StageScene::Update()
 		CGameManager::GetInstance()->AddDamage(1);
 	}
 
-	// 各オブジェクトの更新
-	for (auto it = Objects.begin(); it != Objects.end(); it++)
-	{
-		(*it)->Update();
-	}
-
 	// タイムアップ、またはHPが0で強制シーン遷移
 	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP || 
 		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 		changeSceneFlg = true;
+	}
+
+	// 各オブジェクトの更新
+	for (auto it = Objects.begin(); it != Objects.end(); it++)
+	{
+		(*it)->Update();
 	}
 
 	CGameManager::GetInstance()->Update();

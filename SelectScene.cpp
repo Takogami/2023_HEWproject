@@ -12,7 +12,6 @@ SelectScene::SelectScene()
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
 
-
 	// 文字列の設定
 	StageSelect = new CDrawString;
 	StageSelect->SetFont(FontID::UZURA);
@@ -23,11 +22,11 @@ SelectScene::SelectScene()
 	StageSelect->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
 	StageSelect->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.3f, 0.0f, 0.4f);
 
-	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.3333333f, 1.0f });
+	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.2f, 1.0f });
 	Objects.push_back(StagePreview);
 	StagePreview->transform.position = { -0.97f, -0.07f, -0.1f };
 	StagePreview->transform.scale = { 693.0f * 0.003f, 900.0f * 0.003f, 0.5f };
-	StagePreview->InitAnimParameter(false, 3, 1, ANIM_PATTERN::BOOK, 0.1f);
+	StagePreview->InitAnimParameter(false, 5, 1, ANIM_PATTERN::BOOK, 0.2f);
 
 	// 要素を拡張
 	StageList.resize(listNum);

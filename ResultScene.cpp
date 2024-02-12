@@ -11,32 +11,32 @@ ResultScene::ResultScene()
 	GameOverObj->transform.position = { -0.5f, 0.0f, 0.5f };
 	GameOverObj->transform.scale = { 512.0f * 0.0045f, 512.0f * 0.0045f, 1.0f };
 
+	retry = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOARD));
+	// オブジェクトをリストに登録
+	Objects.push_back(retry);
+	retry->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };;
+	retry->transform.position = { 1.0f, 0.2f };
+
+	goToSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOARD));
+	// オブジェクトをリストに登録
+	Objects.push_back(goToSelect);
+	goToSelect->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
+	goToSelect->transform.position = { 1.0f, -0.1f };
+
+	goToTitle = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOARD));
+	// オブジェクトをリストに登録
+	Objects.push_back(goToTitle);
+	goToTitle->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
+	goToTitle->transform.position = { 1.0f, -0.4f };
+
 	// カーソルの実体化と初期化
 	cursor = new CCursor(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
 	// オブジェクトをリストに登録
 	Objects.push_back(cursor);
 	cursor->transform.scale = { 186.0f * 0.0017f, 54.0f * 0.0017f, 1.0f };
-	cursor->transform.position = { 0.524f, 0.2f };
+	cursor->transform.position = { 0.524f, 0.2f, -0.2f };
 	cursor->transform.rotation = -30.0f;
 	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
-
-	retry = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
-	// オブジェクトをリストに登録
-	Objects.push_back(retry);
-	retry->transform * 0.5f;
-	retry->transform.position = { 0.9f, 0.2f };
-
-	goToSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
-	// オブジェクトをリストに登録
-	Objects.push_back(goToSelect);
-	goToSelect->transform * 0.5f;
-	goToSelect->transform.position = { 0.9f, -0.1f };
-
-	goToTitle = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE));
-	// オブジェクトをリストに登録
-	Objects.push_back(goToTitle);
-	goToTitle->transform * 0.5f;
-	goToTitle->transform.position = { 0.9f, -0.4f };
 }
 
 ResultScene::~ResultScene()

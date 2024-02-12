@@ -49,6 +49,14 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	TIMER,
 	SCORE_BOARD,
 	ENEMY,
+	ENEMY_R,
+	BOARD,
+	PLAY,
+	OPTION,
+	EXIT,
+	RULER,
+	BOOK_OBJ1,
+	BOOK_OBJ2,
 };
 
 // CTextureLoaderクラス
@@ -69,7 +77,7 @@ private:
 		L"asset/title.png",
 		L"asset/tile.png",
 		L"asset/bg.png",
-		L"asset/Playeranim5.png",
+		L"asset/Playeranim.png",
 		L"asset/book.png",
 		L"asset/stringBg.png",
 		L"asset/GameOver.png",
@@ -81,7 +89,15 @@ private:
 		L"asset/heart_half_right.png",
 		L"asset/timer.png",
 		L"asset/scoreBoard.png",
-		L"asset/Tako.jpg",
+		L"asset/enemy.png",
+		L"asset/enemy_reverse.png",
+		L"asset/waku.png",
+		L"asset/play.png",
+		L"asset/option.png",
+		L"asset/exit.png",
+		L"asset/ruler.png",
+		L"asset/bookObj1.png",
+		L"asset/bookObj2.png",
 	};
 
 	/* メソッド */

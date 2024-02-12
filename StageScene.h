@@ -10,7 +10,7 @@ private:
 	// ‚Ü‚Æ‚ß‚ÄUpdate‚ÆDraw‚ğs‚¤‚½‚ß‚Ég—p
 	std::list<CGameObject*>Objects;
 
-	CPlayer* player;
+	CGameObject* player;
 
 	ID3D11Buffer* vertexBufferCharacter;
 
