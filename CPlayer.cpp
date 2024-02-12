@@ -4,18 +4,20 @@
 #include "CSceneManager.h"
 
 // コントローラーを使う場合はtrueを指定
-#define USE_CONTROLLER (true)
+#define USE_CONTROLLER (false)
 
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
 	// 初期スピード設定
-	SetMoveSpeed(0.03f);
+	SetMoveSpeed(0.02f);
 	smoothing = new CSmoothing();
 	// 重力を初期値とする
 	velocity.y = gravity;
 
 	nockf = false;
+
+	nockT = false;
 
 	test = true;
 }
@@ -35,79 +37,90 @@ void CPlayer::PlayerInput()
 	switch (State)
 	{
 	case PState::NORMAL: //通常状態
+		if (anim->GetIsAnimation() == false)
+		{
 			// 前のフレームでめり込んだ方向でないなら移動量を適応する
-		if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
-			(input_stickX < 0.0f && prevFrameCorrect.x != 1))
-		{
-			dir.x = input_stickX;
-		}
-		// 前のフレームでめり込んだ方向に移動しようとしてるなら移動量を適応しない
-		else
-		{
-			dir.x = 0;
-		}
-		if (input_stickX < 0.0f)
-		{
-			SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
-		}
-		else if (input_stickX > 0.0f)
-		{
-			SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
-		}
+			if ((input_stickX > 0.0f && prevFrameCorrect.x != -1) ||
+				(input_stickX < 0.0f && prevFrameCorrect.x != 1))
+			{
+				dir.x = input_stickX;
+			}
+			// 前のフレームでめり込んだ方向に移動しようとしてるなら移動量を適応しない
+			else
+			{
+				dir.x = 0;
+			}
+			if (input_stickX < 0.0f)
+			{
+				SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
+			}
+			else if (input_stickX > 0.0f)
+			{
+				SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
+			}
 
-		if (input_stickX == 0 && !anim->GetIsAnimation())
-		{
-			SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
-		}
-		if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
-		{
-			SetState(PState::FALL);// 倒れる
-			SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
-			anim->SetIsAnimation(true);
-			isWindUp = true;	//	下からの風を受ける
-		}
-		// Aボタン入力でとりあえずのジャンプ操作
-		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
-		{
-			isJump = true;
-			/*	this->transform.position.y = -0.2f;*/
+			if (input_stickX == 0)
+			{
+				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+			}
+			if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
+			{
+				SetState(PState::FALL);// 倒れる
+				SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
+				anim->SetIsAnimation(true);
+				isWindUp = true;	//	下からの風を受ける
+			}
+			// Aボタン入力でとりあえずのジャンプ操作
+			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
+			{
+				isJump = true;
+				/*	this->transform.position.y = -0.2f;*/
+			}
 		}
 		break;
 	case PState::FALL:// 倒れた状態
-		if ((input_stickY > 0.0f) && (old_input_stickY >= 0.0f))
+		if (anim->GetIsAnimation() == false)
 		{
-			SetState(PState::NORMAL);// 通常状態に戻す
-			SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
-			anim->SetIsAnimation(true);
-			isWindUp = false;	//	下からの風を受けない
-			isWindRight = false;	//	風を受けない
-			isWindLeft = false;
-		}
-		if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
-		{
-			SetState(PState::BREAKLEFT);// 左に折れる
-			SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
-			anim->SetIsAnimation(true);
-			isWindRight = true;	//	風を受ける
-			isWindUp = false;	//	上向きの風を受けない
-		}
-		if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
-		{
-			SetState(PState::BREAKRIGHT);// 右に折れる
-			SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
-			anim->SetIsAnimation(true);
-			isWindUp = false;	//	上向きの風を受けない
-			isWindLeft = true;
-		}
-		// Bボタン入力でとりあえずのジャンプ操作
-		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
-		{
-			isJump = true;
-			/*	this->transform.position.y = -0.2f;*/
+			if ((input_stickY > 0.0f) && (old_input_stickY >= 0.0f))
+			{
+				SetState(PState::NORMAL);// 通常状態に戻す
+				SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
+				anim->SetIsAnimation(true);
+				isWindUp = false;	//	下からの風を受けない
+				isWindRight = false;	//	風を受けない
+				isWindLeft = false;
+			}
+			if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
+			{
+				SetState(PState::BREAKLEFT);// 左に折れる
+				SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
+				anim->SetIsAnimation(true);
+				isWindRight = true;	//	風を受ける
+				isWindUp = false;	//	上向きの風を受けない
+			}
+			if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
+			{
+				SetState(PState::BREAKRIGHT);// 右に折れる
+				SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
+				anim->SetIsAnimation(true);
+				isWindUp = false;	//	上向きの風を受けない
+				isWindLeft = true;
+			}
+			// Bボタン入力でとりあえずのジャンプ操作
+			if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A))
+			{
+				isJump = true;
+				/*	this->transform.position.y = -0.2f;*/
 
-			//ジャンプアニメーション
-			SetAnimationPattern(ANIM_PATTERN::JAMP);
-			anim->SetIsAnimation(true);
+				//ジャンプアニメーション
+				SetAnimationPattern(ANIM_PATTERN::JAMP);
+				anim->SetIsAnimation(true);
+			}
+
+			if (prevFrameCorrect.y == 1 && !anim->GetIsAnimation())
+			{
+				SetAnimationPattern(ANIM_PATTERN::FALL);
+			}
 		}
 		break;
 	case PState::BREAKLEFT:// 左に折れた状態
@@ -141,7 +154,6 @@ void CPlayer::PlayerInput()
 	}
 	old_input_stickX= input_stickX;
 	old_input_stickY= input_stickY;
-
 #else
 	switch (State)
 	{
@@ -394,6 +406,22 @@ void CPlayer::ReceiveWind()
 
 void CPlayer::Update()
 {
+	if (this->materialDiffuse.w != 1.0f && nockT == false)
+	{
+		this->materialDiffuse.w = 1.0f;
+	}
+
+	if (this->GetState() == PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.2f;
+	}
+	else if (this->GetState() != PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.1f;
+	}
+	
+
+
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
 	{
@@ -415,6 +443,7 @@ void CPlayer::Update()
 
 	// 前フレームの補正方向を初期化
 	prevFrameCorrect = { 0 };
+	prevFrameCorrectY = { 0 };
 
 	// 単位ベクトル化(矢印を１にする) = 正規化
 	DirectX::XMVECTOR v = DirectX::XMLoadFloat3(&dir);	// ベクトル計算用の型に入れる
@@ -456,6 +485,36 @@ void CPlayer::Update()
 			flameCounter = 0.0f;
 		}
 		//---------------------------------------------------------//
+	}
+
+	if (nockT == true)
+	{
+
+		if (this->GetState() != PState::NORMAL)
+		{
+			this->SetState(PState::NORMAL);
+			SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
+			anim->SetIsAnimation(true);
+		}
+
+		flameCounter++;
+		//---------------------------------------------------------//
+		//プレイヤーを点滅させる
+		if (this->materialDiffuse.w == 1.0f)
+		{
+			this->materialDiffuse.w = 0.2f;
+		}
+		else if (this->materialDiffuse.w == 0.2f)
+		{
+			this->materialDiffuse.w = 1.0f;
+		}
+		//-----------------------------------------------------------//
+		//プレイヤーが入力できない時間を作ってる
+		if (flameCounter == 20)
+		{
+			nockT = false;
+			flameCounter = 0.0f;
+		}
 	}
 
 	// ベクトルに速度をかけて位置を変更
@@ -500,7 +559,8 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_RIGHT:
-				if (isWindRight)
+				//	アニメーションが終わったら……
+				if (anim->GetIsAnimation() == false && isWindRight)
 				{
 					// 右向きの風力を取得
 					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
@@ -512,7 +572,7 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_LEFT:
-				if (isWindLeft)
+				if (anim->GetIsAnimation() == false && isWindLeft)
 				{
 					// 右向きの風力を取得
 					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
@@ -524,44 +584,68 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::WIND_UP:
-				if (isWindUp)
+				if (!anim->GetIsAnimation() && isWindUp)
 				{
+					SetAnimationPattern(ANIM_PATTERN::FLAYING);
 					// 上向きの風力を取得
 					receiveWindPower.y = ((CWind*)(*it))->GetWindStrength();
 					// 風を受けた方向と向き保存
 					dir.y = 1.0f;
 					dir_wind.y = 1.0f;
+
+					//	上に上がってる時に「WIND_RIGHT」があったら
+					//	trueにしてそのまま飛んでいく
+					isWindRight = true;
+					isWindLeft = true;
 				}
 
 				if (prevFrameCorrect.y == 1)
 					ANIM_STOP;
 				break;
-
 			case OBJECT_TYPE::DAMAGE_TILE:
+				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 				// オブジェクトの位置とコライダーの中心を合わせる
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
-
 				//プレイヤーのノックバックの処理
 				if (!nockf)
 				{
 					//吹っ飛ばす計算式（右）
-					if (0.0f > dir.x)
+					if (prevFrameCorrect.x == 1.0f)
 					{
 						moveF = this->transform.position.x + 0.5f;
+						/*nockT = true;*/
 					}
 					//吹っ飛ばす計算式（左）
-					else if (0.0f < dir.x)
+					if (prevFrameCorrect.x == -1.0f )
 					{
 						moveF = this->transform.position.x - 0.5f;
 					}
-					//追従カメラの初期化
+					////追従カメラの初期化
 					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
 					nockf = true;
 				}
-
 				break;
-
+			case OBJECT_TYPE::DAMAGE_TILEY:
+				// コライダーの位置を補正し、補正した方向を受け取る
+				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+				// 天井にぶつかっていたならジャンプ力を0にする
+				if (prevFrameCorrectY.y == -1)
+				{
+					jumpStrength = 0;	// ジャンプ力を0にする
+				}
+				// 重力によって地面に
+				if (prevFrameCorrectY.y == 1 && nockT == false)
+				{
+					velocity.y = 0.0f;				// 速度Yを0に戻す
+					jumpStrength = ini_jumpStrength;
+					isJump = false;
+					nockT = true;
+				}
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+				break;
 			default:
 				break;
 			}

@@ -43,14 +43,17 @@ private:
     CSmoothing* smoothing;
 
     bool nockf = false;
+    bool nockT = false;
     float moveF = 0.0f;
     float flameCounter = 0.0f;
+    float flameCounterMK2 = 0.0f;
     
     // プレイヤーの状態
     PState State = PState::NORMAL;
 
     // 前フレームされた衝突補正の方向
     CORRECT_DIR prevFrameCorrect = { 0 };
+    CORRECT_DIR prevFrameCorrectY = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
 

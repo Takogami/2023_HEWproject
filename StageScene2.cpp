@@ -23,7 +23,7 @@ StageScene2::StageScene2()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
 	// アニメーションの初期化
-	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.1f);
+	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
 	// 背景の設定
 	bg->SetUseingCamera(Cam);

@@ -34,6 +34,7 @@ enum class OBJECT_TYPE
 	WIND_UP,	// 風オブジェクト（上向き）
 	DAMAGE_TILE,//ダメージを受ける床
 	ENEMY,		// 敵オブジェクト
+	DAMAGE_TILEY//縦専用
 };
 
 //CGameObjectクラス
