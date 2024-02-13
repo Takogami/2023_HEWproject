@@ -53,6 +53,8 @@ protected:
 	CAnimation* anim;					//アニメーションクラス
 	bool anim_switch = false;			//アニメーションの行うかのフラグ
 
+	bool active = true;					//オブジェクトのアクティブ状態
+
 	OBJECT_TYPE objectType = OBJECT_TYPE::NORMAL; // 1: 壁や床, 2: 敵 など
 
 public:
@@ -98,5 +100,8 @@ public:
 	void SetObjectType(OBJECT_TYPE _objectType);
 	// ゲームオブジェクトの種類を取得
 	OBJECT_TYPE GetObjectType() const;
+
+	// ゲームオブジェクトのアクティブ・非アクティブを設定
+	void SetActive(bool isActive) { active = isActive; }
 };
 

@@ -30,7 +30,6 @@ typedef struct
 enum class TEX_ID	// テクスチャ識別子列挙型
 {
 	BLOCK,
-	STAGE,
 	NUM,
 	WINDRIGHT_POS,	//	風の起こる位置（右向き）
 	TITLE,
@@ -49,14 +48,17 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	TIMER,
 	SCORE_BOARD,
 	ENEMY,
-	ENEMY_R,
 	BOARD,
 	PLAY,
-	OPTION,
 	EXIT,
 	RULER,
 	BOOK_OBJ1,
 	BOOK_OBJ2,
+	RETRY,
+	STAGE_SELECT,
+	GOTO_TITLE,
+	CLEAR,
+	CLEAR_STRING,
 };
 
 // CTextureLoaderクラス
@@ -71,7 +73,6 @@ private:
 	std::list<const wchar_t*> pathList =	// パスのリスト
 	{
 		L"asset/block.png",
-		L"asset/Madoka_Magika_(Logo).png",
 		L"asset/suuji.png",
 		L"asset/Fade.png",	//	試しでテクスチャ読み込み(風の右向き)
 		L"asset/title.png",
@@ -90,14 +91,17 @@ private:
 		L"asset/timer.png",
 		L"asset/scoreBoard.png",
 		L"asset/enemy.png",
-		L"asset/enemy_reverse.png",
 		L"asset/waku.png",
 		L"asset/play.png",
-		L"asset/option.png",
 		L"asset/exit.png",
 		L"asset/ruler.png",
 		L"asset/bookObj1.png",
 		L"asset/bookObj2.png",
+		L"asset/retry.png",
+		L"asset/selectStage.png",
+		L"asset/goToTitle.png",
+		L"asset/clear.png",
+		L"asset/clearString.png",
 	};
 
 	/* メソッド */

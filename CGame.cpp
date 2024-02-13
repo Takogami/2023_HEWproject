@@ -1,5 +1,6 @@
 /* インクルード */
 #include "CGame.h"
+#include "xa2.h"
 
 //コンストラクタ
 CGame::CGame()
@@ -13,6 +14,13 @@ CGame::CGame()
 
 	// SceneManagerの唯一のインスタンスを生成
 	SceneManager = CSceneManager::GetInstance();
+
+	HRESULT hr;
+	hr = XA_Initialize();
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, "サウンド読み込みに失敗", "エラー", MB_OK | MB_ICONERROR);
+	}
 }
 
 void CGame::Update()

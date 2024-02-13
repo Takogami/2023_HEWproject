@@ -29,6 +29,7 @@ enum class ANIM_PATTERN
 	BOOK,		//–{‚Ì“®‚«
 	BOOK_REVERSE,
 	ENEMY_MOVE,
+	ENEMY_MOVE_R,
 };
 
 class CAnimation
@@ -80,7 +81,8 @@ private:
 
 		{ 0, 1, 2, 3, 4, 0, ANIM_STOP},	//–{‚Ì“®‚«
 		{ 0, 4, 3, 2, 1, 0, ANIM_STOP},	//–{‹t
-		{ 0, 1, ANIM_LOOP},
+		{ 0, 0, 0, 1, 2, 1, ANIM_LOOP},
+		{ 5, 5, 5, 4, 3, 4, ANIM_LOOP},
 
 	};
 

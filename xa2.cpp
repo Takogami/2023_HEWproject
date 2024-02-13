@@ -6,35 +6,9 @@
 
 #include "xa2.h"
 
-// パラメータ構造体
-typedef struct
+PARAM sound_param[SOUND_LABEL_MAX] =
 {
-	LPCSTR filename;	// 音声ファイルまでのパスを設定
-	bool bLoop;			// trueでループ。通常BGMはture、SEはfalse。
-} PARAM;
-
-PARAM g_param[SOUND_LABEL_MAX] =
-{
-	{"asset/SE/fade.wav", false },
-	{"asset/BGM/title.wav", true },	// BGM（ループさせるのでtrue設定）
-	{"asset/BGM/stage.wav", true },
-	{"asset/SE/dorumroll.wav", true },
-	{"asset/SE/result.wav", false },
-	{"asset/SE/dondon.wav", false },
-	{"asset/SE/clear.wav", false },
-	{"asset/SE/cursor.wav", false },
-	{"asset/SE/press.wav", false },
-	{"asset/SE/select.wav", false },
-	{"asset/SE/beep.wav", false },
-	{"asset/SE/hit.wav", false },
-	{"asset/SE/hammer.wav", false },
-	{"asset/SE/black.wav", false },
-	{"asset/SE/clean.wav", false },
-	{"asset/SE/noHit.wav", false },
-	{"asset/SE/start.wav", false },
-	{"asset/SE/countDown.wav", false },
-	{"asset/SE/end.wav", false },
-	{"asset/SE/event.wav", false },
+	{"asset/SE/drumroll.wav", false },
 };
 
 #ifdef _XBOX //Big-Endian
@@ -110,7 +84,7 @@ HRESULT XA_Initialize()
 		memset( &g_wfx[i] , 0 , sizeof( WAVEFORMATEXTENSIBLE ) );
 		memset( &g_buffer[i] , 0 , sizeof( XAUDIO2_BUFFER ) );
 	
-		hFile = CreateFileA( g_param[i].filename , GENERIC_READ , FILE_SHARE_READ , NULL ,
+		hFile = CreateFileA( sound_param[i].filename , GENERIC_READ , FILE_SHARE_READ , NULL ,
 							OPEN_EXISTING , 0 , NULL );
 		if ( hFile == INVALID_HANDLE_VALUE ){
 			return HRESULT_FROM_WIN32( GetLastError() );
@@ -138,7 +112,7 @@ HRESULT XA_Initialize()
 		g_buffer[i].AudioBytes = dwChunkSize;
 		g_buffer[i].pAudioData = g_DataBuffer[i];
 		g_buffer[i].Flags = XAUDIO2_END_OF_STREAM;
-		if(g_param[i].bLoop)
+		if(sound_param[i].bLoop)
 			g_buffer[i].LoopCount = XAUDIO2_LOOP_INFINITE;
 		else
 			g_buffer[i].LoopCount = 0;

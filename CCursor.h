@@ -1,25 +1,31 @@
 #pragma once
 #include "CGameObject.h"
 
-//タイトルからシーン移動できる数
-#define SCENE_COUNT 3
-
 class CEase;
 
-//タイトルのカーソルの位置の列挙型
-enum class CCursor_Point
+//リザルトシーンのカーソル
+enum class CCursor_PointResult
 {
-    STAGE,
-    OPTION,
-    EXIT,
+    RETRY,
+    SELECT,
+    TITLE,
+    INACTIVE,
 };
 
 //別名で関連付ける
-enum class CCursor_PointResult
+enum class CCursor_Point
 {
-    RETRY = (int)CCursor_Point::STAGE,
-    SELECT = (int)CCursor_Point::OPTION,
-    TITLE = (int)CCursor_Point::EXIT,
+    STAGE = (int)CCursor_PointResult::RETRY,
+    EXIT = (int)CCursor_PointResult::SELECT,
+    INACTIVE,
+};
+
+//別名で関連付ける
+enum class CCursor_PointClear
+{
+    SELECT = (int)CCursor_PointResult::RETRY,
+    TITLE = (int)CCursor_PointResult::SELECT,
+    INACTIVE,
 };
 
 class CCursor :
@@ -29,6 +35,9 @@ private:
     /* メンバ変数 */
 
     int scene_count = 0;
+
+    // 遷移できるシーン数
+    int sceneNum = 3;
 
     // 初期位置
     FLOAT_XY ini_position = { 0.0f, 0.0f };
@@ -47,8 +56,8 @@ public:
     void Draw() override;
 
     // カーソルの初期化
-    // 引数1 : 初期位置 引数2 : 動く距離
-    void Init(FLOAT_XY ini_pos, float move = 0.3f);
+    // 引数1 : 初期位置 引数2 : 遷移できるシーン数 引数3 : 動く距離
+    void Init(FLOAT_XY ini_pos, int scene = 3, float move = 0.3f);
 
     //タイトル画面でのポイント位置を取得
     CCursor_Point GetCursorPoint()const;

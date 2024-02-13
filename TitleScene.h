@@ -17,7 +17,6 @@ private:
 	// オブジェクト
 	CCursor* cursor;
 	CGameObject* goToSelect;
-	CGameObject* goToOption;
 	CGameObject* exitGame;
 	CGameObject* bg;
 	CGameObject* Title;

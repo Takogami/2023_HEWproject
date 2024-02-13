@@ -58,6 +58,12 @@ void CGameObject::Update()
 {
 	//全てのオブジェクト共通のUpdate処理
 
+	// オブジェクトがアクティブでないなら更新は行わない
+	if (!active)
+	{
+		return;
+	}
+
 	//オブジェクトの位置とコライダーの中心を合わせる
 	this->Bcol.centerX = this->transform.position.x;
 	this->Bcol.centerY = this->transform.position.y;
@@ -78,6 +84,12 @@ void CGameObject::Update()
 //Draw
 void CGameObject::Draw()
 {
+	// オブジェクトがアクティブでないなら描画は行わない
+	if (!active)
+	{
+		return;
+	}
+
 	//コンストバッファの作成
 	ConstBuffer cb;
 

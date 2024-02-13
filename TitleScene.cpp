@@ -16,17 +16,17 @@ TitleScene::TitleScene()
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	bg->transform.position.z = 0.4f;
 
-	enemyObj = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 0.5f ,1.0f });
+	enemyObj = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 0.333333f ,0.5f });
 	Objects.push_back(enemyObj);
 	enemyObj->transform.position = { 3.5f, 0.2f, 0.3f };
-	enemyObj->transform.scale = { 809.0f * 0.0008f, 573.0f * 0.0008f, 1.0f };
-	enemyObj->InitAnimParameter(true, 2, 1, ANIM_PATTERN::ENEMY_MOVE, 0.08f);
+	enemyObj->transform.scale = { 794.0f * 0.0008f, 793.0f * 0.0008f, 1.0f };
+	enemyObj->InitAnimParameter(true, 3, 2, ANIM_PATTERN::ENEMY_MOVE, 0.2f);
 
-	enemyObj_reverse = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY_R), { 0.5f ,1.0f });
+	enemyObj_reverse = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 0.333333f ,0.5f });
 	Objects.push_back(enemyObj_reverse);
 	enemyObj_reverse->transform.position = { -3.5f, -0.5f, 0.3f };
-	enemyObj_reverse->transform.scale = { 809.0f * 0.0008f, 573.0f * 0.0008f, 1.0f };
-	enemyObj_reverse->InitAnimParameter(true, 2, 1, ANIM_PATTERN::ENEMY_MOVE, 0.08f);
+	enemyObj_reverse->transform.scale = { 794.0f * 0.0008f, 793.0f * 0.0008f, 1.0f };
+	enemyObj_reverse->InitAnimParameter(true, 3, 2, ANIM_PATTERN::ENEMY_MOVE_R, 0.2f);
 
 	playerObj = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	// オブジェクトをリストに登録
@@ -58,21 +58,14 @@ TitleScene::TitleScene()
 	// オブジェクトをリストに登録
 	Objects.push_back(goToSelect);
 	goToSelect->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
-	goToSelect->transform.position = { 0.0f, -0.3f};
-
-	//プレイヤーの実体化と初期化
-	goToOption = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::OPTION));
-	// オブジェクトをリストに登録
-	Objects.push_back(goToOption);
-	goToOption->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
-	goToOption->transform.position = { 0.0f, -0.6f};
+	goToSelect->transform.position = { 0.0f, -0.4f};
 
 	//プレイヤーの実体化と初期化
 	exitGame = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::EXIT));
 	// オブジェクトをリストに登録
 	Objects.push_back(exitGame);
 	exitGame->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
-	exitGame->transform.position = { 0.0f, -0.9f};
+	exitGame->transform.position = { 0.0f, -0.7f};
 
 	// カーソルの実体化と初期化
 	cursor = new CCursor(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
@@ -80,9 +73,8 @@ TitleScene::TitleScene()
 	Objects.push_back(cursor);
 	cursor->transform.scale = { 186.0f * 0.0017f, 54.0f * 0.0017f, 1.0f };
 	cursor->transform.rotation = -30.0f;
-	cursor->transform.position = { -0.5f, -0.3f, -0.1f };
-	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y });
-
+	cursor->transform.position = { -0.5f, -0.4f, -0.1f };
+	cursor->Init({ cursor->transform.position.x, cursor->transform.position.y }, 2);
 	// イージングの実体化
 	titleEase = new CEase();
 	titleEase->Init(&Title->transform.position.y, 0.5f, 1.0f, 0, EASE::easeOutBounce);
@@ -139,13 +131,9 @@ void TitleScene::Update()
 			selectEaseY->Init(&goToSelect->transform.scale.y, 447.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			break;
 
-		case CCursor_Point::OPTION:
-			// オプションの場合の処理を書く
-			break;
-
 		case CCursor_Point::EXIT:
+			// オプションの場合の処理を書く
 			PostQuitMessage(0);
-			// 終了の場合の処理を書く
 			break;
 
 		default:
@@ -178,17 +166,6 @@ void TitleScene::Update()
 			goToSelect->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
 		}
 		goToSelect->materialDiffuse.w = 1.0f;
-		goToOption->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
-		goToOption->materialDiffuse.w = 0.5f;
-		exitGame->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
-		exitGame->materialDiffuse.w = 0.5f;
-		break;
-
-	case CCursor_Point::OPTION:
-		goToOption->transform.scale = { 1100.0f * 0.0007f, 447.0f * 0.0007f, 1.0f };
-		goToOption->materialDiffuse.w = 1.0f;
-		goToSelect->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
-		goToSelect->materialDiffuse.w = 0.5f;
 		exitGame->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
 		exitGame->materialDiffuse.w = 0.5f;
 		break;
@@ -198,8 +175,6 @@ void TitleScene::Update()
 		exitGame->materialDiffuse.w = 1.0f;
 		goToSelect->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
 		goToSelect->materialDiffuse.w = 0.5f;
-		goToOption->transform.scale = { 1100.0f * 0.0006f, 447.0f * 0.0006f, 1.0f };
-		goToOption->materialDiffuse.w = 0.5f;
 		break;
 
 	default:

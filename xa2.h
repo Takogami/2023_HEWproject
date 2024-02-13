@@ -12,28 +12,16 @@
 // サウンドファイル
 typedef enum
 {
-	SOUND_LABEL_FADE = 0,
-	SOUND_LABEL_TITLE,
-	SOUND_LABEL_STAGE,
-	SOUND_LABEL_DORUM,
-	SOUND_LABEL_RESULT,
-	SOUND_LABEL_DONDON,
-	SOUND_LABEL_CLEAR,
-	SOUND_LABEL_CURSOR,
-	SOUND_LABEL_PRESS,
-	SOUND_LABEL_SELECT,
-	SOUND_LABEL_BEEP,
-	SOUND_LABEL_HIT,
-	SOUND_LABEL_HAMMER,
-	SOUND_LABEL_BLACK,
-	SOUND_LABEL_CLEAN,
-	SOUND_LABEL_NOHIT,
-	SOUND_LABEL_START,
-	SOUND_LABEL_COUNT,
-	SOUND_LABEL_END,
-	SOUND_LABEL_EVENT,
+	SOUND_LABEL_TEST = 0,
 	SOUND_LABEL_MAX,
 } SOUND_LABEL;
+
+// パラメータ構造体
+typedef struct
+{
+	LPCSTR filename;	// 音声ファイルまでのパスを設定
+	bool bLoop;			// trueでループ。通常BGMはture、SEはfalse。
+} PARAM;
 
 //*****************************************************************************
 // プロトタイプ宣言
