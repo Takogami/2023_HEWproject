@@ -29,6 +29,10 @@ enum class ANIM_PATTERN
 	BOOK,		//本の動き
 	BOOK_REVERSE,
 	ENEMY_MOVE,
+
+	WIND_UP,	//	扇風機（上）
+	WIND_LEFT,	//	扇風機（左）
+	WIND_RIGHT,	//	扇風機（右）
 };
 
 class CAnimation
@@ -82,6 +86,10 @@ private:
 		{ 0, 4, 3, 2, 1, 0, ANIM_STOP},	//本逆
 		{ 0, 1, ANIM_LOOP},
 
+		//	扇風機アニメーション
+		{ 0, 1, ANIM_LOOP },	//	上
+		{ 2, 3, ANIM_LOOP },	//	左
+		{ 4, 5, ANIM_LOOP },	//	右
 	};
 
 	// アニメーションスピード

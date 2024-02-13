@@ -24,6 +24,7 @@ StageScene4::StageScene4()
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
 	player->transform.position.x += 0.5f;
+	player->transform.position.y += 0.5f;
 
 	// ”wŒi‚ÌÝ’è
 	bg->SetUseingCamera(Cam);
@@ -95,6 +96,7 @@ void StageScene4::Update()
 		(*it)->Update();
 	}
 
+	UpdateTerrain();
 	camSmoothX->Update();
 	camSmoothY->Update();
 	Cam->Update();

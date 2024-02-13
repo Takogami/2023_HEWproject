@@ -92,6 +92,7 @@ void StageScene2::Update()
 		(*it)->Update();
 	}
 
+	UpdateTerrain();
 	camSmooth->Update();
 	Cam->Update();
 
@@ -101,14 +102,14 @@ void StageScene2::Update()
 
 void StageScene2::Draw()
 {
-	// 地形の描画
-	DrawTerrain();
-
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
 	}
+
+	// 地形の描画
+	DrawTerrain();
 
 	// 文字列の描画
 	drawStringTest->Draw();

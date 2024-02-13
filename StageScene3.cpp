@@ -93,6 +93,7 @@ void StageScene3::Update()
 		(*it)->Update();
 	}
 
+	UpdateTerrain();
 	camSmoothX->Update();
 	camSmoothY->Update();
 	Cam->Update();

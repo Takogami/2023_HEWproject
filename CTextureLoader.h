@@ -32,7 +32,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	BLOCK,
 	STAGE,
 	NUM,
-	WINDRIGHT_POS,	//	風の起こる位置（右向き）
+	FADE,	//	風の起こる位置（右向き）
 	TITLE,
 	TILE,
 	BG,
@@ -57,6 +57,8 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	RULER,
 	BOOK_OBJ1,
 	BOOK_OBJ2,
+	WIND,	//	扇風機テクスチャ
+	
 };
 
 // CTextureLoaderクラス
@@ -73,7 +75,7 @@ private:
 		L"asset/block.png",
 		L"asset/Madoka_Magika_(Logo).png",
 		L"asset/suuji.png",
-		L"asset/Fade.png",	//	試しでテクスチャ読み込み(風の右向き)
+		L"asset/Fade.png",	
 		L"asset/title.png",
 		L"asset/tile.png",
 		L"asset/bg.png",
@@ -98,6 +100,7 @@ private:
 		L"asset/ruler.png",
 		L"asset/bookObj1.png",
 		L"asset/bookObj2.png",
+		L"asset/Senpuuki.png",	//	扇風機テクスチャ
 	};
 
 	/* メソッド */
