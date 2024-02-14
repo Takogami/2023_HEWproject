@@ -112,6 +112,8 @@ void StageScene2::Update()
 	camSmooth->Update();
 	Cam->Update();
 
+	CScene::UpdateTerrain();
+
 	// ”wŒi’Ç]
 	bg->transform.position.x = Cam->cameraPos.x;
 

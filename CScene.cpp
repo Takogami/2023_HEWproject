@@ -75,7 +75,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 30)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS), { 1.0f, 1.0f }, OBJECT_TYPE::WIND_RIGHTS));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.33f }, OBJECT_TYPE::WIND_RIGHTS));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -86,6 +86,9 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+
+				//	アニメーション初期化
+				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_RIGHT, 0.3f);
 			}
 
 			//	風が起きるオブジェクト生成（上向き）
@@ -164,7 +167,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 40)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS), { 1.0f, 1.0f }, OBJECT_TYPE::WIND_LEFTS));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.33f }, OBJECT_TYPE::WIND_LEFTS));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -175,6 +178,9 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+
+				//	アニメーション初期化
+				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_LEFT, 0.3f);
 			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す

@@ -393,6 +393,13 @@ void ResultScene::UpdateGameOver()
 				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_2);
 				break;
 
+			case SCENE_ID::STAGE_3:
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3);
+				break;
+
+			case SCENE_ID::STAGE_4:
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_4);
+				break;
 			default:
 				break;
 			}
