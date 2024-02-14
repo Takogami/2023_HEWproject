@@ -125,7 +125,7 @@ void TitleScene::Update()
 		{
 		case CCursor_Point::STAGE:
 			// ステージの場合の処理を書く
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 			selectFlg = true;
 			selectEaseX->Init(&goToSelect->transform.scale.x, 1100.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectEaseY->Init(&goToSelect->transform.scale.y, 447.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);

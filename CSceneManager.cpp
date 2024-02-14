@@ -16,7 +16,13 @@ CSceneManager::CSceneManager()
 	// フェード用オブジェクトの実体化
 	fade = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
 	fade->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
-	fade->transform.position.z = -0.5f;
+	fade->transform.position.z = -0.49f;
+
+	fade_eraser = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE_ANIM), { 0.04761905f, 0.5f });
+	fade_eraser->transform.scale = { 1920.0f * 0.0022f, 1080.0f * 0.0022f, 1.0f };
+	fade_eraser->transform.position.z = -0.5f;
+	fade_eraser->InitAnimParameter(false, 21, 2, ANIM_PATTERN::FADEOUT_ANIM, 0.32f);
+	fade_eraser->SetActive(false);
 }
 
 // デストラクタ
@@ -25,6 +31,7 @@ CSceneManager::~CSceneManager()
 	// フェード用の頂点バッファとオブジェクトの解放
 	SAFE_RELEASE(vertexBuffer);
 	delete fade;
+	delete fade_eraser;
 
 	// 各シーンの解放
 	RELEASE_SCENE(title);
@@ -78,25 +85,61 @@ void CSceneManager::Update()
 	// フェードイン
 	if (fadeState == FADE_STATE::FADE_IN)
 	{
-		// フェード用ポリゴンをだんだん透明に
-		fade->materialDiffuse.w -= 0.01f;
-		// フェード用ポリゴンが完全に透明なら
-		if (fade->materialDiffuse.w <= 0.0f)
+		if (fadeType == FADE_TYPE::ERASER)
 		{
-			// フェードの状態をフェード無し状態に設定
-			fadeState = FADE_STATE::NO_FADE;
+			// 消しゴムフェードインが開始したので計測開始
+			fade_eraser_counter++;
+			// 指定のフレーム数が経過しているなら
+			if (fade_eraser_counter > 80)
+			{
+				// フェードの状態をフェード無し状態に設定
+				fadeState = FADE_STATE::NO_FADE;
+				// カウンターを0に戻す
+				fade_eraser_counter = 0;
+			}
+		}
+		else
+		{
+			// フェード用ポリゴンをだんだん透明に
+			fade->materialDiffuse.w -= 0.01f;
+			// フェード用ポリゴンが完全に透明なら
+			if (fade->materialDiffuse.w <= 0.0f)
+			{
+				// フェードの状態をフェード無し状態に設定
+				fadeState = FADE_STATE::NO_FADE;
+			}
 		}
 	}
 	// フェードアウト
 	else if (fadeState == FADE_STATE::FADE_OUT)
 	{
-		// フェード用ポリゴンをだんだん不透明に
-		fade->materialDiffuse.w += 0.01f;
-		// フェード用ポリゴンが完全に不透明なら
-		if (fade->materialDiffuse.w >= 1.0f)
+		if (fadeType == FADE_TYPE::ERASER)
 		{
-			// 設定されていた次のシーンに切り替える
-			ChangeScene(NewScene);
+			fade_eraser->SetActive(true);
+			fade_eraser->PlayAnimation();
+			// 消しゴムフェードアウトが開始したので計測開始
+			fade_eraser_counter++;
+			// 指定のフレーム数が経過しているなら
+			if (fade_eraser_counter > 80)
+			{
+				// 設定されていた次のシーンに切り替える
+				ChangeScene(NewScene);
+				// 消しゴムのフェードインのアニメーションに切り変える
+				fade_eraser->SetAnimationPattern(ANIM_PATTERN::FADEIN_ANIM);
+				// カウンターを0に戻す
+				fade_eraser_counter = 0;
+			}
+		}
+		else
+		{
+			// フェード用ポリゴンをだんだん不透明に
+			fade->materialDiffuse.w += 0.01f;
+			// フェード用ポリゴンが完全に不透明なら
+			if (fade->materialDiffuse.w >= 1.0f)
+			{
+				// 設定されていた次のシーンに切り替える
+				ChangeScene(NewScene);
+			}
 		}
 	}
 
@@ -151,17 +194,20 @@ void CSceneManager::Update()
 
 	// フェード用ポリゴンの描画
 	fade->Draw();
+	fade_eraser->Update();
+	fade_eraser->Draw();
 
 	// 画面の更新
 	D3D_UpdateScreen();
 }
 
-void CSceneManager::ChangeScene(SCENE_ID _inScene)
+void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 {
 	if (NewScene != _inScene)
 	{
 		NewScene = _inScene;
 		fadeState = FADE_STATE::FADE_OUT;
+		this->fadeType = fadeType;
 		// リトライ時に読み込むシーンとして現在のシーンを保存する
 		retryLoadScene = NowScene;
 	}

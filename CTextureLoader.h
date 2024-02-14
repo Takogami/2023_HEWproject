@@ -60,6 +60,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	CLEAR,
 	CLEAR_STRING,
 	WIND,
+	FADE_ANIM,
 };
 
 // CTextureLoaderクラス
@@ -104,6 +105,7 @@ private:
 		L"asset/clear.png",
 		L"asset/clearString.png",
 		L"asset/Senpuuki.png",
+		L"asset/fadeAnim.png",
 	};
 
 	/* メソッド */

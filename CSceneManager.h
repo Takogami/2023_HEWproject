@@ -27,6 +27,12 @@ enum class FADE_STATE
 	FADE_OUT,
 };
 
+enum class FADE_TYPE
+{
+	NORMAL,	// 通常フェード
+	ERASER,	// 消しゴムフェード
+};
+
 class CSceneManager
 {
 private:
@@ -43,7 +49,10 @@ private:
 
 	CGameManager* gameManager;
 
-	CGameObject* fade;
+	CGameObject* fade;			// 通常フェード用ポリゴン
+	CGameObject* fade_eraser;	// 消しゴムフェード用ポリゴン
+	int fade_eraser_counter = 0;// 消しゴムのフェード時間を計測
+
 	ID3D11Buffer* vertexBuffer;
 
 	SCENE_ID NowScene = SCENE_ID::TITLE;
@@ -54,6 +63,7 @@ private:
 	int prevGameClearTime = 0;
 
 	FADE_STATE fadeState = FADE_STATE::NO_FADE;
+	FADE_TYPE fadeType = FADE_TYPE::NORMAL;
 
 	CSceneManager();
 	~CSceneManager();
@@ -65,7 +75,7 @@ public:
 	static CSceneManager* GetInstance();
 
 	void Update();							//シーンの管理
-	void ChangeScene(SCENE_ID _inScene);	//シーンの変更
+	void ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType = FADE_TYPE::NORMAL);	//シーンの変更
 
 	FADE_STATE GetFadeState() { return fadeState; }
 };
