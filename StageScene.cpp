@@ -68,6 +68,7 @@ void StageScene::Update()
 
 	CGameManager::GetInstance()->Update();
 
+	UpdateTerrain();
 	Cam->cameraPos.x = player->transform.position.x;
 	Cam->Update();
 }

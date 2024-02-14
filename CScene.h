@@ -47,6 +47,9 @@ public:
 	// ステージの描画のみを行う
 	void DrawTerrain();
 
+	//	更新
+	void UpdateTerrain();
+
 	// オーバーライドする用の関数
 	// シーンの更新処理
 	virtual void Update() = 0;

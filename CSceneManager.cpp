@@ -14,7 +14,7 @@ CSceneManager::CSceneManager()
 	ChangeScene(SCENE_ID::TITLE);
 
 	// フェード用オブジェクトの実体化
-	fade = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS));
+	fade = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
 	fade->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	fade->transform.position.z = -0.5f;
 }
