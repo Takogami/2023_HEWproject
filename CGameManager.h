@@ -18,6 +18,7 @@ enum class GAME_STATE
 	START,	// ゲーム開始(中)
 	TIME_UP,// タイムアップ
 	ZERO_HP,// プレイヤーのHPが0
+	CLEAR,	// クリア
 };
 
 class CGameManager
@@ -64,6 +65,9 @@ private:
 
 	// オブジェクトのリスト
 	std::list<CGameObject*> Objects;
+	
+	// ステージの番号
+	int stageNumber = 1;
 
 	// 唯一のインスタンス
 	static CGameManager* instance;
@@ -98,8 +102,12 @@ public:
 	// ダメージの加算
 	// 引数1 : ダメージ値(1~6)
 	void AddDamage(int addDamage);
-
+	// ステージ番号をセットする
+	void SetStageNum(int sNum) { stageNumber = sNum; }
 	// ゲームの進行状態を取得
 	GAME_STATE GetGameState();
+
+	// クリアタイムの取得
+	int GetClearTime();
 };
 

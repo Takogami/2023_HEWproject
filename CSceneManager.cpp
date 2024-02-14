@@ -171,6 +171,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 		CScene::DestroyStage();
 		// フェードインを設定
 		fadeState = FADE_STATE::FADE_IN;
+		// 初期化の前にクリアタイムを受け取る
+		prevGameClearTime = CGameManager::GetInstance()->GetClearTime();
 		// ゲームマネージャを初期化
 		CGameManager::GetInstance()->Init();
 
@@ -261,6 +263,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene)
 			result = new ResultScene();
 			// 前のシーンをリザルトシーンに設定
 			result->SetPrevStage((int)retryLoadScene);
+			// クリアタイムを渡す
+			//result->SetClearTime(prevGameClearTime);
 			break;
 		}
 	}

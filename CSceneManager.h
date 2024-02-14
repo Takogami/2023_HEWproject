@@ -50,6 +50,9 @@ private:
 	SCENE_ID NewScene = SCENE_ID::TITLE;
 	SCENE_ID retryLoadScene = SCENE_ID::TITLE;
 
+	// 前回のゲームのクリアタイム
+	int prevGameClearTime = 0;
+
 	FADE_STATE fadeState = FADE_STATE::NO_FADE;
 
 	CSceneManager();

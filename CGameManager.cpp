@@ -75,7 +75,7 @@ CGameManager::CGameManager()
 	stageNum->transform * 0.18f;
 	stageNum->transform.rotation = -10.0f;
 	stageNum->transform.position = { 0.285f, 0.93f, -0.3f };
-	stageNum->TextureCutout(1, 0);
+	stageNum->TextureCutout(stageNumber, 0);
 
 	// 実体化の後、初期化を行う
 	this->Init();
@@ -370,7 +370,7 @@ void CGameManager::Update()
 		// 桁数に応じて表示位置を変更する
 		if (digit_rank <= 2)
 		{
-			strTime->SetPosition({ 1355.0f + (54 / digit_rank), 65.0f });
+			strTime->SetPosition({ 1355.0f + (50 / digit_rank), 65.0f });
 		}
 		break;
 
@@ -378,6 +378,11 @@ void CGameManager::Update()
 		break;
 
 	case GAME_STATE::ZERO_HP:
+		break;
+
+	case GAME_STATE::CLEAR:
+		// タイマーのストップする
+		gameTime->PauseTimer();
 		break;
 
 	default:
@@ -424,4 +429,16 @@ void CGameManager::AddDamage(int addDamage)
 GAME_STATE CGameManager::GetGameState()
 {
 	return state;
+}
+
+int CGameManager::GetClearTime()
+{
+	// タイマーが停止していないなら、クリアしていないとみなし0を返す
+	if (gameTime->GetTimerState() != TIMER_STATE::PAUSE)
+	{
+		return 0;
+	}
+
+	// 経過時間を返す
+	return (int)gameTime->GetProgressTime();
 }
