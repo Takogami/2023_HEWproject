@@ -11,7 +11,7 @@
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
 	// 初期スピード設定
-	SetMoveSpeed(0.02f);
+	SetMoveSpeed(0.01f);
 	smoothing = new CSmoothing();
 	// 重力を初期値とする
 	velocity.y = gravity;
@@ -407,7 +407,7 @@ void CPlayer::Update()
 	else if (this->GetState() != PState::NORMAL)
 	{
 		this->Bcol.sizeY = 0.1f;
-		this->Bcol.sizeX = 0.15f;
+		this->Bcol.sizeX = 0.1f;
 	}
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
@@ -558,7 +558,16 @@ void CPlayer::Update()
 				}
 				break;
 			case OBJECT_TYPE::WIND_RIGHTS:	//CSV 値30
-				if (this->GetState() == PState::BREAKLEFT)
+				if (!anim->GetIsAnimation() == false)
+				{
+					Aflame = true;
+				}
+				else if (anim->GetIsAnimation() == true)
+				{
+					Aflame = false;
+				}
+
+				if (this->GetState() == PState::BREAKLEFT && Aflame == true)
 				{
 					// 右向きの風力を取得
 					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
@@ -600,18 +609,21 @@ void CPlayer::Update()
 				break;
 				//横向きのダメージタイル
 			case OBJECT_TYPE::DAMAGE_TILE:	//CSV 値4
-				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+				prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
 				// オブジェクトの位置とコライダーの中心を合わせる
 				this->transform.position.x = this->Bcol.centerX;
 				this->transform.position.y = this->Bcol.centerY;
 				//プレイヤーのノックバックの処理
 				if (!nockf)
 				{
+					if (prevFrameCorrect.y == -1.0f)
+					{
+						moveF = this->transform.position.x - 0.8f;
+					}
 					//吹っ飛ばす計算式（右）
 					if (prevFrameCorrect.x == 1.0f)
 					{
 						moveF = this->transform.position.x + 0.5f;
-						/*nockT = true;*/
 					}
 					//吹っ飛ばす計算式（左）
 					if (prevFrameCorrect.x == -1.0f )
