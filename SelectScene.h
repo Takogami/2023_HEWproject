@@ -51,7 +51,6 @@ private:
 	// ステージ選択のイージング
 	std::vector<CEase*> selectEase;
 
-
 public:
 	SelectScene();
 	~SelectScene() override;

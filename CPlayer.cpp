@@ -59,25 +59,39 @@ void CPlayer::PlayerInput()
 			if (input_stickX < 0.0f)
 			{
 				SetAnimationPattern(ANIM_PATTERN::LEFTWALK);// 左に歩くアニメーション再生
+				FInput_dir.x = -1.0f;
 			}
 			else if (input_stickX > 0.0f)
 			{
 				SetAnimationPattern(ANIM_PATTERN::RIGHTWALK);// 右に歩くアニメーション再生
+				FInput_dir.x = 1.0f;
 			}
 
 			if (input_stickX == 0)
 			{
-				SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+				// 最後に入力された方向に応じてアニメーションを変更
+				if (FInput_dir.x == 1.0f)
+				{
+					SetAnimationPattern(ANIM_PATTERN::IDOL_R);// アイドルアニメーション再生
+				}
+				else
+				{
+					SetAnimationPattern(ANIM_PATTERN::IDOL_L);// アイドルアニメーション再生
+				}
 			}
 			if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
 			{
 				SetState(PState::FALL);// 倒れる
-				SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
-				anim->SetIsAnimation(true);
-				if (!anim->GetIsAnimation())
+				// 最後に入力された方向に応じてアニメーションを変更
+				if (FInput_dir.x == 1.0f)
 				{
-
+					SetAnimationPattern(ANIM_PATTERN::FALLDOWN);// 倒れたアニメーション再生
 				}
+				else
+				{
+					SetAnimationPattern(ANIM_PATTERN::FALLDOWN_L);// 倒れたアニメーション再生
+				}
+				anim->SetIsAnimation(true);
 			}
 		}
 		break;
@@ -85,7 +99,15 @@ void CPlayer::PlayerInput()
 		if ((input_stickY > 0.0f) && (old_input_stickY >= 0.0f))
 		{
 			SetState(PState::NORMAL);// 通常状態に戻す
-			SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
+			// 最後に入力された方向に応じてアニメーションを変更
+			if (FInput_dir.x == 1.0f)
+			{
+				SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
+			}
+			else
+			{
+				SetAnimationPattern(ANIM_PATTERN::GETUP_L);// 起き上がるアニメーション再生
+			}
 			anim->SetIsAnimation(true);
 		}
 		if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
@@ -424,7 +446,6 @@ void CPlayer::Update()
 		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
 	{
 		gameOverFlg = true;
-		SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
 	}
 
 	// プレイヤー操作関連の入力処理
@@ -530,6 +551,29 @@ void CPlayer::Update()
 		CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
 		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
 	{
+		// リザルトに遷移するまでの時間を計測
+		ResultShiftCount++;
+		// ゲームオーバー時の処理
+		if (gameOverFlg)
+		{
+			// ダウンアニメーション再生
+			SetAnimationPattern(ANIM_PATTERN::PLAYER_DOWN);
+			SetAnimationSpeed(0.3f);
+			// 180フレームたったら終了状態に設定
+			if (ResultShiftCount >= 240)
+			{
+				this->SetState(PState::CLEAR_GAMEOVER);
+			}
+		}
+		// クリア時の処理
+		else if (clearFlg)
+		{
+			// 180フレームたったら終了状態に設定
+			if (ResultShiftCount >= 180)
+			{
+				this->SetState(PState::CLEAR_GAMEOVER);
+			}
+		}
 		// 親クラスのUpdate()を明示的に呼び出す
 		// 全てのゲームオブジェクト共通の更新処理を行う
 		CGameObject::Update();
@@ -707,7 +751,7 @@ void CPlayer::Update()
 				case OBJECT_TYPE::GOAL:	//CSV 値99
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();
-					SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+					SetAnimationPattern(ANIM_PATTERN::IDOL_R);// 動かないアニメーション再生
 					// クリアフラグを上げる
 					clearFlg = true;
 					break;

@@ -113,8 +113,8 @@ ResultScene::ResultScene()
 
 	clearStringEaseX = new CEase;
 	clearStringEaseY = new CEase;
-	clearStringEaseX->Init(&clearString->transform.scale.x, 1355.0f * 0.0015f, 1.0f, 3, EASE::easeOutBack);
-	clearStringEaseY->Init(&clearString->transform.scale.y, 447.0f * 0.0015f, 1.0f, 3, EASE::easeOutBack);
+	clearStringEaseX->Init(&clearString->transform.scale.x, 1355.0f * 0.0015f, 1.0f, 2, EASE::easeOutBack);
+	clearStringEaseY->Init(&clearString->transform.scale.y, 447.0f * 0.0015f, 1.0f, 2, EASE::easeOutBack);
 
 	scoreBoardEase = new CEase;
 	scoreBoardEase->Init(&scoreBoard->transform.position.y, 0.2f, 1.5f, 2, EASE::easeOutSine);
@@ -231,6 +231,7 @@ void ResultScene::UpdateClear()
 			c_goToSelect->SetActive(true);
 			c_goToTitle->SetActive(true);
 			c_cursor->SetActive(true);
+			selectOK = true;
 		}
 	}
 
@@ -252,7 +253,7 @@ void ResultScene::UpdateClear()
 	// CCursorでの列挙型のSceneを取得する
 	c_cursorPoint = (CCursor_PointClear)c_cursor->GetCursorPoint();
 
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN)) && selectOK)
 	{
 		gInput->ControllerVibration(5, 40000);
 		// カーソルのポイント位置で遷移先のシーンを変更
@@ -365,6 +366,7 @@ void ResultScene::UpdateGameOver()
 		retry->SetActive(true);
 		goToSelect->SetActive(true);
 		goToTitle->SetActive(true);
+		selectOK = true;
 	}
 
 	// 前回のシーンからリトライで読み込むシーンを決定
@@ -377,7 +379,7 @@ void ResultScene::UpdateGameOver()
 	// CCursorでの列挙型のSceneを取得する
 	cursorPoint = (CCursor_PointResult)cursor->GetCursorPoint();
 
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN)) && selectOK)
 	{
 		gInput->ControllerVibration(5, 40000);
 		// カーソルのポイント位置で遷移先のシーンを変更

@@ -67,17 +67,19 @@ void StageScene2::Update()
 		CGameManager::GetInstance()->AddDamage(1);
 	}
 
-	// タイムアップ、またはHPが0で強制シーン遷移
-	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
-		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
+	// クリア、ゲームオーバーでシーン遷移
+	if (player->GetState() == PState::CLEAR_GAMEOVER && !changeSceneFlg)
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		// クリアなら、シーン遷移演出を変える
+		if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::CLEAR)
+		{
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT, FADE_TYPE::ERASER);
+		}
+		else
+		{
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		}
 		changeSceneFlg = true;
-	}
-
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}
 
 	// 各オブジェクトの更新

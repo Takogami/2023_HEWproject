@@ -9,6 +9,7 @@ enum class PState
     FALL,
     BREAKLEFT,
     BREAKRIGHT,
+    CLEAR_GAMEOVER, // クリア、ゲームオーバー状態
 };
 
 class CPlayer :
@@ -65,6 +66,8 @@ private:
     CORRECT_DIR prevFrameCorrectY = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
+    // 最後に横入力された向き
+    DirectX::XMFLOAT3 FInput_dir = { 1.0f, 0.0f, 0.0f };
 
     int jumpCount = 0;
 
@@ -77,6 +80,8 @@ private:
     bool clearFlg = false;
     // ゲームオーバーフラグ
     bool gameOverFlg = false;
+    // リザルトに遷移するまでの時間を測る
+    int ResultShiftCount = 0;
 
 public:
     /* メンバ変数 */
