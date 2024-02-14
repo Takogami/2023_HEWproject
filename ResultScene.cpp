@@ -7,7 +7,7 @@ ResultScene::ResultScene()
 	Cam = new CCamera;
 
 	/*---------------ゲームオーバー画面のオブジェクト-----------------------*/
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::WINDRIGHT_POS));
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
 	Objects.push_back(bg);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	bg->transform.position.z = 0.4f;

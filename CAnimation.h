@@ -25,11 +25,13 @@ enum class ANIM_PATTERN
 	JAMP,		//ジャンプ
 	FLAYING,	//飛んでる状態		
 	FALL,		//倒れている状態
-
 	BOOK,		//本の動き
 	BOOK_REVERSE,
 	ENEMY_MOVE,
 	ENEMY_MOVE_R,
+	WIND_UP,
+	WIND_LEFT,
+	WIND_RIGHT,
 };
 
 class CAnimation
@@ -84,6 +86,10 @@ private:
 		{ 0, 0, 0, 1, 2, 1, ANIM_LOOP},
 		{ 5, 5, 5, 4, 3, 4, ANIM_LOOP},
 
+		// 扇風機アニメーション
+		{0, 1, ANIM_LOOP},
+		{2, 3, ANIM_LOOP},
+		{4, 5, ANIM_LOOP},
 	};
 
 	// アニメーションスピード

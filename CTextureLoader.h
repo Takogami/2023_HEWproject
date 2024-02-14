@@ -31,7 +31,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 {
 	BLOCK,
 	NUM,
-	WINDRIGHT_POS,	//	風の起こる位置（右向き）
+	FADE,
 	TITLE,
 	TILE,
 	BG,
