@@ -102,6 +102,8 @@ public:
 	// ダメージの加算
 	// 引数1 : ダメージ値(1~6)
 	void AddDamage(int addDamage);
+	// ゲームクリアの信号を送る
+	void SetGameClear() { state = GAME_STATE::CLEAR; }
 	// ステージ番号をセットする
 	void SetStageNum(int sNum) { stageNumber = sNum; }
 	// ゲームの進行状態を取得

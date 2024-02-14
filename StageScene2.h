@@ -27,9 +27,6 @@ private:
 	ID3D11Buffer* vertexBufferCharacter;
 	ID3D11Buffer* vertexBufferObject;
 
-	CDrawString* drawStringTest;
-	CDrawString* drawStringTest2;
-
 public:
 	StageScene2();
 	~StageScene2();

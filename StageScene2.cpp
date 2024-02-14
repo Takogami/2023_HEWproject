@@ -36,24 +36,6 @@ StageScene2::StageScene2()
 	camSmooth = new CSmoothing;
 	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
 
-	// 文字列の設定
-	drawStringTest = new CDrawString;
-	drawStringTest->SetFont(FontID::KARAKAZE);
-	drawStringTest->SetString("これはテストです。abc あいうえお アイウエオ 漢字");
-	drawStringTest->SetPosition({ 0.0f, 100.0f });
-	drawStringTest->SetFontSize(40.0f);
-	drawStringTest->SetFontColor(1.0f, 0.0f, 1.0f);
-	drawStringTest->SetFontWeight(FONT_WEIGHT::HEAVY);
-	drawStringTest->SetFontStyle(FONT_STYLE::ITALIC);
-
-	drawStringTest2 = new CDrawString;
-	drawStringTest2->SetFont(FontID::LETROGO);
-	drawStringTest2->SetString("これはテストです。\nabc\nあいうえお\nアイウエオ\n漢字");
-	drawStringTest2->SetPosition({0.0f, 400.0f});
-	drawStringTest2->SetFontSize(30.0f);
-	drawStringTest2->SetLineSpacing(20.0f);
-	drawStringTest2->SetShadow({ -2.0f, -1.0f }, 0.0f, 0.0f, 0.0f, 0.5f);
-
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);
 }
@@ -73,9 +55,6 @@ StageScene2::~StageScene2()
 	// カメラオブジェクトの削除
 	delete Cam;
 	delete camSmooth;
-
-	delete drawStringTest;
-	delete drawStringTest2;
 
 	// ステージの後片付け
 	CScene::DestroyStage();
@@ -129,10 +108,6 @@ void StageScene2::Draw()
 	{
 		(*it)->Draw();
 	}
-
-	// 文字列の描画
-	drawStringTest->Draw();
-	drawStringTest2->Draw();
 
 	CGameManager::GetInstance()->Draw();
 

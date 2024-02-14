@@ -17,21 +17,26 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 	velocity.y = gravity;
 
 	nockf = false;
-
 	nockT = false;
-
 	test = true;
+
+	// ダメージエフェクトオブジェクト
+	damageEffect = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::DAMAGE_FX), {0.2f, 0.5f});
+	damageEffect->InitAnimParameter(false, 5, 2, ANIM_PATTERN::DAMAGE, 0.3f);
+	damageEffect->transform.scale = { 120.0f * 0.0025f, 120.0f * 0.0025f, 1.0f };
+	damageEffect->SetActive(false);
 }
 
 void CPlayer::PlayerInput()
 {
-	if (nockf)
+	// ノックバック時、クリアまたはゲームオーバー時は入力を受け付けない
+	if (nockf || clearFlg || gameOverFlg)
 	{
 		return;
 	}
+
 #if USE_CONTROLLER == true
 
-	
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
 	input_stickY = gInput->GetLeftStickY();
@@ -394,20 +399,10 @@ void CPlayer::ReceiveWind()
 
 void CPlayer::Update()
 {
+	// ダメージ時の透明度を元に戻す
 	if (this->materialDiffuse.w != 1.0f && nockT == false)
 	{
 		this->materialDiffuse.w = 1.0f;
-	}
-
-	if (this->GetState() == PState::NORMAL)
-	{
-		this->Bcol.sizeY = 0.25f;
-		this->Bcol.sizeX = 0.2f;
-	}
-	else if (this->GetState() != PState::NORMAL)
-	{
-		this->Bcol.sizeY = 0.1f;
-		this->Bcol.sizeX = 0.1f;
 	}
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
@@ -424,9 +419,28 @@ void CPlayer::Update()
 	{
 		dir.x = 0.0f;
 	}
-  
+	// ゲームマネージャから状態を取得して、ゲームオーバーならフラグを上げる
+	if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
+	{
+		gameOverFlg = true;
+		SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+	}
+
 	// プレイヤー操作関連の入力処理
 	PlayerInput();
+
+	// ステートに応じてコライダーのサイズを変更
+	if (this->GetState() == PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.25f;
+		this->Bcol.sizeX = 0.2f;
+	}
+	else if (this->GetState() != PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.1f;
+		this->Bcol.sizeX = 0.1f;
+	}
 
 	// 前フレームの補正方向を初期化
 	prevFrameCorrect = { 0 };
@@ -454,7 +468,7 @@ void CPlayer::Update()
 		smoothing->Update();
 		//プレイヤーがすぐ入力できないようにするためのフレームカウンター
 		flameCounter++;
-		gInput->ControllerVibration(10, 35000);
+		gInput->ControllerVibration(7, 35000);
 		//---------------------------------------------------------//
 		//プレイヤーを点滅させる
 		if (this->materialDiffuse.w == 1.0f)
@@ -471,20 +485,23 @@ void CPlayer::Update()
 		{
 			nockf = false;
 			flameCounter = 0.0f;
+			// ダメージエフェクトの初期化
+			damageEffect->StopAnimation();
+			damageEffect->ResetAnimation();
+			damageEffect->SetActive(false);
 		}
 		//---------------------------------------------------------//
 	}
 
 	if (nockT == true)
 	{
-
 		if (this->GetState() != PState::NORMAL)
 		{
 			this->SetState(PState::NORMAL);
 			SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 			anim->SetIsAnimation(true);
 		}
-		gInput->ControllerVibration(10, 35000);
+		gInput->ControllerVibration(7, 35000);
 		flameCounter++;
 		//---------------------------------------------------------//
 		//プレイヤーを点滅させる
@@ -501,166 +518,210 @@ void CPlayer::Update()
 			CGameManager::GetInstance()->AddDamage(1);
 			nockT = false;
 			flameCounter = 0.0f;
+			// ダメージエフェクトの初期化
+			damageEffect->StopAnimation();
+			damageEffect->ResetAnimation();
+			damageEffect->SetActive(false);
 		}
 	}
 
-	// ベクトルに速度をかけて位置を変更
-	this->transform.position.x += dir.x * velocity.x;
-	this->transform.position.y -= velocity.y;
-
-	// 風の計算を行う
-	ReceiveWind();
-
-
-	// 親クラスのUpdate()を明示的に呼び出す
-	// 全てのゲームオブジェクト共通の更新処理を行う
-	CGameObject::Update();
-
-	// 地形との当たり判定と補正
-	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
+	// ゲーム開始状態の時以外は移動、当たり判定の処理をしない
+	if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::CLEAR ||
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
 	{
-		if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
+		// 親クラスのUpdate()を明示的に呼び出す
+		// 全てのゲームオブジェクト共通の更新処理を行う
+		CGameObject::Update();
+	}
+	// ゲームオーバー、またはクリアでは無いときに移動、当たり判定の処理をする
+	else
+	{
+		// ベクトルに速度をかけて位置を変更
+		this->transform.position.x += dir.x * velocity.x;
+		this->transform.position.y -= velocity.y;
+
+		// 風の計算を行う
+		ReceiveWind();
+
+		// 親クラスのUpdate()を明示的に呼び出す
+		// 全てのゲームオブジェクト共通の更新処理を行う
+		CGameObject::Update();
+
+		// 地形との当たり判定と補正
+		for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
 		{
-			// オブジェクトの種類に応じて処理を変更
-			switch ((*it)->GetObjectType())
+			if (CCollision::TestBoxCollision(this->Bcol, (*it)->Bcol))
 			{
-			case OBJECT_TYPE::NORMAL:	//CSV　値１
-				// コライダーの位置を補正し、補正した方向を受け取る
-				prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
-				// 天井にぶつかっていたならジャンプ力を0にする
-				if (prevFrameCorrect.y == -1)
+				// オブジェクトの種類に応じて処理を変更
+				switch ((*it)->GetObjectType())
 				{
-					jumpStrength = 0;	// ジャンプ力を0にする
-				}
-				// 重力によって地面に衝突していたなら
-				if (prevFrameCorrect.y == 1)
-				{
-					velocity.y = 0.0f;				// 速度Yを0に戻す
-					jumpStrength = ini_jumpStrength;
-					isJump = false;
-					jumpCount = 0;
-				}
-
-				// オブジェクトの位置とコライダーの中心を合わせる
-				this->transform.position.x = this->Bcol.centerX;
-				this->transform.position.y = this->Bcol.centerY;
-				break;
-
-			case OBJECT_TYPE::WIND_RIGHT:	//CSV 値２
-				//	アニメーションが終わったら……
-				if (anim->GetIsAnimation() == false && this->GetState() == PState::BREAKLEFT)
-				{
-					// 右向きの風力を取得
-					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
-					// 風を受けた方向と向き保存
-					dir.x = 1.0f;
-					dir_wind.x = 1.0f;
-				}
-				break;
-			case OBJECT_TYPE::WIND_RIGHTS:	//CSV 値30
-				if (!anim->GetIsAnimation() == false)
-				{
-					Aflame = true;
-				}
-				else if (anim->GetIsAnimation() == true)
-				{
-					Aflame = false;
-				}
-
-				if (this->GetState() == PState::BREAKLEFT && Aflame == true)
-				{
-					// 右向きの風力を取得
-					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
-					// 風を受けた方向と向き保存
-					dir.x = 1.0f;
-					dir_wind.x = 1.0f;
-				}
-				break;
-			case OBJECT_TYPE::WIND_LEFT:	//CSV 値９
-				if (anim->GetIsAnimation() == false && this->GetState() == PState::BREAKRIGHT)
-				{
-					// 右向きの風力を取得
-					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
-					// 風を受けた方向と向き保存
-					dir.x = -1.0f;
-					dir_wind.x = -1.0f;
-				}
-				break;
-			case OBJECT_TYPE::WIND_LEFTS:	//CSV 値40
-				if (this->GetState() == PState::BREAKRIGHT)
-				{
-					// 右向きの風力を取得
-					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
-					// 風を受けた方向と向き保存
-					dir.x = -1.0f;
-					dir_wind.x = -1.0f;
-				}
-				break;
-			case OBJECT_TYPE::WIND_UP:	//CSV 値３
-				if (anim->GetIsAnimation() == false && this->GetState() == PState::FALL)
-				{
-					SetAnimationPattern(ANIM_PATTERN::FLAYING);
-					// 上向きの風力を取得
-					receiveWindPower.y = ((CWind*)(*it))->GetWindStrengthY();
-					// 風を受けた方向と向き保存
-					dir.y = 1.0f;
-					dir_wind.y = 1.0f;
-				}
-				break;
-				//横向きのダメージタイル
-			case OBJECT_TYPE::DAMAGE_TILE:	//CSV 値4
-				prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
-				// オブジェクトの位置とコライダーの中心を合わせる
-				this->transform.position.x = this->Bcol.centerX;
-				this->transform.position.y = this->Bcol.centerY;
-				//プレイヤーのノックバックの処理
-				if (!nockf)
-				{
-					if (prevFrameCorrect.y == -1.0f)
+				case OBJECT_TYPE::NORMAL:	//CSV　値１
+					// コライダーの位置を補正し、補正した方向を受け取る
+					prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+					// 天井にぶつかっていたならジャンプ力を0にする
+					if (prevFrameCorrect.y == -1)
 					{
-						moveF = this->transform.position.x - 0.8f;
+						jumpStrength = 0;	// ジャンプ力を0にする
 					}
-					//吹っ飛ばす計算式（右）
-					if (prevFrameCorrect.x == 1.0f)
+					// 重力によって地面に衝突していたなら
+					if (prevFrameCorrect.y == 1)
 					{
-						moveF = this->transform.position.x + 0.5f;
+						velocity.y = 0.0f;				// 速度Yを0に戻す
+						jumpStrength = ini_jumpStrength;
+						isJump = false;
+						jumpCount = 0;
 					}
-					//吹っ飛ばす計算式（左）
-					if (prevFrameCorrect.x == -1.0f )
+
+					// オブジェクトの位置とコライダーの中心を合わせる
+					this->transform.position.x = this->Bcol.centerX;
+					this->transform.position.y = this->Bcol.centerY;
+					break;
+
+				case OBJECT_TYPE::WIND_RIGHT:	//CSV 値２
+					//	アニメーションが終わったら……
+					if (anim->GetIsAnimation() == false && this->GetState() == PState::BREAKLEFT)
 					{
-						moveF = this->transform.position.x - 0.5f;
+						// 右向きの風力を取得
+						receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
+						// 風を受けた方向と向き保存
+						dir.x = 1.0f;
+						dir_wind.x = 1.0f;
 					}
-					////追従カメラの初期化
-					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
-					CGameManager::GetInstance()->AddDamage(1);
-					nockf = true;
+					break;
+				case OBJECT_TYPE::WIND_RIGHTS:	//CSV 値30
+					if (!anim->GetIsAnimation() == false)
+					{
+						Aflame = true;
+					}
+					else if (anim->GetIsAnimation() == true)
+					{
+						Aflame = false;
+					}
+
+					if (this->GetState() == PState::BREAKLEFT && Aflame == true)
+					{
+						// 右向きの風力を取得
+						receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
+						// 風を受けた方向と向き保存
+						dir.x = 1.0f;
+						dir_wind.x = 1.0f;
+					}
+					break;
+				case OBJECT_TYPE::WIND_LEFT:	//CSV 値９
+					if (anim->GetIsAnimation() == false && this->GetState() == PState::BREAKRIGHT)
+					{
+						// 右向きの風力を取得
+						receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
+						// 風を受けた方向と向き保存
+						dir.x = -1.0f;
+						dir_wind.x = -1.0f;
+					}
+					break;
+				case OBJECT_TYPE::WIND_LEFTS:	//CSV 値40
+					if (this->GetState() == PState::BREAKRIGHT)
+					{
+						// 右向きの風力を取得
+						receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
+						// 風を受けた方向と向き保存
+						dir.x = -1.0f;
+						dir_wind.x = -1.0f;
+					}
+					break;
+				case OBJECT_TYPE::WIND_UP:	//CSV 値３
+					if (anim->GetIsAnimation() == false && this->GetState() == PState::FALL)
+					{
+						SetAnimationPattern(ANIM_PATTERN::FLAYING);
+						// 上向きの風力を取得
+						receiveWindPower.y = ((CWind*)(*it))->GetWindStrengthY();
+						// 風を受けた方向と向き保存
+						dir.y = 1.0f;
+						dir_wind.y = 1.0f;
+					}
+					break;
+					//横向きのダメージタイル
+				case OBJECT_TYPE::DAMAGE_TILE:	//CSV 値4
+					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
+					// オブジェクトの位置とコライダーの中心を合わせる
+					this->transform.position.x = this->Bcol.centerX;
+					this->transform.position.y = this->Bcol.centerY;
+
+					// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+					damageEffect->transform.position = { this->transform.position.x,this->transform.position.y, -0.3f };
+					// エフェクトをアクティブに
+					damageEffect->SetActive(true);
+
+					//プレイヤーのノックバックの処理
+					if (!nockf)
+					{
+						if (prevFrameCorrect.y == -1.0f)
+						{
+							moveF = this->transform.position.x - 0.8f;
+						}
+						//吹っ飛ばす計算式（右）
+						if (prevFrameCorrect.x == 1.0f)
+						{
+							moveF = this->transform.position.x + 0.5f;
+						}
+						//吹っ飛ばす計算式（左）
+						if (prevFrameCorrect.x == -1.0f)
+						{
+							moveF = this->transform.position.x - 0.5f;
+						}
+						//追従カメラの初期化
+						smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
+						CGameManager::GetInstance()->AddDamage(1);
+						nockf = true;
+
+						// エフェクトの再生
+						damageEffect->PlayAnimation();
+					}
+					break;
+				case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
+					// コライダーの位置を補正し、補正した方向を受け取る
+					prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+					// オブジェクトの位置とコライダーの中心を合わせる
+					this->transform.position.x = this->Bcol.centerX;
+					this->transform.position.y = this->Bcol.centerY;
+
+					// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+					damageEffect->transform.position = { this->transform.position.x,this->transform.position.y, -0.3f };
+					// エフェクトをアクティブに
+					damageEffect->SetActive(true);
+
+					// 天井にぶつかっていたならジャンプ力を0にする
+					if (prevFrameCorrectY.y == -1)
+					{
+						jumpStrength = 0;	// ジャンプ力を0にする
+					}
+					// 重力によって地面に
+					if (prevFrameCorrectY.y == 1 && nockT == false)
+					{
+						velocity.y = 0.0f;				// 速度Yを0に戻す
+						jumpStrength = ini_jumpStrength;
+						isJump = false;
+						nockT = true;
+					}
+					break;
+
+				case OBJECT_TYPE::GOAL:	//CSV 値99
+					// ゲームクリアの信号を送る
+					CGameManager::GetInstance()->SetGameClear();
+					SetAnimationPattern(ANIM_PATTERN::NO_ANIM);// 動かないアニメーション再生
+					// クリアフラグを上げる
+					clearFlg = true;
+					break;
+
+				default:
+					break;
 				}
-				break;
-			case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
-				// コライダーの位置を補正し、補正した方向を受け取る
-				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
-				// 天井にぶつかっていたならジャンプ力を0にする
-				if (prevFrameCorrectY.y == -1)
-				{
-					jumpStrength = 0;	// ジャンプ力を0にする
-				}
-				// 重力によって地面に
-				if (prevFrameCorrectY.y == 1 && nockT == false)
-				{
-					velocity.y = 0.0f;				// 速度Yを0に戻す
-					jumpStrength = ini_jumpStrength;
-					isJump = false;
-					nockT = true;
-				}
-				// オブジェクトの位置とコライダーの中心を合わせる
-				this->transform.position.x = this->Bcol.centerX;
-				this->transform.position.y = this->Bcol.centerY;
-				break;
-			default:
-				break;
 			}
 		}
 	}
+
+	// プレイヤーが使っているカメラを使い、エフェクトを更新
+	damageEffect->SetUseingCamera(this->useCamera);
+	damageEffect->Update();
 }
 
 PState CPlayer::GetState()
@@ -673,26 +734,24 @@ void CPlayer::SetState(PState state)
 	State = state;
 }
 
-void CPlayer::Rknoc(DirectX::XMFLOAT3)
-{
-
-}
-
-void CPlayer::Lknoc(DirectX::XMFLOAT3)
-{
-
-}
-
 void CPlayer::Draw()
 {
 	// 親クラスのDraw()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の描画処理を行う
 	CGameObject::Draw();
+
+	// エフェクトの描画
+	damageEffect->Draw();
 }
 
 CPlayer::~CPlayer()
 {
+	// エフェクトの解放
+	SAFE_RELEASE(vertexBufferEffect);
+	delete damageEffect;
+
 	delete smoothing;
+
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う
 	CGameObject::~CGameObject();

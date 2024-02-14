@@ -23,6 +23,11 @@ private:
     float old_input_stickX = 0.0f;
     float old_input_stickY = 0.0f;
 
+    // プレイヤーのダメージエフェクト
+    CGameObject* damageEffect;
+    // プレイヤーのダメージエフェクト用頂点バッファ
+    ID3D11Buffer* vertexBufferEffect;
+
     // 重力
     const float gravity = 0.97f / 200;
     // ジャンプ開始時(初期状態)のジャンプの強さ
@@ -41,6 +46,7 @@ private:
     bool isWindLeft = false;    //  左向き
     bool isWindUp = false;      //  上向き
 
+    // 吹っ飛びのスムージング
     CSmoothing* smoothing;
 
     bool nockf = false;
@@ -67,6 +73,11 @@ private:
     //  アニメーションお試し
     bool fly = false;
 
+    // クリアフラグ
+    bool clearFlg = false;
+    // ゲームオーバーフラグ
+    bool gameOverFlg = false;
+
 public:
     /* メンバ変数 */
     // 移動速度
@@ -83,10 +94,6 @@ public:
     // 受けている風力
     FLOAT_XY receiveWindPower = { 0.0f, 0.0f };
 
-    //吹っ飛ぶ力
-    float Sumash = 0.0f;
-
-
     /* メソッド */
 
     // 入力処理
@@ -95,9 +102,6 @@ public:
     float Jump();
     // 風を受けたときの処理
     void ReceiveWind();
-    
-    void Rknoc(DirectX::XMFLOAT3);
-    void Lknoc(DirectX::XMFLOAT3);
 
 public:
     /* メソッド */
