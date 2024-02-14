@@ -6,7 +6,7 @@ class CWind :
 {
 private:
     // •—‚Ì‹­‚³(‰Šú’l : 0.01f)
-    float windStrength = 0.01f;
+    float windStrength = 0.013f;
     float windStrengthY = 0.02f;
 
 public:
