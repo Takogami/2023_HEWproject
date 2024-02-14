@@ -558,9 +558,8 @@ void CPlayer::Update()
 				}
 				break;
 			case OBJECT_TYPE::WIND_RIGHTS:	//CSV 値30
-				if (this->GetState() == PState::FALL)
+				if (this->GetState() == PState::BREAKLEFT)
 				{
-					SetAnimationPattern(ANIM_PATTERN::FLAYING);
 					// 右向きの風力を取得
 					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
 					// 風を受けた方向と向き保存
@@ -579,9 +578,8 @@ void CPlayer::Update()
 				}
 				break;
 			case OBJECT_TYPE::WIND_LEFTS:	//CSV 値40
-				if (this->GetState() == PState::FALL)
+				if (this->GetState() == PState::BREAKRIGHT)
 				{
-					SetAnimationPattern(ANIM_PATTERN::FLAYING);
 					// 右向きの風力を取得
 					receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
 					// 風を受けた方向と向き保存
