@@ -1,6 +1,7 @@
 /* インクルード */
 #include "StageScene2.h"
 #include "CSceneManager.h"	// シーン切り替えのためにインクルード
+#include "CGameManager.h"
 
 StageScene2::StageScene2()
 {
@@ -21,7 +22,8 @@ StageScene2::StageScene2()
 	player->transform * 0.2f;
 	player->transform.position.z = -0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f};
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.25f};
+	player->transform.position.x = -1.5f;
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
@@ -81,6 +83,19 @@ StageScene2::~StageScene2()
 
 void StageScene2::Update()
 {
+	if (gInput->GetKeyTrigger(VK_DELETE))
+	{
+		CGameManager::GetInstance()->AddDamage(1);
+	}
+
+	// タイムアップ、またはHPが0で強制シーン遷移
+	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		changeSceneFlg = true;
+	}
+
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
@@ -92,26 +107,31 @@ void StageScene2::Update()
 		(*it)->Update();
 	}
 
-	UpdateTerrain();
+	CGameManager::GetInstance()->Update();
+
 	camSmooth->Update();
 	Cam->Update();
 
 	// 背景追従
 	bg->transform.position.x = Cam->cameraPos.x;
+
 }
 
 void StageScene2::Draw()
 {
+	// 地形の描画
+	DrawTerrain();
+
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
 	}
 
-	// 地形の描画
-	DrawTerrain();
-
 	// 文字列の描画
 	drawStringTest->Draw();
 	drawStringTest2->Draw();
+
+	CGameManager::GetInstance()->Draw();
+
 }

@@ -18,6 +18,9 @@ private:
 
 	CPlayer* player;
 
+	// シーン遷移中か判定するフラグ
+	bool changeSceneFlg = false;
+
 	// カメラ追従のスムージング
 	CSmoothing* camSmooth;
 

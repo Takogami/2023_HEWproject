@@ -7,6 +7,7 @@ class CWind :
 private:
     // 風の強さ(初期値 : 0.01f)
     float windStrength = 0.01f;
+    float windStrengthY = 0.02f;
 
 public:
     // コンストラクタ
@@ -20,5 +21,7 @@ public:
     void SetWindStrangth(float power);
     // 風の強さを返す
     float GetWindStrength() { return windStrength; }
+
+    float GetWindStrengthY() { return windStrengthY; };
 };
 
