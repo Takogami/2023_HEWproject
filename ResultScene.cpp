@@ -258,14 +258,14 @@ void ResultScene::UpdateClear()
 		switch (c_cursorPoint)
 		{
 		case CCursor_PointClear::SELECT:	// セレクトに戻る
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 			selectEaseX->Init(&c_goToSelect->transform.scale.x, 1100.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectEaseY->Init(&c_goToSelect->transform.scale.y, 447.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectFlg = true;
 			break;
 
 		case CCursor_PointClear::TITLE:	// タイトルに戻る
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE, FADE_TYPE::ERASER);
 			selectEaseX->Init(&c_goToTitle->transform.scale.x, 1100.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectEaseY->Init(&c_goToTitle->transform.scale.y, 447.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectFlg = true;
@@ -386,19 +386,19 @@ void ResultScene::UpdateGameOver()
 			switch (loadScene)
 			{
 			case SCENE_ID::STAGE_1:
-				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_1);
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_1, FADE_TYPE::ERASER);
 				break;
 
 			case SCENE_ID::STAGE_2:
-				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_2);
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_2, FADE_TYPE::ERASER);
 				break;
 
 			case SCENE_ID::STAGE_3:
-				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3);
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3, FADE_TYPE::ERASER);
 				break;
 
 			case SCENE_ID::STAGE_4:
-				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_4);
+				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_4, FADE_TYPE::ERASER);
 				break;
 			default:
 				break;
@@ -409,7 +409,7 @@ void ResultScene::UpdateGameOver()
 			break;
 
 		case CCursor_PointResult::SELECT:	// セレクトに戻る
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT);
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 			selectEaseX->Init(&goToSelect->transform.scale.x, 1100.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectEaseY->Init(&goToSelect->transform.scale.y, 447.0f * 0.00065f, 0.1f, 0, EASE::easeInCubic);
 			selectFlg = true;

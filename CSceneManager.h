@@ -49,9 +49,10 @@ private:
 
 	CGameManager* gameManager;
 
-	CGameObject* fade;			// 通常フェード用ポリゴン
-	CGameObject* fade_eraser;	// 消しゴムフェード用ポリゴン
-	int fade_eraser_counter = 0;// 消しゴムのフェード時間を計測
+	CGameObject* fade;					// 通常フェード用ポリゴン
+	CGameObject* fade_eraser;			// 消しゴムフェード用ポリゴン
+	int fade_eraser_counter = 0;		// 消しゴムのフェード時間を計測
+	const int fade_eraser_flame = 80;	// 消しゴムのフェードにかける時間
 
 	ID3D11Buffer* vertexBuffer;
 

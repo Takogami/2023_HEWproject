@@ -90,12 +90,16 @@ void CSceneManager::Update()
 			// 消しゴムフェードインが開始したので計測開始
 			fade_eraser_counter++;
 			// 指定のフレーム数が経過しているなら
-			if (fade_eraser_counter > 80)
+			if (fade_eraser_counter > fade_eraser_flame)
 			{
 				// フェードの状態をフェード無し状態に設定
 				fadeState = FADE_STATE::NO_FADE;
 				// カウンターを0に戻す
 				fade_eraser_counter = 0;
+				// 消しゴムのフェードアウトのアニメーションに戻す
+				fade_eraser->SetAnimationPattern(ANIM_PATTERN::FADEOUT_ANIM);
+				// アニメーションを停止
+				fade_eraser->StopAnimation();
 			}
 		}
 		else
@@ -120,7 +124,7 @@ void CSceneManager::Update()
 			// 消しゴムフェードアウトが開始したので計測開始
 			fade_eraser_counter++;
 			// 指定のフレーム数が経過しているなら
-			if (fade_eraser_counter > 80)
+			if (fade_eraser_counter > fade_eraser_flame)
 			{
 				// 設定されていた次のシーンに切り替える
 				ChangeScene(NewScene);
