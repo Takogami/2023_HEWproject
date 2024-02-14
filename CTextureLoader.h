@@ -59,6 +59,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	GOTO_TITLE,
 	CLEAR,
 	CLEAR_STRING,
+	WIND,
 };
 
 // CTextureLoaderクラス
@@ -102,6 +103,7 @@ private:
 		L"asset/goToTitle.png",
 		L"asset/clear.png",
 		L"asset/clearString.png",
+		L"asset/Senpuuki.png",
 	};
 
 	/* メソッド */
