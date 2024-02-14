@@ -17,6 +17,8 @@ private:
 
 	CPlayer* player;
 
+	bool changeSceneFlg = false;
+
 	// カメラ追従のスムージング
 	CSmoothing* camSmoothX;
 	CSmoothing* camSmoothY;

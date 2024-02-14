@@ -1,5 +1,6 @@
 #include "StageScene4.h"
 #include "CSceneManager.h"	// シーン切り替えのためにインクルード
+#include "CGameManager.h"
 
 StageScene4::StageScene4()
 {
@@ -84,6 +85,20 @@ StageScene4::~StageScene4()
 
 void StageScene4::Update()
 {
+
+	if (gInput->GetKeyTrigger(VK_DELETE))
+	{
+		CGameManager::GetInstance()->AddDamage(1);
+	}
+
+	// タイムアップ、またはHPが0で強制シーン遷移
+	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		changeSceneFlg = true;
+	}
+
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
@@ -115,6 +130,8 @@ void StageScene4::Draw()
 
 	// 地形の描画
 	DrawTerrain();
+
+	CGameManager::GetInstance()->Draw();
 
 	// 文字列の描画
 	drawStringTest->Draw();

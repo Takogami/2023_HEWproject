@@ -2,6 +2,7 @@
 #include "CGameObject.h"
 #include "CSmoothing.h"
 
+
 enum class PState
 {
     NORMAL,
@@ -23,9 +24,9 @@ private:
     float old_input_stickY = 0.0f;
 
     // 重力
-    const float gravity = 0.97f / 200;
+    const float gravity = 0.97f / 250;
     // ジャンプ開始時(初期状態)のジャンプの強さ
-    const float ini_jumpStrength = 10.0f / 500;
+    const float ini_jumpStrength = 10.0f / 450;
     // 速度の限界値
     const float velocityY_limit = 0.0005f;
     // 現在のジャンプの強さ
@@ -47,6 +48,7 @@ private:
     float moveF = 0.0f;
     float flameCounter = 0.0f;
     float flameCounterMK2 = 0.0f;
+    float AnimflameCounter = 0.0f;
     
     // プレイヤーの状態
     PState State = PState::NORMAL;
@@ -57,10 +59,14 @@ private:
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
 
+    int jumpCount = 0;
+
     bool test = false;
 
     //  アニメーションお試し
     bool fly = false;
+
+    bool FFF = false;
 
 public:
     /* メンバ変数 */
@@ -107,8 +113,6 @@ public:
     // 状態の設定
     void SetState(PState state);
 
-    void testknoc(CPlayer p);
-
     // 更新
     void Update() override;
     // 描画
@@ -117,5 +121,7 @@ public:
     // デストラクタ
     ~CPlayer() override;
 
+    // コントローラーのインデックス（0〜3）
+    DWORD controllerIndex = 0;
 };
 
