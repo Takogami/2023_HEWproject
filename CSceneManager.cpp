@@ -16,13 +16,27 @@ CSceneManager::CSceneManager()
 	// フェード用オブジェクトの実体化
 	fade = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
 	fade->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
-	fade->transform.position.z = -0.49f;
+	fade->transform.position.z = -0.48f;
 
 	fade_eraser = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE_ANIM), { 0.04761905f, 0.5f });
 	fade_eraser->transform.scale = { 1920.0f * 0.0022f, 1080.0f * 0.0022f, 1.0f };
-	fade_eraser->transform.position.z = -0.5f;
+	fade_eraser->transform.position.z = -0.49f;
 	fade_eraser->InitAnimParameter(false, 21, 2, ANIM_PATTERN::FADEOUT_ANIM, 0.32f);
 	fade_eraser->SetActive(false);
+
+	// 消しゴム
+	fadeObj_eraser = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::ERASER));
+	fadeObj_eraser->transform.scale = { 1507.0f * 0.0005f, 641.0f * 0.0005f, 1.0f};
+	fadeObj_eraser->transform.position = { -2.0f, 1.5f, -0.5f };
+	fadeObj_eraser->transform.rotation = 45.0f;
+	fadeObj_eraser->SetActive(false);
+
+	// 鉛筆
+	fadeObj_pencil = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
+	fadeObj_pencil->transform.scale = { 1507.0f * 0.0005f, 641.0f * 0.0005f, 1.0f };
+	fadeObj_pencil->transform.position = { -2.0f, 1.5f, -0.5f };
+	fadeObj_pencil->transform.rotation = -135.0f;
+	fadeObj_pencil->SetActive(false);
 }
 
 // デストラクタ
@@ -32,6 +46,8 @@ CSceneManager::~CSceneManager()
 	SAFE_RELEASE(vertexBuffer);
 	delete fade;
 	delete fade_eraser;
+	delete fadeObj_eraser;
+	delete fadeObj_pencil;
 
 	// 各シーンの解放
 	RELEASE_SCENE(title);
@@ -50,6 +66,38 @@ void CSceneManager::CleanupSingleton()
 	{
 		delete instance;
 		instance = nullptr;
+	}
+}
+
+void CSceneManager::FadeObjectMove(CGameObject* moveObj)
+{
+	// 消しゴムの下移動
+	if (!eraserReverse)
+	{
+		// 座標更新
+		moveObj->transform.position.x -= 0.3f;
+		moveObj->transform.position.y -= 0.35f;
+		// 一番下まで来たならxを次の位置までずらす
+		if (moveObj->transform.position.y <= -1.6f)
+		{
+			// 折り返しフラグを上げる
+			eraserReverse = true;
+			moveObj->transform.position.x += 1.0f;
+		}
+	}
+	// 消しゴムの上移動
+	else
+	{
+		// 座標更新
+		moveObj->transform.position.x += 0.3f;
+		moveObj->transform.position.y += 0.35f;
+		// 一番上まで来たならxを次の位置までずらす
+		if (moveObj->transform.position.y >= 1.6f)
+		{
+			// 折り返しフラグを下げる
+			eraserReverse = false;
+			moveObj->transform.position.x += 1.0f;
+		}
 	}
 }
 
@@ -92,6 +140,10 @@ void CSceneManager::Update()
 				//	サウンド再生
 				XA_Play(SOUND_LABEL_FADEIN);
 			}
+			// 鉛筆をアクティブにする
+			fadeObj_pencil->SetActive(true);
+			// 鉛筆を移動させる
+			FadeObjectMove(fadeObj_pencil);
 
 			// 消しゴムフェードインが開始したので計測開始
 			fade_eraser_counter++;
@@ -107,6 +159,11 @@ void CSceneManager::Update()
 				fade_eraser->SetAnimationPattern(ANIM_PATTERN::FADEOUT_ANIM);
 				// アニメーションを停止
 				fade_eraser->StopAnimation();
+
+				// 鉛筆を元の位置に戻す
+				fadeObj_pencil->transform.position = { -2.0f, 1.5f, -0.5f };
+				fadeObj_pencil->SetActive(false);
+				eraserReverse = false;
 			}
 		}
 		else
@@ -131,6 +188,10 @@ void CSceneManager::Update()
 				//	サウンド再生
 				XA_Play(SOUND_LABEL_FADEOUT);
 			}
+			// 消しゴムをアクティブにする
+			fadeObj_eraser->SetActive(true);
+			// 消しゴムを移動させる
+			FadeObjectMove(fadeObj_eraser);
 
 			fade_eraser->SetActive(true);
 			fade_eraser->PlayAnimation();
@@ -146,6 +207,12 @@ void CSceneManager::Update()
 				fade_eraser->SetAnimationPattern(ANIM_PATTERN::FADEIN_ANIM);
 				// カウンターを0に戻す
 				fade_eraser_counter = 0;
+				// 消しゴムを非アクティブにする
+				fadeObj_eraser->SetActive(false);
+				// 消しゴムを元の位置に戻す
+				fadeObj_eraser->transform.position = { -2.0f, 1.5f, -0.5f };
+				fadeObj_eraser->SetActive(false);
+				eraserReverse = false;
 			}
 		}
 		else
@@ -214,6 +281,8 @@ void CSceneManager::Update()
 	fade->Draw();
 	fade_eraser->Update();
 	fade_eraser->Draw();
+	fadeObj_eraser->Draw();
+	fadeObj_pencil->Draw();
 
 	// 画面の更新
 	D3D_UpdateScreen();

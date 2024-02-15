@@ -33,7 +33,7 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 
 	// ゲームオーバー演出用背景
 	gameoverBg = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
-	gameoverBg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	gameoverBg->transform.scale = { 1920.0f * 0.003f, 1080.0f * 0.003f, 1.0f };
 	gameoverBg->SetActive(false);
 	// ゲームオーバー演出用イージング
 	gameoverEaseX = new CEase;
