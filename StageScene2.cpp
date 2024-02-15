@@ -10,8 +10,11 @@ StageScene2::StageScene2()
 
 	// プレイヤーの実体化と初期化
 	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
-	// オブジェクトをリストに登録
-	Objects.push_back(bg);
+	// 背景の設定
+	bg->SetUseingCamera(Cam);
+	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	bg->transform.position.z = 0.4f;
+
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	// オブジェクトをリストに登録
@@ -27,11 +30,6 @@ StageScene2::StageScene2()
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
-	// 背景の設定
-	bg->SetUseingCamera(Cam);
-	bg->transform.scale = {1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f};
-	bg->transform.position.z = 0.4f;
-
 	// スムージングの実体化
 	camSmooth = new CSmoothing;
 	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
@@ -45,6 +43,8 @@ StageScene2::~StageScene2()
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferCharacter);
 	SAFE_RELEASE(vertexBufferObject);
+
+	delete bg;
 
 	// 各オブジェクトのメモリ解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -102,9 +102,16 @@ void StageScene2::Update()
 
 void StageScene2::Draw()
 {
-	// 地形の描画
-	DrawTerrain();
+	// 背景の描画
+	bg->Draw();
 
+	// ゲームオーバーの演出が行われていないなら
+	if (CGameManager::GetInstance()->GetGameState() != GAME_STATE::TIME_UP &&
+		CGameManager::GetInstance()->GetGameState() != GAME_STATE::ZERO_HP)
+	{
+		// 地形の描画
+		DrawTerrain();
+	}
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{

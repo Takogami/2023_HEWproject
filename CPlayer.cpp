@@ -3,6 +3,8 @@
 #include "CWind.h"
 #include "CSceneManager.h"
 #include "CGameManager.h"
+#include "CSmoothing.h"
+#include "CEase.h"
 
 // コントローラーを使う場合はtrueを指定
 #define USE_CONTROLLER (true)
@@ -10,6 +12,9 @@
 //明示的に親クラスのコンストラクタを呼び出す
 CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
+	// スケールの初期値を設定
+	ini_scale = { transform.scale.x,transform.scale.y, 1.0f };
+
 	// 初期スピード設定
 	SetMoveSpeed(0.01f);
 	smoothing = new CSmoothing();
@@ -25,6 +30,14 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 	damageEffect->InitAnimParameter(false, 5, 2, ANIM_PATTERN::DAMAGE, 0.3f);
 	damageEffect->transform.scale = { 120.0f * 0.0025f, 120.0f * 0.0025f, 1.0f };
 	damageEffect->SetActive(false);
+
+	// ゲームオーバー演出用背景
+	gameoverBg = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
+	gameoverBg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	gameoverBg->SetActive(false);
+	// ゲームオーバー演出用イージング
+	gameoverEaseX = new CEase;
+	gameoverEaseY = new CEase;
 }
 
 void CPlayer::PlayerInput()
@@ -442,10 +455,13 @@ void CPlayer::Update()
 		dir.x = 0.0f;
 	}
 	// ゲームマネージャから状態を取得して、ゲームオーバーならフラグを上げる
-	if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
-		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
+	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !gameOverFlg)
 	{
 		gameOverFlg = true;
+		// ゲームオーバー演出に使うイージングの初期化
+		gameoverEaseX->Init(&transform.position.x, 0.0f, 3.0f, 0, EASE::easeOutSine);
+		gameoverEaseY->Init(&transform.position.y, 0.3f, 3.0f, 0, EASE::easeOutSine);
 	}
 
 	// プレイヤー操作関連の入力処理
@@ -556,6 +572,18 @@ void CPlayer::Update()
 		// ゲームオーバー時の処理
 		if (gameOverFlg)
 		{
+			// 背景を有効化する
+			gameoverBg->SetActive(true);
+			// ゲームオーバー時の背景をプレイヤーの位置とカメラに合わせる
+			gameoverBg->SetUseingCamera(this->useCamera);
+			gameoverBg->transform.position = { this->useCamera->cameraPos.x, this-> useCamera->cameraPos.y };
+			// 拡大率を変更
+			gameoverPlayerUpperSize = gameoverPlayerUpperSize < 1.5f ? gameoverPlayerUpperSize + 0.01f : gameoverPlayerUpperSize;
+			// プレイヤーの大きさを拡大する
+			this->transform.scale = { ini_scale.x * gameoverPlayerUpperSize, ini_scale.y * gameoverPlayerUpperSize, 1.0f };
+			gameoverEaseX->Update();
+			gameoverEaseY->Update();
+
 			// ダウンアニメーション再生
 			SetAnimationPattern(ANIM_PATTERN::PLAYER_DOWN);
 			SetAnimationSpeed(0.3f);
@@ -780,6 +808,8 @@ void CPlayer::SetState(PState state)
 
 void CPlayer::Draw()
 {
+	gameoverBg->Draw();
+
 	// 親クラスのDraw()を明示的に呼び出す
 	// 全てのゲームオブジェクト共通の描画処理を行う
 	CGameObject::Draw();
@@ -790,11 +820,14 @@ void CPlayer::Draw()
 
 CPlayer::~CPlayer()
 {
-	// エフェクトの解放
+	// プレイヤー内オブジェクトの解放
 	SAFE_RELEASE(vertexBufferEffect);
 	delete damageEffect;
+	delete gameoverBg;
 
 	delete smoothing;
+	delete gameoverEaseX;
+	delete gameoverEaseY;
 
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う

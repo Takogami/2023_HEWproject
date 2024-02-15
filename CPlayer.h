@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include "CGameObject.h"
-#include "CSmoothing.h"
 
+/* 前方宣言 */
+class CEase;
+class CSmoothing;
 
 enum class PState
 {
@@ -26,6 +28,17 @@ private:
 
     // プレイヤーのダメージエフェクト
     CGameObject* damageEffect;
+
+    // ゲームオーバー背景
+    CGameObject* gameoverBg;
+    // プレイヤーの拡大率
+    float gameoverPlayerUpperSize = 1.0f;
+    // スケールの初期値
+    DirectX::XMFLOAT3 ini_scale;
+    // ゲームオーバー時のプレイヤー位置を戻すイージング
+    CEase* gameoverEaseX;
+    CEase* gameoverEaseY;
+
     // プレイヤーのダメージエフェクト用頂点バッファ
     ID3D11Buffer* vertexBufferEffect;
 
