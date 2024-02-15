@@ -12,8 +12,8 @@ PARAM sound_param[SOUND_LABEL_MAX] =
 
 	{"asset/BGM/TitleBgm.wav", true},
 
-	{"asset/SE/FadeIn.wav", false },
 	{"asset/SE/FadeOut.wav", false },
+	{"asset/SE/FadeIn.wav", false },
 };
 
 #ifdef _XBOX //Big-Endian
