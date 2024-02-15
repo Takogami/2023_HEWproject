@@ -112,6 +112,7 @@ void SelectScene::Update()
 	}
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
+		gInput->ControllerVibration(5, 40000);
 		switch (userSelect)
 		{
 		case STAGE_NUM::STAGE1:

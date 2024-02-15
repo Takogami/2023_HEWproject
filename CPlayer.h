@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include "CGameObject.h"
-#include "CSmoothing.h"
 
+/* 前方宣言 */
+class CEase;
+class CSmoothing;
 
 enum class PState
 {
@@ -9,6 +11,7 @@ enum class PState
     FALL,
     BREAKLEFT,
     BREAKRIGHT,
+    CLEAR_GAMEOVER, // クリア、ゲームオーバー状態
 };
 
 class CPlayer :
@@ -22,6 +25,22 @@ private:
     float input_stickY;
     float old_input_stickX = 0.0f;
     float old_input_stickY = 0.0f;
+
+    // プレイヤーのダメージエフェクト
+    CGameObject* damageEffect;
+
+    // ゲームオーバー背景
+    CGameObject* gameoverBg;
+    // プレイヤーの拡大率
+    float gameoverPlayerUpperSize = 1.0f;
+    // スケールの初期値
+    DirectX::XMFLOAT3 ini_scale;
+    // ゲームオーバー時のプレイヤー位置を戻すイージング
+    CEase* gameoverEaseX;
+    CEase* gameoverEaseY;
+
+    // プレイヤーのダメージエフェクト用頂点バッファ
+    ID3D11Buffer* vertexBufferEffect;
 
     // 重力
     const float gravity = 0.97f / 200;
@@ -41,6 +60,7 @@ private:
     bool isWindLeft = false;    //  左向き
     bool isWindUp = false;      //  上向き
 
+    // 吹っ飛びのスムージング
     CSmoothing* smoothing;
 
     bool nockf = false;
@@ -60,6 +80,8 @@ private:
     CORRECT_DIR prevFrameCorrectY = { 0 };
     // 前フレームの方向
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
+    // 最後に横入力された向き
+    DirectX::XMFLOAT3 FInput_dir = { 1.0f, 0.0f, 0.0f };
 
     int jumpCount = 0;
 
@@ -68,7 +90,12 @@ private:
     //  アニメーションお試し
     bool fly = false;
 
-    bool flg = false;
+    // クリアフラグ
+    bool clearFlg = false;
+    // ゲームオーバーフラグ
+    bool gameOverFlg = false;
+    // リザルトに遷移するまでの時間を測る
+    int ResultShiftCount = 0;
 
 public:
     /* メンバ変数 */
@@ -86,10 +113,6 @@ public:
     // 受けている風力
     FLOAT_XY receiveWindPower = { 0.0f, 0.0f };
 
-    //吹っ飛ぶ力
-    float Sumash = 0.0f;
-
-
     /* メソッド */
 
     // 入力処理
@@ -98,9 +121,6 @@ public:
     float Jump();
     // 風を受けたときの処理
     void ReceiveWind();
-    
-    void Rknoc(DirectX::XMFLOAT3);
-    void Lknoc(DirectX::XMFLOAT3);
 
 public:
     /* メソッド */

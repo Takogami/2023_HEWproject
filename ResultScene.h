@@ -66,6 +66,8 @@ private:
 	// スコアボード降下のイージング
 	CEase* scoreBoardEase;
 
+	// セレクト可能にするかどうかのフラグ
+	bool selectOK = false;
 	// 選択ボタンが押されたかどうかを判定するフラグ
 	bool selectFlg = false;
 	// 選択されたときのイージングが完了しているか判定するフラグ

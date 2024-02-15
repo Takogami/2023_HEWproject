@@ -18,13 +18,13 @@ CGameManager::CGameManager()
 	// UIオブジェクトの実体化
 	UI_timer = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::TIMER));
 	Objects.push_back(UI_timer);
-	UI_timer->transform.position = { 1.75f, 0.85f, -0.4f };
+	UI_timer->transform.position = { 1.75f, 0.85f, -0.44f };
 	UI_timer->transform.scale = {466.0f * 0.00085f, 517.0f * 0.00085f, 1.0f};
 	UI_timer->transform.rotation = -25.0f;
 
 	UI_hpBoard = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::SCORE_BOARD));
 	Objects.push_back(UI_hpBoard);
-	UI_hpBoard->transform.position = { -1.6f, 0.85f, -0.4f };
+	UI_hpBoard->transform.position = { -1.6f, 0.85f, -0.44f };
 	UI_hpBoard->transform.scale = { 1101.0f * 0.0007f, 750.0f * 0.0007f, 1.0f };
 
 	// hpのUIの実体化
@@ -65,7 +65,7 @@ CGameManager::CGameManager()
 
 	strBg = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOARD));
 	Objects.push_back(strBg);
-	strBg->transform.position = { 0.0f, 0.93f, -0.2f };
+	strBg->transform.position = { 0.0f, 0.93f, -0.44f };
 	strBg->transform.scale = { 772.0f * 0.0013f, 472.0f * 0.0007f, 1.0f };
 
 	stageNum = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
@@ -74,7 +74,7 @@ CGameManager::CGameManager()
 	// スケールの設定
 	stageNum->transform * 0.18f;
 	stageNum->transform.rotation = -10.0f;
-	stageNum->transform.position = { 0.285f, 0.93f, -0.3f };
+	stageNum->transform.position = { 0.285f, 0.93f, -0.45f };
 	stageNum->TextureCutout(stageNumber, 0);
 
 	// 実体化の後、初期化を行う

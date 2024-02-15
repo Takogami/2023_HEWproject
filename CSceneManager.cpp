@@ -222,9 +222,6 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 		// フェードインを設定
 		fadeState = FADE_STATE::FADE_IN;
 		// 初期化の前にクリアタイムを受け取る
-		prevGameClearTime = CGameManager::GetInstance()->GetClearTime();
-		// ゲームマネージャを初期化
-		CGameManager::GetInstance()->Init();
 
 		// 1. 現在のシーンに関連するリソースを解放する
 		switch (_inScene)
@@ -291,30 +288,51 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 		case SCENE_ID::STAGE_1:
 			// もし新しいシーンがSTAGE_01なら、新しいSTAGE_01シーンを作成する
 			stage1 = new StageScene();
+			// ゲームマネージャを初期化
+			CGameManager::GetInstance()->Init();
 			break;
 
 		case SCENE_ID::STAGE_2:
 			// もし新しいシーンがTAGE_2なら、新しいSTAGE_2シーンを作成する
 			stage2 = new StageScene2();
+			// ゲームマネージャを初期化
+			CGameManager::GetInstance()->Init();
 			break;
 
 		case SCENE_ID::STAGE_3:
 			// もし新しいシーンがTAGE_3なら、新しいSTAGE_3シーンを作成する
 			stage3 = new StageScene3();
+			// ゲームマネージャを初期化
+			CGameManager::GetInstance()->Init();
 			break;
 
 		case SCENE_ID::STAGE_4:
 			// もし新しいシーンがTAGE_4なら、新しいSTAGE_4シーンを作成する
 			stage4 = new StageScene4();
+			// ゲームマネージャを初期化
+			CGameManager::GetInstance()->Init();
 			break;
 
 		case SCENE_ID::RESULT:
 			// もし新しいシーンがRESULTなら、新しいRESULTシーンを作成する
 			result = new ResultScene();
-			// 前のシーンをリザルトシーンに設定
-			result->SetPrevStage((int)retryLoadScene);
-			// クリアタイムを渡す
-			//result->SetClearTime(prevGameClearTime);
+			// HPが0かタイムアップの場合はゲームオーバーに遷移させる
+			if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
+				CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
+			{
+				// リトライで読み込むシーンをリザルトシーンに設定
+				result->SetPrevStage((int)retryLoadScene);
+				// ゲームオーバーをセット
+				result->SetResultState(RESULT_STATE::GAMEOVER);
+			}
+			// クリアのときはクリア画面に遷移させる
+			else
+			{
+				// クリアをセット
+				result->SetResultState(RESULT_STATE::CLEAR);
+				// クリアタイムを渡す
+				result->SetClearTime(CGameManager::GetInstance()->GetClearTime());
+			}
 			break;
 		}
 	}

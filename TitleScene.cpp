@@ -121,6 +121,7 @@ void TitleScene::Update()
 
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
+		gInput->ControllerVibration(5, 40000);
 		switch (cursorPoint)
 		{
 		case CCursor_Point::STAGE:
