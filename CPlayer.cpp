@@ -96,7 +96,7 @@ void CPlayer::PlayerInput()
 			anim->SetIsAnimation(true);
 		}
 		// Bボタン入力でとりあえずのジャンプ操作
-		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) && jumpCount != 5)
+		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) && jumpCount != 2)
 		{
 			isJump = true;
 			jumpStrength = ini_jumpStrength;
@@ -398,16 +398,14 @@ void CPlayer::Update()
 	{
 		this->materialDiffuse.w = 1.0f;
 	}
-
 	if (this->GetState() == PState::NORMAL)
 	{
-		this->Bcol.sizeY = 0.25f;
-		this->Bcol.sizeX = 0.2f;
+		this->Bcol.sizeY = 0.3f;
+		this->Bcol.sizeX = 0.14f;
 	}
 	else if (this->GetState() != PState::NORMAL)
 	{
-		this->Bcol.sizeY = 0.1f;
-		this->Bcol.sizeX = 0.1f;
+		this->Bcol.sizeY = 0.14f;
 	}
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
@@ -424,8 +422,8 @@ void CPlayer::Update()
 	{
 		dir.x = 0.0f;
 	}
-  
-	// プレイヤー操作関連の入力処理
+	
+	//プレイヤー操作関連の入力処理
 	PlayerInput();
 
 	// 前フレームの補正方向を初期化
@@ -450,6 +448,7 @@ void CPlayer::Update()
 	//ノックバックオブジェクトに当たったのなら以下の処理をする
 	if (nockf)
 	{
+		dir_wind.x = 0.0f;
 		//プレイヤーがノックバックした先にカメラを追従させる
 		smoothing->Update();
 		//プレイヤーがすぐ入力できないようにするためのフレームカウンター
@@ -485,22 +484,23 @@ void CPlayer::Update()
 			anim->SetIsAnimation(true);
 		}
 		gInput->ControllerVibration(10, 35000);
-		flameCounter++;
+		flameCounterMK2++;
 		//---------------------------------------------------------//
 		//プレイヤーを点滅させる
 		if (this->materialDiffuse.w == 1.0f)
 		{
-			this->materialDiffuse.w = 0.2f;
+			this->materialDiffuse.w = 0.5f;
 		}
 		else if (this->materialDiffuse.w == 0.2f)
 		{
 			this->materialDiffuse.w = 1.0f;
 		}
-		if (flameCounter == 20 && nockT == true)
-		{
-			CGameManager::GetInstance()->AddDamage(1);
+		//flameCounteMK2で無敵の時間を決めています（６０フレーム）
+		if (flameCounterMK2 == 60 && nockT == true)
+		{	
+			//nockTがfalseになるとプレイヤーの当たり判定が復活（縦軸）
 			nockT = false;
-			flameCounter = 0.0f;
+			flameCounterMK2 = 0.0f;
 		}
 	}
 
@@ -618,15 +618,27 @@ void CPlayer::Update()
 				{
 					if (prevFrameCorrect.y == -1.0f)
 					{
-						moveF = this->transform.position.x - 0.8f;
+						moveF = this->transform.position.x - 0.2f;
+					}
+					if (prevFrameCorrect.y == 1.0f)
+					{
+						moveF = this->transform.position.x - 0.2f;
 					}
 					//吹っ飛ばす計算式（右）
-					if (prevFrameCorrect.x == 1.0f)
+					if (prevFrameCorrect.x == 1.0f && dir_wind.x == 1.0f)
+					{
+						moveF = this->transform.position.x + 0.5f;
+					}
+					else if (prevFrameCorrect.x == 1.0f)
 					{
 						moveF = this->transform.position.x + 0.5f;
 					}
 					//吹っ飛ばす計算式（左）
-					if (prevFrameCorrect.x == -1.0f )
+					if (prevFrameCorrect.x == 1.0f && dir_wind.x == -1.0f)
+					{
+						moveF = this->transform.position.x - 0.5f;
+					}
+					else if (prevFrameCorrect.x == -1.0f )
 					{
 						moveF = this->transform.position.x - 0.5f;
 					}
@@ -645,12 +657,18 @@ void CPlayer::Update()
 					jumpStrength = 0;	// ジャンプ力を0にする
 				}
 				// 重力によって地面に
-				if (prevFrameCorrectY.y == 1 && nockT == false)
+				if (prevFrameCorrectY.y == 1)
 				{
 					velocity.y = 0.0f;				// 速度Yを0に戻す
 					jumpStrength = ini_jumpStrength;
 					isJump = false;
-					nockT = true;
+					//もしもプレイヤーの当たり判定がfalseならダメージを受ける
+					if (nockT == false)
+					{
+						CGameManager::GetInstance()->AddDamage(1);
+						//プレイヤーの当たり判定を受けないようにするためにtrue;
+						nockT = true;
+					}
 				}
 				// オブジェクトの位置とコライダーの中心を合わせる
 				this->transform.position.x = this->Bcol.centerX;
