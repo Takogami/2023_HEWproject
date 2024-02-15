@@ -87,8 +87,15 @@ void CSceneManager::Update()
 	{
 		if (fadeType == FADE_TYPE::ERASER)
 		{
+			if (fade_eraser_counter <= 0.0f)
+			{
+				//	サウンド再生
+				XA_Play(SOUND_LABEL_FADEIN);
+			}
+
 			// 消しゴムフェードインが開始したので計測開始
 			fade_eraser_counter++;
+
 			// 指定のフレーム数が経過しているなら
 			if (fade_eraser_counter > fade_eraser_flame)
 			{
@@ -119,10 +126,17 @@ void CSceneManager::Update()
 	{
 		if (fadeType == FADE_TYPE::ERASER)
 		{
+			if (fade_eraser_counter <= 0.0f)
+			{
+				//	サウンド再生
+				XA_Play(SOUND_LABEL_FADEOUT);
+			}
+
 			fade_eraser->SetActive(true);
 			fade_eraser->PlayAnimation();
 			// 消しゴムフェードアウトが開始したので計測開始
 			fade_eraser_counter++;
+
 			// 指定のフレーム数が経過しているなら
 			if (fade_eraser_counter > fade_eraser_flame)
 			{
@@ -237,6 +251,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 
 		case SCENE_ID::SELECT:
 			// もし現在のシーンがSELECTなら、SELECTシーンを解放する
+			//	サウンド再生の停止
+			XA_Stop(SOUND_LABEL_TITLEBGM);
 			delete select;
 			select = nullptr;
 			break;
@@ -286,6 +302,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 		case SCENE_ID::SELECT:
 			// もし新しいシーンがSELECTなら、新しいSELECTシーンを作成する
 			select = new SelectScene();
+			XA_Play(SOUND_LABEL_TITLEBGM);
 			break;
 
 		case SCENE_ID::STAGE_1:
