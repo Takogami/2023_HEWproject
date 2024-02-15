@@ -22,10 +22,10 @@ StageScene2::StageScene2()
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
-	player->transform * 0.2f;
+	player->transform * 0.3f;
 	player->transform.position.z = -0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.25f};
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.13f, 0.3f};
 	player->transform.position.x = -1.5f;
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);

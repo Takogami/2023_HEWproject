@@ -478,13 +478,12 @@ void CPlayer::Update()
 	// ステートに応じてコライダーのサイズを変更
 	if (this->GetState() == PState::NORMAL)
 	{
-		this->Bcol.sizeY = 0.25f;
-		this->Bcol.sizeX = 0.2f;
+		this->Bcol.sizeY = 0.3f;
+		this->Bcol.sizeX = 0.13f;
 	}
 	else if (this->GetState() != PState::NORMAL)
 	{
-		this->Bcol.sizeY = 0.1f;
-		this->Bcol.sizeX = 0.1f;
+		this->Bcol.sizeY = 0.13f;
 	}
 
 	// 前フレームの補正方向を初期化
