@@ -307,6 +307,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			stage1 = new StageScene();
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
+			CGameManager::GetInstance()->SetStageNum(1);
 			break;
 
 		case SCENE_ID::STAGE_2:
@@ -314,6 +315,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			stage2 = new StageScene2();
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
+			CGameManager::GetInstance()->SetStageNum(2);
 			break;
 
 		case SCENE_ID::STAGE_3:
@@ -321,6 +323,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			stage3 = new StageScene3();
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
+			CGameManager::GetInstance()->SetStageNum(3);
 			break;
 
 		case SCENE_ID::STAGE_4:
@@ -328,6 +331,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			stage4 = new StageScene4();
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
+			CGameManager::GetInstance()->SetStageNum(4);
 			break;
 
 		case SCENE_ID::RESULT:

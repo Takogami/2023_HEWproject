@@ -758,6 +758,12 @@ void CPlayer::Update()
 			case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+
+				// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+				damageEffect->transform.position = { this->transform.position.x,this->transform.position.y - 0.15f, -0.3f };
+				// エフェクトをアクティブに
+				damageEffect->SetActive(true);
+
 				// 天井にぶつかっていたならジャンプ力を0にする
 				if (prevFrameCorrectY.y == -1)
 				{

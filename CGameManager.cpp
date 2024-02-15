@@ -75,7 +75,6 @@ CGameManager::CGameManager()
 	stageNum->transform * 0.18f;
 	stageNum->transform.rotation = -10.0f;
 	stageNum->transform.position = { 0.285f, 0.93f, -0.45f };
-	stageNum->TextureCutout(stageNumber, 0);
 
 	// 実体化の後、初期化を行う
 	this->Init();
@@ -317,6 +316,9 @@ void CGameManager::Init()
 
 void CGameManager::Update()
 {
+	// ステージ番号の設定
+	stageNum->TextureCutout(stageNumber, 0);
+
 	// タイマーの更新
 	gameTime->Update();
 
