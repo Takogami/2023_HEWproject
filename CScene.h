@@ -15,6 +15,7 @@
 #include "CEase.h"
 #include "CTimer.h"
 #include "CGameManager.h"
+#include "xa2.h"
 
 class CScene
 {
