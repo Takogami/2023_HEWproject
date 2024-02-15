@@ -136,7 +136,7 @@ void CPlayer::PlayerInput()
 			anim->SetIsAnimation(true);
 		}
 		// Bボタン入力でとりあえずのジャンプ操作
-		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) && jumpCount != 5)
+		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) && jumpCount != 2)
 		{
 			isJump = true;
 			jumpStrength = ini_jumpStrength;
@@ -439,6 +439,15 @@ void CPlayer::Update()
 	{
 		this->materialDiffuse.w = 1.0f;
 	}
+	if (this->GetState() == PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.3f;
+		this->Bcol.sizeX = 0.14f;
+	}
+	else if (this->GetState() != PState::NORMAL)
+	{
+		this->Bcol.sizeY = 0.14f;
+	}
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
 	{
@@ -454,6 +463,7 @@ void CPlayer::Update()
 	{
 		dir.x = 0.0f;
 	}
+  
 	// ゲームマネージャから状態を取得して、ゲームオーバーならフラグを上げる
 	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
 		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !gameOverFlg)
@@ -463,8 +473,6 @@ void CPlayer::Update()
 		gameoverEaseX->Init(&transform.position.x, 0.0f, 3.0f, 0, EASE::easeOutSine);
 		gameoverEaseY->Init(&transform.position.y, 0.3f, 3.0f, 0, EASE::easeOutSine);
 	}
-
-	// プレイヤー操作関連の入力処理
 	PlayerInput();
 
 	// ステートに応じてコライダーのサイズを変更
@@ -501,6 +509,7 @@ void CPlayer::Update()
 	//ノックバックオブジェクトに当たったのなら以下の処理をする
 	if (nockf)
 	{
+		dir_wind.x = 0.0f;
 		//プレイヤーがノックバックした先にカメラを追従させる
 		smoothing->Update();
 		//プレイヤーがすぐ入力できないようにするためのフレームカウンター
@@ -538,21 +547,22 @@ void CPlayer::Update()
 			SetAnimationPattern(ANIM_PATTERN::GETUP);// 起き上がるアニメーション再生
 			anim->SetIsAnimation(true);
 		}
-		gInput->ControllerVibration(7, 35000);
+		gInput->ControllerVibration(10, 35000);
 		flameCounter++;
 		//---------------------------------------------------------//
 		//プレイヤーを点滅させる
 		if (this->materialDiffuse.w == 1.0f)
 		{
-			this->materialDiffuse.w = 0.2f;
+			this->materialDiffuse.w = 0.5f;
 		}
 		else if (this->materialDiffuse.w == 0.2f)
 		{
 			this->materialDiffuse.w = 1.0f;
 		}
-		if (flameCounter == 20 && nockT == true)
-		{
-			CGameManager::GetInstance()->AddDamage(1);
+		//flameCounteMK2で無敵の時間を決めています（６０フレーム）
+		if (flameCounter == 60 && nockT == true)
+		{	
+			//nockTがfalseになるとプレイヤーの当たり判定が復活（縦軸）
 			nockT = false;
 			flameCounter = 0.0f;
 			// ダメージエフェクトの初期化
@@ -662,16 +672,7 @@ void CPlayer::Update()
 					}
 					break;
 				case OBJECT_TYPE::WIND_RIGHTS:	//CSV 値30
-					if (!anim->GetIsAnimation() == false)
-					{
-						Aflame = true;
-					}
-					else if (anim->GetIsAnimation() == true)
-					{
-						Aflame = false;
-					}
-
-					if (this->GetState() == PState::BREAKLEFT && Aflame == true)
+					if (this->GetState() == PState::BREAKLEFT)
 					{
 						// 右向きの風力を取得
 						receiveWindPower.x = ((CWind*)(*it))->GetWindStrength();
@@ -699,7 +700,7 @@ void CPlayer::Update()
 						dir.x = -1.0f;
 						dir_wind.x = -1.0f;
 					}
-					break;
+				break;
 				case OBJECT_TYPE::WIND_UP:	//CSV 値３
 					if (anim->GetIsAnimation() == false && this->GetState() == PState::FALL)
 					{
@@ -749,33 +750,29 @@ void CPlayer::Update()
 						damageEffect->PlayAnimation();
 					}
 					break;
-				case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
-					// コライダーの位置を補正し、補正した方向を受け取る
-					prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
-					// オブジェクトの位置とコライダーの中心を合わせる
-					this->transform.position.x = this->Bcol.centerX;
-					this->transform.position.y = this->Bcol.centerY;
-
-					// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
-					damageEffect->transform.position = { this->transform.position.x,this->transform.position.y, -0.3f };
-					// エフェクトをアクティブに
-					damageEffect->SetActive(true);
-
-					// 天井にぶつかっていたならジャンプ力を0にする
-					if (prevFrameCorrectY.y == -1)
-					{
-						jumpStrength = 0;	// ジャンプ力を0にする
-					}
-					// 重力によって地面に
-					if (prevFrameCorrectY.y == 1 && nockT == false)
-					{
-						velocity.y = 0.0f;				// 速度Yを0に戻す
-						jumpStrength = ini_jumpStrength;
-						isJump = false;
-						nockT = true;
-					}
-					break;
-
+			  case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
+				  // コライダーの位置を補正し、補正した方向を受け取る
+				  prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+				  // 天井にぶつかっていたならジャンプ力を0にする
+				  if (prevFrameCorrectY.y == -1)
+				  {
+					  jumpStrength = 0;	// ジャンプ力を0にする
+				  }
+				  // 重力によって地面に
+				  if (prevFrameCorrectY.y == 1)
+				  {
+					  velocity.y = 0.0f;				// 速度Yを0に戻す
+					  jumpStrength = ini_jumpStrength;
+					  isJump = false;
+					  //もしもプレイヤーの当たり判定がfalseならダメージを受ける
+					  if (nockT == false)
+					  {
+						  CGameManager::GetInstance()->AddDamage(1);
+						  //プレイヤーの当たり判定を受けないようにするためにtrue;
+						  nockT = true;
+					  }
+					  break;
+            
 				case OBJECT_TYPE::GOAL:	//CSV 値99
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();

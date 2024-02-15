@@ -45,7 +45,7 @@ private:
     // 重力
     const float gravity = 0.97f / 200;
     // ジャンプ開始時(初期状態)のジャンプの強さ
-    const float ini_jumpStrength = 10.0f / 400;
+    const float ini_jumpStrength = 10.0f / 450;
     // 速度の限界値
     const float velocityY_limit = 0.0005f;
     // 現在のジャンプの強さ
@@ -66,6 +66,7 @@ private:
     bool nockf = false;
     bool nockT = false;
     bool Aflame = false;
+    bool HitTy = false;
     float moveF = 0.0f;
     float flameCounter = 0.0f;
     float flameCounterMK2 = 0.0f;
