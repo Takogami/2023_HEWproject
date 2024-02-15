@@ -553,7 +553,7 @@ void CPlayer::Update()
 		//プレイヤーを点滅させる
 		if (this->materialDiffuse.w == 1.0f)
 		{
-			this->materialDiffuse.w = 0.5f;
+			this->materialDiffuse.w = 0.2f;
 		}
 		else if (this->materialDiffuse.w == 0.2f)
 		{
@@ -671,6 +671,7 @@ void CPlayer::Update()
 						dir_wind.x = 1.0f;
 					}
 					break;
+
 				case OBJECT_TYPE::WIND_RIGHTS:	//CSV 値30
 					if (this->GetState() == PState::BREAKLEFT)
 					{
@@ -681,6 +682,7 @@ void CPlayer::Update()
 						dir_wind.x = 1.0f;
 					}
 					break;
+
 				case OBJECT_TYPE::WIND_LEFT:	//CSV 値９
 					if (anim->GetIsAnimation() == false && this->GetState() == PState::BREAKRIGHT)
 					{
@@ -691,6 +693,7 @@ void CPlayer::Update()
 						dir_wind.x = -1.0f;
 					}
 					break;
+
 				case OBJECT_TYPE::WIND_LEFTS:	//CSV 値40
 					if (this->GetState() == PState::BREAKRIGHT)
 					{
@@ -700,7 +703,8 @@ void CPlayer::Update()
 						dir.x = -1.0f;
 						dir_wind.x = -1.0f;
 					}
-				break;
+					break;
+
 				case OBJECT_TYPE::WIND_UP:	//CSV 値３
 					if (anim->GetIsAnimation() == false && this->GetState() == PState::FALL)
 					{
@@ -712,6 +716,7 @@ void CPlayer::Update()
 						dir_wind.y = 1.0f;
 					}
 					break;
+
 					//横向きのダメージタイル
 				case OBJECT_TYPE::DAMAGE_TILE:	//CSV 値4
 					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
@@ -750,29 +755,36 @@ void CPlayer::Update()
 						damageEffect->PlayAnimation();
 					}
 					break;
-			  case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
-				  // コライダーの位置を補正し、補正した方向を受け取る
-				  prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
-				  // 天井にぶつかっていたならジャンプ力を0にする
-				  if (prevFrameCorrectY.y == -1)
-				  {
-					  jumpStrength = 0;	// ジャンプ力を0にする
-				  }
-				  // 重力によって地面に
-				  if (prevFrameCorrectY.y == 1)
-				  {
-					  velocity.y = 0.0f;				// 速度Yを0に戻す
-					  jumpStrength = ini_jumpStrength;
-					  isJump = false;
-					  //もしもプレイヤーの当たり判定がfalseならダメージを受ける
-					  if (nockT == false)
-					  {
-						  CGameManager::GetInstance()->AddDamage(1);
-						  //プレイヤーの当たり判定を受けないようにするためにtrue;
-						  nockT = true;
-					  }
-					  break;
-            
+
+			case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
+				// コライダーの位置を補正し、補正した方向を受け取る
+				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+				// 天井にぶつかっていたならジャンプ力を0にする
+				if (prevFrameCorrectY.y == -1)
+				{
+					jumpStrength = 0;	// ジャンプ力を0にする
+				}
+				// 重力によって地面に
+				if (prevFrameCorrectY.y == 1)
+				{
+					velocity.y = 0.0f;				// 速度Yを0に戻す
+					jumpStrength = ini_jumpStrength;
+					isJump = false;
+					//もしもプレイヤーの当たり判定がfalseならダメージを受ける
+					if (nockT == false)
+					{
+						CGameManager::GetInstance()->AddDamage(1);
+						//プレイヤーの当たり判定を受けないようにするためにtrue;
+						nockT = true;
+					}
+				}
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+				// エフェクトの再生
+				damageEffect->PlayAnimation();
+				break;
+
 				case OBJECT_TYPE::GOAL:	//CSV 値99
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();
