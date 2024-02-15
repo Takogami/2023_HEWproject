@@ -1,5 +1,7 @@
 #pragma once
 #include "CScene.h"
+#include"CSmoothing.h"
+
 class StageScene :
     public CScene
 {
@@ -10,12 +12,19 @@ private:
 	// まとめてUpdateとDrawを行うために使用
 	std::list<CGameObject*>Objects;
 
-	CGameObject* player;
+	// 背景
+	CGameObject* bg;
 
-	ID3D11Buffer* vertexBufferCharacter;
+	CPlayer* player;
 
 	// シーン遷移中か判定するフラグ
 	bool changeSceneFlg = false;
+
+	// カメラ追従のスムージング
+	CSmoothing* camSmooth;
+
+	ID3D11Buffer* vertexBufferCharacter;
+	ID3D11Buffer* vertexBufferObject;
 
 public:
 	StageScene();

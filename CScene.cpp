@@ -55,7 +55,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 2)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.33f }, OBJECT_TYPE::WIND_RIGHT));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_RIGHT), { 0.2f, 1.0f }, OBJECT_TYPE::WIND_RIGHT));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -66,7 +66,8 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 
 				//	アニメーション初期化
-				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_RIGHT, 0.3f);
+				map_object.back()->InitAnimParameter(true, 5, 1, ANIM_PATTERN::WIND_ANIM_RIGHT, 0.15f);
+				map_object.back()->materialDiffuse.w = 0.5f;
 
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
@@ -75,7 +76,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 30)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.33f }, OBJECT_TYPE::WIND_RIGHTS));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_RIGHT), { 0.2f, 1.0f }, OBJECT_TYPE::WIND_RIGHTS));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -88,14 +89,15 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 
 				//	アニメーション初期化
-				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_RIGHT, 0.3f);
+				map_object.back()->InitAnimParameter(true, 5, 1, ANIM_PATTERN::WIND_ANIM_RIGHT, 0.15f);
+				map_object.back()->materialDiffuse.w = 0.5f;
 			}
 
 			//	風が起きるオブジェクト生成（上向き）
 			if (map_data[i][j] == 3)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.3f }, OBJECT_TYPE::WIND_UP));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_UP), { 1.0f, 0.2f }, OBJECT_TYPE::WIND_UP));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -106,7 +108,8 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 
 				//	アニメーション初期化
-				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_UP, 0.3f);
+				map_object.back()->InitAnimParameter(true, 1, 5, ANIM_PATTERN::WIND_ANIM_UP_LEFT, 0.15f);
+				map_object.back()->materialDiffuse.w = 0.5f;
 
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
@@ -148,7 +151,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 9)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.33f }, OBJECT_TYPE::WIND_LEFT));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_LEFT), { 0.2f, 1.0f }, OBJECT_TYPE::WIND_LEFT));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -159,7 +162,8 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->transform.position.y = y_tile;
 
 				//	アニメーション初期化
-				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_LEFT, 0.3f);
+				map_object.back()->InitAnimParameter(true, 5, 1, ANIM_PATTERN::WIND_ANIM_UP_LEFT, 0.15f);
+				map_object.back()->materialDiffuse.w = 0.5f;
 
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
@@ -167,7 +171,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 40)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND), { 0.5f, 0.33f }, OBJECT_TYPE::WIND_LEFTS));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::WIND_LEFT), { 0.2f, 1.0f }, OBJECT_TYPE::WIND_LEFTS));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -180,7 +184,8 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 
 				//	アニメーション初期化
-				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_LEFT, 0.3f);
+				map_object.back()->InitAnimParameter(true, 5, 1, ANIM_PATTERN::WIND_ANIM_UP_LEFT, 0.15f);
+				map_object.back()->materialDiffuse.w = 0.5f;
 			}
 			// ゴール
 			if (map_data[i][j] == 99)

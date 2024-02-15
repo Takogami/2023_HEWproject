@@ -63,6 +63,9 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	FADE_ANIM,
 	DAMAGE_FX,
 	ERASER,
+	WIND_UP,
+	WIND_LEFT,
+	WIND_RIGHT,
 };
 
 // CTextureLoaderクラス
@@ -110,6 +113,9 @@ private:
 		L"asset/fadeAnim.png",
 		L"asset/damageFX.png",
 		L"asset/kesigomu.png",
+		L"asset/wind_up.png",
+		L"asset/wind_left.png",
+		L"asset/wind_right.png",
 	};
 
 	/* メソッド */
