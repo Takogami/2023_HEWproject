@@ -23,8 +23,12 @@ private:
     // スティック入力一時保存用
     float input_stickX;
     float input_stickY;
+    float input_stickX2;
+    float input_stickY2;
     float old_input_stickX = 0.0f;
     float old_input_stickY = 0.0f;
+    float old_input_stickX2 = 0.0f;
+    float old_input_stickY2 = 0.0f;
 
     // プレイヤーのダメージエフェクト
     CGameObject* damageEffect;
@@ -82,6 +86,7 @@ private:
     DirectX::XMFLOAT3 prevFrameDir = { 0.0f, -1.0f, 0.0f };
     // 最後に横入力された向き
     DirectX::XMFLOAT3 FInput_dir = { 1.0f, 0.0f, 0.0f };
+    DirectX::XMFLOAT3 RFInput_dir = { 0.0f, 0.0f , 0.0f };
 
     int jumpCount = 0;
 
