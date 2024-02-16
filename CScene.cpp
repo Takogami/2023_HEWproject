@@ -50,7 +50,36 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT};
 			}
-
+			if (map_data[i][j] == 11)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::darkTile)));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
+			if (map_data[i][j] == 66)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CEnemy(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 0.333333f ,0.5f }, OBJECT_TYPE::ENEMY));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 			//	風が起きるオブジェクト生成（右方向）
 			if (map_data[i][j] == 2)
 			{
@@ -119,7 +148,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 4)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::TILE), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_TILE));
+				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::DTILEX), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_TILE));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする

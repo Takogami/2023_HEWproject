@@ -1,33 +1,33 @@
 //-------------------------------------------------------------------------------
 // CTextureLoader.h
 // 
-// ì¬Ò:’Ò KG
+// ä½œæˆè€…:è¾» å¹¸å®
 // 
-// ŠT—v:ƒeƒNƒXƒ`ƒƒ‚ğƒ[ƒh‚µA‚»‚ê‚ğ•Ô‚·ƒNƒ‰ƒX
-//      ƒVƒ“ƒOƒ‹ƒgƒ“‚ÅÀ‘•‚µ‚Ä‚¢‚é‚½‚ßA—Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é•K—v‚ª‚ ‚é
-//      ƒpƒX‚Æ¯•Êq‚ğ’Ç‰Á‚·‚é‚¾‚¯‚ÅƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh‚ğs‚¦‚é
+// æ¦‚è¦:ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã€ãã‚Œã‚’è¿”ã™ã‚¯ãƒ©ã‚¹
+//      ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã§å®Ÿè£…ã—ã¦ã„ã‚‹ãŸã‚ã€å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹å¿…è¦ãŒã‚ã‚‹
+//      ãƒ‘ã‚¹ã¨è­˜åˆ¥å­ã‚’è¿½åŠ ã™ã‚‹ã ã‘ã§ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰ã‚’è¡Œãˆã‚‹
 // 
-//      10/30:enumƒNƒ‰ƒX‚ğŠO‚ÉˆÚ“®
-//            GetTex‚ÌIDw’è‚ªŠÈ’P‚É
+//      10/30:enumã‚¯ãƒ©ã‚¹ã‚’å¤–ã«ç§»å‹•
+//            GetTexã®IDæŒ‡å®šãŒç°¡å˜ã«
 // 
-// ÅIXV“ú:2023/10/30
+// æœ€çµ‚æ›´æ–°æ—¥æ™‚:2023/10/30
 //-------------------------------------------------------------------------------
 
 #pragma once
 
-/* ƒCƒ“ƒNƒ‹[ƒh */
+/* ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ */
 #include "direct3d.h"
 #include <list>
 
-// ƒeƒNƒXƒ`ƒƒî•ñŠi”[—p\‘¢‘Ì
-// ƒpƒX‚ÆƒeƒNƒXƒ`ƒƒ‚ğ“Ç‚İ‚Ş•Ï”‚Ìƒ|ƒCƒ“ƒ^
+// ãƒ†ã‚¯ã‚¹ãƒãƒ£æƒ…å ±æ ¼ç´ç”¨æ§‹é€ ä½“
+// ãƒ‘ã‚¹ã¨ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿è¾¼ã‚€å¤‰æ•°ã®ãƒã‚¤ãƒ³ã‚¿
 typedef struct
 {
 	const wchar_t* path;
 	ID3D11ShaderResourceView* tex;
 }TEX_INFO;
 
-enum class TEX_ID	// ƒeƒNƒXƒ`ƒƒ¯•Êq—ñ‹“Œ^
+enum class TEX_ID	// ãƒ†ã‚¯ã‚¹ãƒãƒ£è­˜åˆ¥å­åˆ—æŒ™å‹
 {
 	BLOCK,
 	NUM,
@@ -67,24 +67,27 @@ enum class TEX_ID	// ƒeƒNƒXƒ`ƒƒ¯•Êq—ñ‹“Œ^
 	WIND_UP,
 	WIND_LEFT,
 	WIND_RIGHT,
+  BG2,
+	darkTile,
+	DTILEX,
 };
 
-// CTextureLoaderƒNƒ‰ƒX
+// CTextureLoaderã‚¯ãƒ©ã‚¹
 class CTextureLoader
 {
 private:
-	/* ƒƒ“ƒo•Ï” */
+	/* ãƒ¡ãƒ³ãƒå¤‰æ•° */
  
-	static CTextureLoader* instance;		// —Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğŠi”[‚·‚é‚½‚ß‚Ìƒ|ƒCƒ“ƒ^
+	static CTextureLoader* instance;		// å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ãƒã‚¤ãƒ³ã‚¿
 
-	std::list<TEX_INFO> texList;			// ƒeƒNƒXƒ`ƒƒî•ñ‚ÌƒŠƒXƒg
-	std::list<const wchar_t*> pathList =	// ƒpƒX‚ÌƒŠƒXƒg
+	std::list<TEX_INFO> texList;			// ãƒ†ã‚¯ã‚¹ãƒãƒ£æƒ…å ±ã®ãƒªã‚¹ãƒˆ
+	std::list<const wchar_t*> pathList =	// ãƒ‘ã‚¹ã®ãƒªã‚¹ãƒˆ
 	{
 		L"asset/block.png",
 		L"asset/suuji.png",
-		L"asset/Fade.png",	//	‚µ‚ÅƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ(•—‚Ì‰EŒü‚«)
+		L"asset/Fade.png",	//	è©¦ã—ã§ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿(é¢¨ã®å³å‘ã)
 		L"asset/title.png",
-		L"asset/tile.png",
+		L"asset/gabyouue.png",
 		L"asset/bg.png",
 		L"asset/Playeranim.png",
 		L"asset/book.png",
@@ -118,23 +121,26 @@ private:
 		L"asset/wind_up.png",
 		L"asset/wind_left.png",
 		L"asset/wind_right.png",
+    L"asset/bg2.png",
+		L"asset/Dtile.png",
+		L"asset/gabyou3.png"
 	};
 
-	/* ƒƒ\ƒbƒh */
+	/* ãƒ¡ã‚½ãƒƒãƒ‰ */
 
-	CTextureLoader();				//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	~CTextureLoader();				//ƒfƒXƒgƒ‰ƒNƒ^
+	CTextureLoader();				//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	~CTextureLoader();				//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 
-	static void CleanupSingleton();	//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“I—¹‚ÉƒR[ƒ‹ƒoƒbƒN‚Æ‚µ‚ÄŒÄ‚Ño‚·(ƒVƒ“ƒOƒ‹ƒgƒ“‚Ì‰ğ•ú)
+	static void CleanupSingleton();	//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã¨ã—ã¦å‘¼ã³å‡ºã™(ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã®è§£æ”¾)
 
 public:
-	/* ƒƒ\ƒbƒh */
+	/* ãƒ¡ã‚½ãƒƒãƒ‰ */
 
-	void LoadTexture();							// ƒeƒNƒXƒ`ƒƒ‚ğƒ[ƒh‚·‚é
-	void UnloadTexture();						// ƒeƒNƒXƒ`ƒƒ‚ğƒAƒ“ƒ[ƒh‚·‚é
+	void LoadTexture();							// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
+	void UnloadTexture();						// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
 
-	ID3D11ShaderResourceView* GetTex(TEX_ID id);// ƒeƒNƒXƒ`ƒƒ‚ğæ“¾‚·‚é
+	ID3D11ShaderResourceView* GetTex(TEX_ID id);// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’å–å¾—ã™ã‚‹
 
-	static CTextureLoader* GetInstance();		//ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+	static CTextureLoader* GetInstance();		//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
 };
 
