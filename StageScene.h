@@ -17,6 +17,10 @@ private:
 
 	CPlayer* player;
 
+	CGameObject* zyougi;
+	CGameObject* book;
+	CGameObject* pencil;
+
 	// シーン遷移中か判定するフラグ
 	bool changeSceneFlg = false;
 
