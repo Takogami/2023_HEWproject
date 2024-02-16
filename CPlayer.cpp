@@ -479,12 +479,10 @@ void CPlayer::Update()
 	if (this->GetState() == PState::NORMAL)
 	{
 		this->Bcol.sizeY = 0.25f;
-		this->Bcol.sizeX = 0.2f;
 	}
 	else if (this->GetState() != PState::NORMAL)
 	{
 		this->Bcol.sizeY = 0.1f;
-		this->Bcol.sizeX = 0.1f;
 	}
 
 	// 前フレームの補正方向を初期化
@@ -734,7 +732,7 @@ void CPlayer::Update()
 					{
 						if (prevFrameCorrect.y == -1.0f)
 						{
-							moveF = this->transform.position.x - 0.8f;
+							moveF = this->transform.position.x - 0.5f;
 						}
 						//吹っ飛ばす計算式（右）
 						if (prevFrameCorrect.x == 1.0f)
@@ -784,7 +782,6 @@ void CPlayer::Update()
 				// エフェクトの再生
 				damageEffect->PlayAnimation();
 				break;
-
 				case OBJECT_TYPE::GOAL:	//CSV 値99
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();
@@ -792,7 +789,42 @@ void CPlayer::Update()
 					// クリアフラグを上げる
 					clearFlg = true;
 					break;
+				case OBJECT_TYPE::ENEMY:	//CSV 値66
+					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
+					// オブジェクトの位置とコライダーの中心を合わせる
+					this->transform.position.x = this->Bcol.centerX;
+					this->transform.position.y = this->Bcol.centerY;
 
+					// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+					damageEffect->transform.position = { this->transform.position.x,this->transform.position.y, -0.3f };
+					// エフェクトをアクティブに
+					damageEffect->SetActive(true);
+
+					//プレイヤーのノックバックの処理
+					if (!nockf)
+					{
+						if (prevFrameCorrect.y == 1.0f)
+						{
+							moveF = this->transform.position.x - 0.3f;
+						}
+						//吹っ飛ばす計算式（右）
+						if (prevFrameCorrect.x == 1.0f)
+						{
+							moveF = this->transform.position.x + 0.5f;
+						}
+						//吹っ飛ばす計算式（左）
+						if (prevFrameCorrect.x == -1.0f)
+						{
+							moveF = this->transform.position.x - 0.5f;
+						}
+						//追従カメラの初期化
+						smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
+						CGameManager::GetInstance()->AddDamage(1);
+						nockf = true;
+
+						// エフェクトの再生
+						damageEffect->PlayAnimation();
+					}
 				default:
 					break;
 				}

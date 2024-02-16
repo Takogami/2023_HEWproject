@@ -61,7 +61,10 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	CLEAR_STRING,
 	WIND,
 	FADE_ANIM,
-	DAMAGE_FX
+	DAMAGE_FX,
+	BG2,
+	darkTile,
+	DTILEX,
 };
 
 // CTextureLoaderクラス
@@ -79,7 +82,7 @@ private:
 		L"asset/suuji.png",
 		L"asset/Fade.png",	//	試しでテクスチャ読み込み(風の右向き)
 		L"asset/title.png",
-		L"asset/tile.png",
+		L"asset/gabyouue.png",
 		L"asset/bg.png",
 		L"asset/Playeranim.png",
 		L"asset/book.png",
@@ -108,6 +111,9 @@ private:
 		L"asset/Senpuuki.png",
 		L"asset/fadeAnim.png",
 		L"asset/damageFX.png",
+		L"asset/bg2.png",
+		L"asset/Dtile.png",
+		L"asset/gabyou3.png"
 	};
 
 	/* メソッド */

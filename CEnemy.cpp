@@ -12,6 +12,7 @@ void CEnemy::EnemyPattern()
 		walkTime->StartTimer();
 		break;
 	case EState::LEFTWALK:
+		SetAnimationPattern(ANIM_PATTERN::ENEMY_MOVE);
 		dir.x = -1.0f;
 		prevFrameDir.x = dir.x;
 		if (walkTime->GetTimerState() == TIMER_STATE::END)//(prevFrameCorrect.x >= 1)
@@ -22,6 +23,7 @@ void CEnemy::EnemyPattern()
 		}
 		break;
 	case EState::RIGHTWALK:
+		SetAnimationPattern(ANIM_PATTERN::ENEMY_MOVE_R);
 		dir.x = 1.0f;
 		prevFrameDir.x = dir.x;
 		if (walkTime->GetTimerState() == TIMER_STATE::END)//(prevFrameCorrect.x <= -1)
@@ -41,6 +43,7 @@ CEnemy::CEnemy(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJ
 	// 初期スピード設定
 	SetMoveSpeed(0.005f);
 	// 重力を初期値とする
+	this->InitAnimParameter(true, 3, 2, ANIM_PATTERN::ENEMY_MOVE, 0.2f);
 	velocity.y = gravity;
 	walkTime = new CTimer;
 }
@@ -154,20 +157,20 @@ void CEnemy::Update()
 				this->transform.position.y = this->Bcol.centerY;
 				break;
 
-			case OBJECT_TYPE::WIND_RIGHT:	//	風（右向き）
-				dir_wind.x = 1.0f;
-				dir.x = 1.0f;
-				windStrength = 0.01f;
-				// オブジェクトの位置とコライダーの中心を合わせる
-				this->Bcol.centerX = this->transform.position.x;
-				this->Bcol.centerY = this->transform.position.y;
-				break;
+			//case OBJECT_TYPE::WIND_RIGHT:	//	風（右向き）
+			//	dir_wind.x = 1.0f;
+			//	dir.x = 1.0f;
+			//	windStrength = 0.01f;
+			//	// オブジェクトの位置とコライダーの中心を合わせる
+			//	this->Bcol.centerX = this->transform.position.x;
+			//	this->Bcol.centerY = this->transform.position.y;
+			//	break;
 
-			case OBJECT_TYPE::WIND_UP:		//	風（上向き）
-				dir_wind.y = 1.0f;
-				dir.y = 1.0f;
-				windStrength = 0.01f;
-				break;
+			//case OBJECT_TYPE::WIND_UP:		//	風（上向き）
+			//	dir_wind.y = 1.0f;
+			//	dir.y = 1.0f;
+			//	windStrength = 0.01f;
+			//	break;
 
 			default:
 				break;

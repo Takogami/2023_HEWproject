@@ -9,7 +9,7 @@ StageScene2::StageScene2()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG2), { 1.0f ,1.0f });
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
@@ -22,11 +22,12 @@ StageScene2::StageScene2()
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
-	player->transform * 0.2f;
+	player->transform * 0.25f;
 	player->transform.position.z = -0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.25f};
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.15f, 0.25f};
 	player->transform.position.x = -1.5f;
+	player->transform.position.y = 0.5f;
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
