@@ -20,8 +20,7 @@ private:
 	bool changeSceneFlg = false;
 
 	// カメラ追従のスムージング
-	CSmoothing* camSmoothX;
-	CSmoothing* camSmoothY;
+	CSmoothing* camSmooth;
 
 	ID3D11Buffer* vertexBufferCharacter;
 	ID3D11Buffer* vertexBufferObject;
