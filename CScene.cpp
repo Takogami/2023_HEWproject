@@ -50,6 +50,21 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT};
 			}
+			if (map_data[i][j] == 50)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CGameObject(vertexBufferMap,NULL));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 			if (map_data[i][j] == 11)
 			{
 				// マップタイルを1つnewする
@@ -101,6 +116,26 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			//	風が起きるオブジェクト生成（右方向）
+			if (map_data[i][j] == 22)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.33f }, OBJECT_TYPE::WIND_RIGHT));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+
+				//	アニメーション初期化
+				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_RIGHT, 0.3f);
+
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 			//	風が起きるオブジェクト生成（右方向）(空中）
 			if (map_data[i][j] == 30)
 			{
@@ -143,6 +178,25 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			if (map_data[i][j] == 33)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.33f }, OBJECT_TYPE::WIND_UP));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+
+				//	アニメーション初期化
+				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_UP, 0.3f);
+
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 
 			// ダメージタイル
 			if (map_data[i][j] == 4)
@@ -160,7 +214,21 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
-
+			if (map_data[i][j] == 25)	//下向きの画鋲
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::DTILEX), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_DOWN));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
 			if (map_data[i][j] == 20)
 			{
 				// マップタイルを1つnewする
@@ -197,6 +265,26 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			if (map_data[i][j] == 80)
+			{
+				// マップタイルを1つnewする
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.33f }, OBJECT_TYPE::WIND_LEFT));
+				// 使うカメラを設定
+				map_object.back()->SetUseingCamera(_useCamera);
+				// タイルのサイズをセットする
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				// タイルの位置をセットする
+				map_object.back()->transform.position.x = x_tile;
+				map_object.back()->transform.position.y = y_tile;
+
+				//	アニメーション初期化
+				map_object.back()->InitAnimParameter(true, 2, 3, ANIM_PATTERN::WIND_LEFT, 0.3f);
+
+				// コライダーの設定
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+			}
+
 			if (map_data[i][j] == 40)
 			{
 				// マップタイルを1つnewする

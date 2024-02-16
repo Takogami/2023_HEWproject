@@ -70,6 +70,7 @@ enum class TEX_ID	// テクスチャ識別子列挙型
   BG2,
 	darkTile,
 	DTILEX,
+	Senpuuki,
 };
 
 // CTextureLoaderクラス
@@ -123,7 +124,8 @@ private:
 		L"asset/wind_right.png",
     L"asset/bg2.png",
 		L"asset/Dtile.png",
-		L"asset/gabyou3.png"
+		L"asset/gabyou3.png",
+		L"asset/Senpuuki.png",
 	};
 
 	/* メソッド */

@@ -53,6 +53,8 @@ void CPlayer::PlayerInput()
 	// スティックの入力を保存
 	input_stickX = gInput->GetLeftStickX();
 	input_stickY = gInput->GetLeftStickY();
+	input_stickX2 = gInput->GetRightStickX();
+	input_stickY2 = gInput->GetRightStickY();
 	switch (State)
 	{
 	case PState::NORMAL: //通常状態
@@ -92,7 +94,7 @@ void CPlayer::PlayerInput()
 					SetAnimationPattern(ANIM_PATTERN::IDOL_L);// アイドルアニメーション再生
 				}
 			}
-			if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1)
+			if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1 && (input_stickY2 < 0.0f))
 			{
 				SetState(PState::FALL);// 倒れる
 				// 最後に入力された方向に応じてアニメーションを変更
@@ -109,7 +111,7 @@ void CPlayer::PlayerInput()
 		}
 		break;
 	case PState::FALL:// 倒れた状態
-		if ((input_stickY > 0.0f) && (old_input_stickY >= 0.0f))
+		if ((input_stickY > 0.0f) && (input_stickY2 > 0.0f) && (old_input_stickY >= 0.0f))
 		{
 			SetState(PState::NORMAL);// 通常状態に戻す
 			// 最後に入力された方向に応じてアニメーションを変更
@@ -123,7 +125,7 @@ void CPlayer::PlayerInput()
 			}
 			anim->SetIsAnimation(true);
 		}
-		if (input_stickX <= -1.0f && (old_input_stickX > -1.0f))
+		if (input_stickX2 <= -1.0f && (old_input_stickX2 > -1.0f))
 		{
 			SetState(PState::BREAKLEFT);// 左に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
@@ -155,7 +157,7 @@ void CPlayer::PlayerInput()
 	case PState::BREAKLEFT:// 左に折れた状態
 		if (anim->GetIsAnimation() == false)
 		{
-			if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
+			if (input_stickX2 >= 1.0f && (old_input_stickX2 < 1.0f))
 			{
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
@@ -178,8 +180,10 @@ void CPlayer::PlayerInput()
 	default:
 		break;
 	}
-	old_input_stickX= input_stickX;
-	old_input_stickY= input_stickY;
+	old_input_stickX = input_stickX;
+	old_input_stickY = input_stickY;
+	old_input_stickX2 = input_stickX2;
+	old_input_stickY2 = input_stickY2;
 
 
 #else
@@ -636,7 +640,7 @@ void CPlayer::Update()
 				// オブジェクトの種類に応じて処理を変更
 				switch ((*it)->GetObjectType())
 				{
-				case OBJECT_TYPE::NORMAL:	//CSV　値１
+				case OBJECT_TYPE::NORMAL:	//CSV　値１	CSV 50(透明なタイル)
 					// コライダーの位置を補正し、補正した方向を受け取る
 					prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 					// 天井にぶつかっていたならジャンプ力を0にする
@@ -653,6 +657,10 @@ void CPlayer::Update()
 						jumpCount = 0;
 					}
 
+					// オブジェクトの位置とコライダーの中心を合わせる
+					this->transform.position.x = this->Bcol.centerX;
+					this->transform.position.y = this->Bcol.centerY;
+					break;
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;
 					this->transform.position.y = this->Bcol.centerY;
@@ -755,7 +763,6 @@ void CPlayer::Update()
 						damageEffect->PlayAnimation();
 					}
 					break;
-
 			case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
@@ -792,6 +799,34 @@ void CPlayer::Update()
 				// エフェクトの再生
 				damageEffect->PlayAnimation();
 				break;
+			case OBJECT_TYPE::DAMAGE_DOWN:
+				//	サウンド再生
+				XA_Play(SOUND_LABEL_DAMAGEHIT);
+				prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
+				// オブジェクトの位置とコライダーの中心を合わせる
+				this->transform.position.x = this->Bcol.centerX;
+				this->transform.position.y = this->Bcol.centerY;
+
+				// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+				damageEffect->transform.position = { this->transform.position.x,this->transform.position.y, -0.3f };
+				// エフェクトをアクティブに
+				damageEffect->SetActive(true);
+
+				//プレイヤーのノックバックの処理
+				if (!nockf)
+				{
+					if (prevFrameCorrect.y == -1.0f)
+					{
+						moveF = this->transform.position.x - 0.5f;
+					}
+					//追従カメラの初期化
+					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
+					CGameManager::GetInstance()->AddDamage(1);
+					nockf = true;
+
+					// エフェクトの再生
+					damageEffect->PlayAnimation();
+				}
 				case OBJECT_TYPE::GOAL:	//CSV 値99
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();

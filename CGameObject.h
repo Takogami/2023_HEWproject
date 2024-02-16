@@ -37,7 +37,9 @@ enum class OBJECT_TYPE
 	DAMAGE_TILE,	// ダメージを受ける床
 	ENEMY,			// 敵オブジェクト
 	DAMAGE_TILEY,	// 縦専用
+	DAMAGE_DOWN,	//下向きの画鋲
 	GOAL,			// ゴール
+	SKELETON_TILE,	//透明なタイル
 };
 
 //CGameObjectクラス
