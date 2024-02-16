@@ -640,7 +640,7 @@ void CPlayer::Update()
 				// オブジェクトの種類に応じて処理を変更
 				switch ((*it)->GetObjectType())
 				{
-				case OBJECT_TYPE::NORMAL:	//CSV　値１	CSV 50(透明なタイル)
+				case OBJECT_TYPE::NORMAL:	//CSV　値１
 					// コライダーの位置を補正し、補正した方向を受け取る
 					prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 					// 天井にぶつかっていたならジャンプ力を0にする
@@ -661,6 +661,23 @@ void CPlayer::Update()
 					this->transform.position.x = this->Bcol.centerX;
 					this->transform.position.y = this->Bcol.centerY;
 					break;
+				case OBJECT_TYPE::SKELETON_TILE:	//CSV 50(透明なタイル)
+					// コライダーの位置を補正し、補正した方向を受け取る
+					prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+					// 天井にぶつかっていたならジャンプ力を0にする
+					if (prevFrameCorrect.y == -1)
+					{
+						jumpStrength = 0;	// ジャンプ力を0にする
+					}
+					// 重力によって地面に衝突していたなら
+					if (prevFrameCorrect.y == 1)
+					{
+						velocity.y = 0.0f;				// 速度Yを0に戻す
+						jumpStrength = ini_jumpStrength;
+						isJump = false;
+						jumpCount = 0;
+					}
+
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;
 					this->transform.position.y = this->Bcol.centerY;
@@ -763,6 +780,7 @@ void CPlayer::Update()
 						damageEffect->PlayAnimation();
 					}
 					break;
+
 			case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
@@ -799,6 +817,7 @@ void CPlayer::Update()
 				// エフェクトの再生
 				damageEffect->PlayAnimation();
 				break;
+
 			case OBJECT_TYPE::DAMAGE_DOWN:
 				//	サウンド再生
 				XA_Play(SOUND_LABEL_DAMAGEHIT);
@@ -819,6 +838,16 @@ void CPlayer::Update()
 					{
 						moveF = this->transform.position.x - 0.5f;
 					}
+					//吹っ飛ばす計算式（右）
+					if (prevFrameCorrect.x == 1.0f)
+					{
+						moveF = this->transform.position.x + 0.5f;
+					}
+					//吹っ飛ばす計算式（左）
+					if (prevFrameCorrect.x == -1.0f)
+					{
+						moveF = this->transform.position.x - 0.5f;
+					}
 					//追従カメラの初期化
 					smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
 					CGameManager::GetInstance()->AddDamage(1);
@@ -827,6 +856,8 @@ void CPlayer::Update()
 					// エフェクトの再生
 					damageEffect->PlayAnimation();
 				}
+				break;
+
 				case OBJECT_TYPE::GOAL:	//CSV 値99
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();
@@ -834,6 +865,7 @@ void CPlayer::Update()
 					// クリアフラグを上げる
 					clearFlg = true;
 					break;
+
 				case OBJECT_TYPE::ENEMY:	//CSV 値66
 					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
 					// オブジェクトの位置とコライダーの中心を合わせる

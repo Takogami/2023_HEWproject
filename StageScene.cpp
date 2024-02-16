@@ -139,6 +139,7 @@ void StageScene::Draw()
 		// 地形の描画
 		DrawTerrain();
 	}
+
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{

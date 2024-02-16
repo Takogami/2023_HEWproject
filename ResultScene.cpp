@@ -400,10 +400,6 @@ void ResultScene::UpdateGameOver()
 			case SCENE_ID::STAGE_3:
 				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3, FADE_TYPE::ERASER);
 				break;
-
-			case SCENE_ID::STAGE_4:
-				CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_4, FADE_TYPE::ERASER);
-				break;
 			default:
 				break;
 			}

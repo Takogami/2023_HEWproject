@@ -67,12 +67,13 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	WIND_UP,
 	WIND_LEFT,
 	WIND_RIGHT,
-  BG2,
+	BG2,
 	darkTile,
 	DTILEX,
 	PENCIL,
-  Senpuuki,
+	Senpuuki,
 	NOMAL_TILE,
+	DTILE_DOWN,
 };
 
 // CTextureLoaderクラス
@@ -127,9 +128,10 @@ private:
 		L"asset/bg2.png",
 		L"asset/Dtile.png",
 		L"asset/gabyou3.png",
-		L"asset/pencil.png"
-    L"asset/Senpuuki.png",
-		L"asset/nomal.png"
+		L"asset/pencil.png",
+		L"asset/Senpuuki.png",
+		L"asset/nomal.png",
+		L"asset/gabyousita.png",
 	};
 
 	/* メソッド */

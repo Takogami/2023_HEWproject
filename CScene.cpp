@@ -50,10 +50,11 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT};
 			}
+			// スケルトンタイル
 			if (map_data[i][j] == 50)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CGameObject(vertexBufferMap,NULL));
+				map_object.push_back(new CGameObject(vertexBufferMap, NULL, {1.0f, 1.0f}, OBJECT_TYPE::SKELETON_TILE));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -65,6 +66,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			// 通常普通のタイル(模様無し)
 			if (map_data[i][j] == 11)
 			{
 				// マップタイルを1つnewする
@@ -80,6 +82,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			// 黒いタイル
 			if (map_data[i][j] == 12)
 			{
 				// マップタイルを1つnewする
@@ -95,6 +98,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			// 敵
 			if (map_data[i][j] == 66)
 			{
 				// マップタイルを1つnewする
@@ -131,7 +135,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
-			//	風が起きるオブジェクト生成（右方向）
+			//	右向き扇風機
 			if (map_data[i][j] == 22)
 			{
 				// マップタイルを1つnewする
@@ -193,6 +197,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			// 上向き扇風機
 			if (map_data[i][j] == 33)
 			{
 				// マップタイルを1つnewする
@@ -232,7 +237,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 25)	//下向きの画鋲
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::DTILEX), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_DOWN));
+				map_object.push_back(new Cdamagetile(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::DTILE_DOWN), { 1.0f, 1.0f }, OBJECT_TYPE::DAMAGE_DOWN));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -280,6 +285,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}
+			// 左向き扇風機
 			if (map_data[i][j] == 80)
 			{
 				// マップタイルを1つnewする
@@ -364,7 +370,11 @@ void CScene::DrawTerrain()
 	// 地形オブジェクトの描画
 	for (auto it = map_object.begin(); it != map_object.end(); it++)
 	{
-		(*it)->Draw();
+		// 透明タイルは描画しない
+		if ((*it)->GetObjectType() != OBJECT_TYPE::SKELETON_TILE)
+		{
+			(*it)->Draw();
+		}
 	}
 }
 
