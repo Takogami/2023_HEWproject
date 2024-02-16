@@ -6,6 +6,7 @@ StageScene3::StageScene3()
 {
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
+	Cam->cameraPos.x = 6.0f;
 
 	// プレイヤーの実体化と初期化
 	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
@@ -13,6 +14,24 @@ StageScene3::StageScene3()
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	bg->transform.position.z = 0.4f;
+
+	//	ゲームオブジェクトの実体化と初期化
+	book = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ2), { 1.0f,1.0f });
+	/*book->transform.scale = { 0.05f, 1080.0f, 1.0f };
+	book->transform.position.z = 0.4f;*/
+
+	//	ものさし（スタート）
+	ruler[0] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::RULER), {1.0f,1.0f});
+	ruler[0]->SetUseingCamera(Cam);
+	ruler[0]->transform.scale = { 0.3f, 2.5f, 1.0f };
+	ruler[0]->transform.position = { -2.0f, 0.0f, -0.1f };
+
+	//	ものさし（ゴール）
+	ruler[1] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::RULER), { 1.0f,1.0f });
+	ruler[1]->SetUseingCamera(Cam);
+	ruler[1]->transform.scale = { 0.3f, 2.5f, 1.0f };
+	ruler[1]->transform.position = { 7.75f, 0.0f, -0.1f };
+	ruler[1]->transform.rotation = 180.0f;
 
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
@@ -44,6 +63,9 @@ StageScene3::~StageScene3()
 	SAFE_RELEASE(vertexBufferObject);
 
 	delete bg;
+	delete book;
+	delete ruler[0];
+	delete ruler[1];
 
 	// 各オブジェクトのメモリ解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -89,7 +111,7 @@ void StageScene3::Update()
 
 	CGameManager::GetInstance()->Update();
 
-	camSmooth->Update();
+	//camSmooth->Update();
 	Cam->Update();
 
 	CScene::UpdateTerrain();
@@ -110,6 +132,9 @@ void StageScene3::Draw()
 	{
 		// 地形の描画
 		DrawTerrain();
+		//book->Draw();
+		ruler[0]->Draw();
+		ruler[1]->Draw();
 	}
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)

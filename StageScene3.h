@@ -15,6 +15,10 @@ private:
 	// 背景
 	CGameObject* bg;
 
+	//	ゲームオブジェクト
+	CGameObject* book;
+	CGameObject* ruler[3];
+
 	CPlayer* player;
 
 	bool changeSceneFlg = false;
@@ -24,9 +28,6 @@ private:
 
 	ID3D11Buffer* vertexBufferCharacter;
 	ID3D11Buffer* vertexBufferObject;
-
-	CDrawString* drawStringTest;
-	CDrawString* drawStringTest2;
 
 public:
 	StageScene3();
