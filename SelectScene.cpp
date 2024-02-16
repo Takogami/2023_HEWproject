@@ -73,6 +73,9 @@ void SelectScene::Update()
 	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
 	{
+		//	サウンド再生
+		XA_Play(SOUND_LABEL_BOOKSE);
+
 		// 選択中のステージの更新
 		stageNum -= 1;
 		// ステージ番号を列挙型クラスに変換する
@@ -94,6 +97,9 @@ void SelectScene::Update()
 	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1))
 		&& stageNum < listNum && !selectMoveUp && !selectMoveDown)
 	{
+		//	サウンド再生
+		XA_Play(SOUND_LABEL_BOOKSE);
+
 		// 選択中のステージの更新
 		stageNum += 1;
 		// ステージ番号を列挙型クラスに変換する

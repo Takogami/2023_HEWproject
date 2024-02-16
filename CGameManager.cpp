@@ -243,6 +243,9 @@ void CGameManager::UpdateUIhp()
 			UI_breakHeart_L[0]->materialDiffuse.w =
 				UI_breakHeart_L[0]->materialDiffuse.w > 0.0f ?
 				UI_breakHeart_L[0]->materialDiffuse.w -= 0.02f : UI_breakHeart_L[2]->materialDiffuse.w;
+
+			//サウンド再生
+			XA_Play(SOUND_LABEL_GAMEOVER_2);
 		}
 		// ハートのイージングの更新
 		breakHeart_L_ease[0]->Update();

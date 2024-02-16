@@ -718,6 +718,8 @@ void CPlayer::Update()
 
 					//横向きのダメージタイル
 				case OBJECT_TYPE::DAMAGE_TILE:	//CSV 値4
+					//	サウンド再生
+					XA_Play(SOUND_LABEL_DAMAGEHIT);
 					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;
@@ -774,6 +776,8 @@ void CPlayer::Update()
 					{
 						CGameManager::GetInstance()->AddDamage(1);
 						//プレイヤーの当たり判定を受けないようにするためにtrue;
+						//	サウンド再生
+						XA_Play(SOUND_LABEL_DAMAGEHIT);
 						nockT = true;
 					}
 				}

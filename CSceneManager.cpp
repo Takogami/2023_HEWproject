@@ -221,6 +221,9 @@ void CSceneManager::Update()
 
 void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 {
+	//	サウンド再生の停止
+	XA_Stop(SOUND_LABEL_TITLEBGM);
+
 	if (NewScene != _inScene)
 	{
 		NewScene = _inScene;
@@ -248,8 +251,6 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 
 		case SCENE_ID::SELECT:
 			// もし現在のシーンがSELECTなら、SELECTシーンを解放する
-			//	サウンド再生の停止
-			XA_Stop(SOUND_LABEL_TITLEBGM);
 			delete select;
 			select = nullptr;
 			break;

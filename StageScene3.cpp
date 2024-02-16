@@ -9,8 +9,11 @@ StageScene3::StageScene3()
 
 	// プレイヤーの実体化と初期化
 	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
-	// オブジェクトをリストに登録
-	Objects.push_back(bg);
+	// 背景の設定
+	bg->SetUseingCamera(Cam);
+	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	bg->transform.position.z = 0.4f;
+
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	// オブジェクトをリストに登録
@@ -18,40 +21,17 @@ StageScene3::StageScene3()
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
-	player->transform * 0.2f;
+	player->transform * 0.3f;
+	player->transform.position.z = -0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.13f, 0.3f };
+	player->transform.position.x = -1.5f;
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
-	// 背景の設定
-	bg->SetUseingCamera(Cam);
-	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
-	bg->transform.position.z = 0.99f;
-
 	// スムージングの実体化
-	camSmoothX = new CSmoothing;
-	camSmoothY = new CSmoothing;
-	camSmoothX->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
-	camSmoothY->InitSmooth(&player->transform.position.y, &Cam->cameraPos.y, 0.1f);
-
-	// 文字列の設定
-	drawStringTest = new CDrawString;
-	drawStringTest->SetFont(FontID::KARAKAZE);
-	drawStringTest->SetString("これはテストです。abc あいうえお アイウエオ 漢字");
-	drawStringTest->SetPosition({ 0.0f, 100.0f });
-	drawStringTest->SetFontSize(40.0f);
-	drawStringTest->SetFontColor(1.0f, 0.0f, 1.0f);
-	drawStringTest->SetFontWeight(FONT_WEIGHT::HEAVY);
-	drawStringTest->SetFontStyle(FONT_STYLE::ITALIC);
-
-	drawStringTest2 = new CDrawString;
-	drawStringTest2->SetFont(FontID::LETROGO);
-	drawStringTest2->SetString("これはテストです。\nabc\nあいうえお\nアイウエオ\n漢字");
-	drawStringTest2->SetPosition({ 0.0f, 400.0f });
-	drawStringTest2->SetFontSize(30.0f);
-	drawStringTest2->SetLineSpacing(20.0f);
-	drawStringTest2->SetShadow({ -2.0f, -1.0f }, 0.0f, 0.0f, 0.0f, 0.5f);
+	camSmooth = new CSmoothing;
+	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_3, Cam);
@@ -63,6 +43,8 @@ StageScene3::~StageScene3()
 	SAFE_RELEASE(vertexBufferCharacter);
 	SAFE_RELEASE(vertexBufferObject);
 
+	delete bg;
+
 	// 各オブジェクトのメモリ解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
@@ -71,11 +53,7 @@ StageScene3::~StageScene3()
 
 	// カメラオブジェクトの削除
 	delete Cam;
-	delete camSmoothX;
-	delete camSmoothY;
-
-	delete drawStringTest;
-	delete drawStringTest2;
+	delete camSmooth;
 
 	// ステージの後片付け
 	CScene::DestroyStage();
@@ -88,22 +66,19 @@ void StageScene3::Update()
 		CGameManager::GetInstance()->AddDamage(1);
 	}
 
-	// タイムアップ、またはHPが0で強制シーン遷移
-	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
-		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
+	// クリア、ゲームオーバーでシーン遷移
+	if (player->GetState() == PState::CLEAR_GAMEOVER && !changeSceneFlg)
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		// クリアなら、シーン遷移演出を変える
+		if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::CLEAR)
+		{
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT, FADE_TYPE::ERASER);
+		}
+		else
+		{
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		}
 		changeSceneFlg = true;
-	}
-
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
-	}
-
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
-	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
 	}
 
 	// 各オブジェクトの更新
@@ -112,34 +87,35 @@ void StageScene3::Update()
 		(*it)->Update();
 	}
 
-	UpdateTerrain();
-	camSmoothX->Update();
-	camSmoothY->Update();
+	CGameManager::GetInstance()->Update();
+
+	camSmooth->Update();
 	Cam->Update();
+
+	CScene::UpdateTerrain();
 
 	// 背景追従
 	bg->transform.position.x = Cam->cameraPos.x;
+
 }
 
 void StageScene3::Draw()
 {
-	D3D_ClearScreen();
+	// 背景の描画
+	bg->Draw();
 
+	// ゲームオーバーの演出が行われていないなら
+	if (CGameManager::GetInstance()->GetGameState() != GAME_STATE::TIME_UP &&
+		CGameManager::GetInstance()->GetGameState() != GAME_STATE::ZERO_HP)
+	{
+		// 地形の描画
+		DrawTerrain();
+	}
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
 	}
 
-	// 地形の描画
-	DrawTerrain();
-
 	CGameManager::GetInstance()->Draw();
-
-	// 文字列の描画
-	drawStringTest->Draw();
-	drawStringTest2->Draw();
-
-	// 画面更新
-	D3D_UpdateScreen();
 }
