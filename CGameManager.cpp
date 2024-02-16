@@ -75,7 +75,6 @@ CGameManager::CGameManager()
 	stageNum->transform * 0.18f;
 	stageNum->transform.rotation = -10.0f;
 	stageNum->transform.position = { 0.285f, 0.93f, -0.45f };
-	stageNum->TextureCutout(stageNumber, 0);
 
 	// 実体化の後、初期化を行う
 	this->Init();
@@ -243,6 +242,9 @@ void CGameManager::UpdateUIhp()
 			UI_breakHeart_L[0]->materialDiffuse.w =
 				UI_breakHeart_L[0]->materialDiffuse.w > 0.0f ?
 				UI_breakHeart_L[0]->materialDiffuse.w -= 0.02f : UI_breakHeart_L[2]->materialDiffuse.w;
+
+			//サウンド再生
+			XA_Play(SOUND_LABEL_GAMEOVER_2);
 		}
 		// ハートのイージングの更新
 		breakHeart_L_ease[0]->Update();
@@ -317,6 +319,9 @@ void CGameManager::Init()
 
 void CGameManager::Update()
 {
+	// ステージ番号の設定
+	stageNum->TextureCutout(stageNumber, 0);
+
 	// タイマーの更新
 	gameTime->Update();
 

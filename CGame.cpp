@@ -37,5 +37,6 @@ void CGame::Update()
 CGame::~CGame()
 {
 	TextureLoader->UnloadTexture();
+	XA_Release();
 }
 

@@ -63,10 +63,20 @@ private:
 	FADE_STATE fadeState = FADE_STATE::NO_FADE;
 	FADE_TYPE fadeType = FADE_TYPE::NORMAL;
 
+	// フェード用のオブジェクト
+	CGameObject* fadeObj_eraser;
+	CGameObject* fadeObj_pencil;
+	// 折り返しフラグ
+	bool eraserReverse = true;
+
 	CSceneManager();
 	~CSceneManager();
 	// アプリケーション終了時にコールバックとして呼び出す(シングルトンの解放)
 	static void CleanupSingleton();
+
+	// フェード時のオブジェクトの座標更新
+	// 引数1 : オブジェクトポインタ
+	void FadeObjectMove(CGameObject* moveObj);
 
 public:
 	// インスタンスを取得するためのメソッド

@@ -38,7 +38,9 @@ enum class ANIM_PATTERN
 	WIND_RIGHT,
 	FADEOUT_ANIM,
 	FADEIN_ANIM,
-	DAMAGE
+	DAMAGE,
+	WIND_ANIM_UP_LEFT,
+	WIND_ANIM_RIGHT,
 };
 
 class CAnimation
@@ -94,7 +96,7 @@ private:
 		{ 15, 16, 17, 18, 19, ANIM_STOP},	//右に折れる
 		{ 14, 13, 12, 11, 10, ANIM_STOP},	//左に起き上がる
 		{ 19, 18, 17, 16, 15, ANIM_STOP},	//右に起き上がる
-		{ 42, 43, 44, 43, 42, 41, 40, ANIM_STOP},	//ジャンプ
+		{ 45, 46, 47, 48, 49, 25, ANIM_STOP},
 		{ 45, 46, 47, 48, 49, 48, 47, 46, ANIM_LOOP},	//飛んでる状態
 		{ 10, ANIM_STOP },	//倒れている状態
 
@@ -114,6 +116,10 @@ private:
 
 		// ダメージエフェクト用
 		{0, 1, 2, 3, 4, 5, 6, ANIM_STOP},
+
+		// 上、左の風
+		{4, 3, 1, 0, ANIM_LOOP},
+		{0, 1, 3, 4, ANIM_LOOP},
 	};
 
 	// アニメーションスピード

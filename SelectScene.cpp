@@ -24,16 +24,30 @@ SelectScene::SelectScene()
 
 	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.2f, 1.0f });
 	Objects.push_back(StagePreview);
-	StagePreview->transform.position = { -0.97f, -0.07f, -0.1f };
-	StagePreview->transform.scale = { 693.0f * 0.003f, 900.0f * 0.003f, 0.5f };
+	StagePreview->transform.position = { -0.97f, -0.07f, 0.2f };
+	StagePreview->transform.scale = { 693.0f * 0.003f, 900.0f * 0.003f};
 	StagePreview->InitAnimParameter(false, 5, 1, ANIM_PATTERN::BOOK, 0.2f);
+
+	StageView = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
+	Objects.push_back(StageView);
+	StageView->transform.position = { -0.95f, -0.13f, 0.15f };
+	StageView->transform.rotation = 1.4f;
+	StageView->transform.scale = { 1.2f, 1.2f };
+	StageView->materialDiffuse.w = 0.0f;
 
 	// 要素を拡張
 	StageList.resize(listNum);
-	// ステージのオブジェクトの生成と初期化
+
+	// ステージのオブジェクトの生成
+	StageList[0] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::S1_SELECT_FLAME));
+	StageList[1] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
+	StageList[2] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
+	StageList[3] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
+	StageList[4] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
+
+	// 初期化
 	for (int i = 0; i < StageList.size(); i++)
 	{
-		StageList[i] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
 		StageList[i]->transform.scale = { 646.0f * 0.0025f, 277.0f * 0.0025f, 1.0f };
 		StageList[i]->transform.position = { 1.0f, 0.0f - (0.7f * i), -0.1f };
 		moveEndPos.resize(StageList.size());
@@ -44,8 +58,12 @@ SelectScene::SelectScene()
 
 	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
 	Objects.push_back(StagePreview2);
-	StagePreview2->transform.position = { -0.8f, 0.76f, -0.2f };
-	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f, 0.5f };
+	StagePreview2->transform.position = { -0.8f, 0.76f, 0.05f };
+	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f};
+
+	// プレビューのイージング
+	viewEase = new CEase;
+	viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 1.3f, 0, EASE::easeInOutCubic);
 }
 
 SelectScene::~SelectScene()
@@ -62,6 +80,7 @@ SelectScene::~SelectScene()
 	{
 		delete selectEase[i];
 	}
+	delete viewEase;
 
 	// カメラオブジェクトの削除
 	delete Cam;
@@ -73,6 +92,9 @@ void SelectScene::Update()
 	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
 	{
+		//	サウンド再生
+		XA_Play(SOUND_LABEL_BOOKSE);
+
 		// 選択中のステージの更新
 		stageNum -= 1;
 		// ステージ番号を列挙型クラスに変換する
@@ -94,6 +116,9 @@ void SelectScene::Update()
 	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1))
 		&& stageNum < listNum && !selectMoveUp && !selectMoveDown)
 	{
+		//	サウンド再生
+		XA_Play(SOUND_LABEL_BOOKSE);
+
 		// 選択中のステージの更新
 		stageNum += 1;
 		// ステージ番号を列挙型クラスに変換する
@@ -163,9 +188,23 @@ void SelectScene::Update()
 			StageList[i]->materialDiffuse.w = 0.7f;
 		}
 
+		// プレビューの透明度変更イージングの設定
+		viewEase->Update();
+
 		// リストが移動中かどうかを判定
 		if (selectMoveUp)
 		{
+			if (viewEase->GetState() == STATE::END && !viewAlphaFlg)
+			{
+				viewEase->Init(&StageView->materialDiffuse.w, 0.0f, 1.3f, 0, EASE::easeInOutCubic);
+				viewAlphaFlg = true;
+			}
+			else if (viewEase->GetState() == STATE::END && viewAlphaFlg)
+			{
+				viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 1.3f, 0, EASE::easeInOutCubic);
+				viewAlphaFlg = false;
+			}
+			
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを上移動させる
@@ -182,6 +221,16 @@ void SelectScene::Update()
 		}
 		else if (selectMoveDown)
 		{
+			if (viewEase->GetState() == STATE::END && !viewAlphaFlg)
+			{
+				viewEase->Init(&StageView->materialDiffuse.w, 0.0f, 1.3f, 0, EASE::easeInOutCubic);
+				viewAlphaFlg = true;
+			}
+			else if (viewEase->GetState() == STATE::END && viewAlphaFlg)
+			{
+				viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 1.3f, 0, EASE::easeInOutCubic);
+				viewAlphaFlg = false;
+			}
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを下移動させる

@@ -9,6 +9,15 @@
 PARAM sound_param[SOUND_LABEL_MAX] =
 {
 	{"asset/SE/drumroll.wav", false },
+
+	{"asset/BGM/TitleBgm.wav", true},
+
+	{"asset/SE/FadeOut.wav", false },
+	{"asset/SE/FadeIn.wav", false },
+	{"asset/SE/BookSE.wav", false},
+	{"asset/SE/gameover2.wav", false},
+	{"asset/SE/ゲームオーバー.wav", false},
+	{"asset/SE/DamegeHit.wav", false},
 };
 
 #ifdef _XBOX //Big-Endian

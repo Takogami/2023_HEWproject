@@ -33,7 +33,7 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 
 	// ゲームオーバー演出用背景
 	gameoverBg = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
-	gameoverBg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	gameoverBg->transform.scale = { 1920.0f * 0.003f, 1080.0f * 0.003f, 1.0f };
 	gameoverBg->SetActive(false);
 	// ゲームオーバー演出用イージング
 	gameoverEaseX = new CEase;
@@ -717,6 +717,8 @@ void CPlayer::Update()
 
 					//横向きのダメージタイル
 				case OBJECT_TYPE::DAMAGE_TILE:	//CSV 値4
+					//	サウンド再生
+					XA_Play(SOUND_LABEL_DAMAGEHIT);
 					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;
@@ -757,6 +759,12 @@ void CPlayer::Update()
 			case OBJECT_TYPE::DAMAGE_TILEY:	//CSV 値20
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
+
+				// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+				damageEffect->transform.position = { this->transform.position.x,this->transform.position.y - 0.15f, -0.3f };
+				// エフェクトをアクティブに
+				damageEffect->SetActive(true);
+
 				// 天井にぶつかっていたならジャンプ力を0にする
 				if (prevFrameCorrectY.y == -1)
 				{
@@ -773,6 +781,8 @@ void CPlayer::Update()
 					{
 						CGameManager::GetInstance()->AddDamage(1);
 						//プレイヤーの当たり判定を受けないようにするためにtrue;
+						//	サウンド再生
+						XA_Play(SOUND_LABEL_DAMAGEHIT);
 						nockT = true;
 					}
 				}

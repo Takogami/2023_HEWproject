@@ -8,19 +8,30 @@ StageScene::StageScene()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	player = new CGameObject(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	// 背景の設定
+	bg->SetUseingCamera(Cam);
+	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
+	bg->transform.position.z = 0.4f;
+
+	// プレイヤーの実体化と初期化
+	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	// オブジェクトをリストに登録
 	Objects.push_back(player);
 	// 自身の投影に使うカメラの設定
 	player->SetUseingCamera(Cam);
 	// スケールの設定
-	player->transform * 0.2f;
+	player->transform * 0.3f;
+	player->transform.position.z = -0.1f;
 	// コライダーの設定
-	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.2f, 0.2f };
-	player->InitAnimParameter(true, 10, 1, ANIM_PATTERN::TEST, 0.02f);
+	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.13f, 0.3f };
+	player->transform.position.x = -1.5f;
+	// アニメーションの初期化
+	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
-	// シーン遷移フラグの初期化
-	changeSceneFlg = false;
+	// スムージングの実体化
+	camSmooth = new CSmoothing;
+	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_2, Cam);
@@ -30,6 +41,9 @@ StageScene::~StageScene()
 {
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferCharacter);
+	SAFE_RELEASE(vertexBufferObject);
+
+	delete bg;
 
 	// 各オブジェクトのメモリ解放
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
@@ -39,6 +53,7 @@ StageScene::~StageScene()
 
 	// カメラオブジェクトの削除
 	delete Cam;
+	delete camSmooth;
 
 	// ステージの後片付け
 	CScene::DestroyStage();
@@ -46,17 +61,23 @@ StageScene::~StageScene()
 
 void StageScene::Update()
 {
-	// テスト用ダメージ追加
 	if (gInput->GetKeyTrigger(VK_DELETE))
 	{
 		CGameManager::GetInstance()->AddDamage(1);
 	}
 
-	// タイムアップ、またはHPが0で強制シーン遷移
-	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP || 
-		CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP) && !changeSceneFlg)
+	// クリア、ゲームオーバーでシーン遷移
+	if (player->GetState() == PState::CLEAR_GAMEOVER && !changeSceneFlg)
 	{
-		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		// クリアなら、シーン遷移演出を変える
+		if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::CLEAR)
+		{
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT, FADE_TYPE::ERASER);
+		}
+		else
+		{
+			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT);
+		}
 		changeSceneFlg = true;
 	}
 
@@ -68,16 +89,27 @@ void StageScene::Update()
 
 	CGameManager::GetInstance()->Update();
 
-	UpdateTerrain();
-	Cam->cameraPos.x = player->transform.position.x;
+	camSmooth->Update();
 	Cam->Update();
+
+	CScene::UpdateTerrain();
+
+	// 背景追従
+	bg->transform.position.x = Cam->cameraPos.x;
 }
 
 void StageScene::Draw()
 {
-	// 地形の描画
-	DrawTerrain();
+	// 背景の描画
+	bg->Draw();
 
+	// ゲームオーバーの演出が行われていないなら
+	if (CGameManager::GetInstance()->GetGameState() != GAME_STATE::TIME_UP &&
+		CGameManager::GetInstance()->GetGameState() != GAME_STATE::ZERO_HP)
+	{
+		// 地形の描画
+		DrawTerrain();
+	}
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
@@ -85,4 +117,5 @@ void StageScene::Draw()
 	}
 
 	CGameManager::GetInstance()->Draw();
+
 }

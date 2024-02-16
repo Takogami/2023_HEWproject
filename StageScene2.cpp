@@ -1,63 +1,63 @@
-/* ƒCƒ“ƒNƒ‹[ƒh */
+/* ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ */
 #include "StageScene2.h"
-#include "CSceneManager.h"	// ƒV[ƒ“Ø‚è‘Ö‚¦‚Ì‚½‚ß‚ÉƒCƒ“ƒNƒ‹[ƒh
+#include "CSceneManager.h"	// ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆã®ãŸã‚ã«ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 #include "CGameManager.h"
 
 StageScene2::StageScene2()
 {
-	// ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg‚ÌŽÀ‘Ì‰»
+	// ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å®Ÿä½“åŒ–
 	Cam = new CCamera;
 
-	// ƒvƒŒƒCƒ„[‚ÌŽÀ‘Ì‰»‚Æ‰Šú‰»
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å®Ÿä½“åŒ–ã¨åˆæœŸåŒ–
 	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG2), { 1.0f ,1.0f });
-	// ”wŒi‚ÌÝ’è
+	// èƒŒæ™¯ã®è¨­å®š
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	bg->transform.position.z = 0.4f;
 
-	// ƒvƒŒƒCƒ„[‚ÌŽÀ‘Ì‰»‚Æ‰Šú‰»
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å®Ÿä½“åŒ–ã¨åˆæœŸåŒ–
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
-	// ƒIƒuƒWƒFƒNƒg‚ðƒŠƒXƒg‚É“o˜^
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒªã‚¹ãƒˆã«ç™»éŒ²
 	Objects.push_back(player);
-	// Ž©g‚Ì“Š‰e‚ÉŽg‚¤ƒJƒƒ‰‚ÌÝ’è
+	// è‡ªèº«ã®æŠ•å½±ã«ä½¿ã†ã‚«ãƒ¡ãƒ©ã®è¨­å®š
 	player->SetUseingCamera(Cam);
-	// ƒXƒP[ƒ‹‚ÌÝ’è
+	// ã‚¹ã‚±ãƒ¼ãƒ«ã®è¨­å®š
 	player->transform * 0.25f;
 	player->transform.position.z = -0.1f;
-	// ƒRƒ‰ƒCƒ_[‚ÌÝ’è
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®è¨­å®š
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.15f, 0.25f};
 	player->transform.position.x = -1.5f;
 	player->transform.position.y = 0.5f;
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
-	// ƒXƒ€[ƒWƒ“ƒO‚ÌŽÀ‘Ì‰»
+	// ã‚¹ãƒ ãƒ¼ã‚¸ãƒ³ã‚°ã®å®Ÿä½“åŒ–
 	camSmooth = new CSmoothing;
 	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
 
-	// \¬‚·‚éƒXƒe[ƒW‚ÆŽg—p‚·‚éƒJƒƒ‰‚Ìƒ|ƒCƒ“ƒ^‚ðŽw’è
+	// æ§‹æˆã™ã‚‹ã‚¹ãƒ†ãƒ¼ã‚¸ã¨ä½¿ç”¨ã™ã‚‹ã‚«ãƒ¡ãƒ©ã®ãƒã‚¤ãƒ³ã‚¿ã‚’æŒ‡å®š
 	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);
 }
 
 StageScene2::~StageScene2()
 {
-	// ’¸“_ƒoƒbƒtƒ@‚Ì‰ð•ú
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®è§£æ”¾
 	SAFE_RELEASE(vertexBufferCharacter);
 	SAFE_RELEASE(vertexBufferObject);
 
 	delete bg;
 
-	// ŠeƒIƒuƒWƒFƒNƒg‚Ìƒƒ‚ƒŠ‰ð•ú
+	// å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¡ãƒ¢ãƒªè§£æ”¾
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		delete (*it);
 	}
 
-	// ƒJƒƒ‰ƒIƒuƒWƒFƒNƒg‚Ìíœ
+	// ã‚«ãƒ¡ãƒ©ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‰Šé™¤
 	delete Cam;
 	delete camSmooth;
 
-	// ƒXƒe[ƒW‚ÌŒã•Ð•t‚¯
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã®å¾Œç‰‡ä»˜ã‘
 	CScene::DestroyStage();
 }
 
@@ -68,10 +68,10 @@ void StageScene2::Update()
 		CGameManager::GetInstance()->AddDamage(1);
 	}
 
-	// ƒNƒŠƒAAƒQ[ƒ€ƒI[ƒo[‚ÅƒV[ƒ“‘JˆÚ
+	// ã‚¯ãƒªã‚¢ã€ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã§ã‚·ãƒ¼ãƒ³é·ç§»
 	if (player->GetState() == PState::CLEAR_GAMEOVER && !changeSceneFlg)
 	{
-		// ƒNƒŠƒA‚È‚çAƒV[ƒ“‘JˆÚ‰‰o‚ð•Ï‚¦‚é
+		// ã‚¯ãƒªã‚¢ãªã‚‰ã€ã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºã‚’å¤‰ãˆã‚‹
 		if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::CLEAR)
 		{
 			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::RESULT, FADE_TYPE::ERASER);
@@ -83,7 +83,7 @@ void StageScene2::Update()
 		changeSceneFlg = true;
 	}
 
-	// ŠeƒIƒuƒWƒFƒNƒg‚ÌXV
+	// å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Update();
@@ -96,24 +96,24 @@ void StageScene2::Update()
 
 	CScene::UpdateTerrain();
 
-	// ”wŒi’Ç]
+	// èƒŒæ™¯è¿½å¾“
 	bg->transform.position.x = Cam->cameraPos.x;
 
 }
 
 void StageScene2::Draw()
 {
-	// ”wŒi‚Ì•`‰æ
+	// èƒŒæ™¯ã®æç”»
 	bg->Draw();
 
-	// ƒQ[ƒ€ƒI[ƒo[‚Ì‰‰o‚ªs‚í‚ê‚Ä‚¢‚È‚¢‚È‚ç
+	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã®æ¼”å‡ºãŒè¡Œã‚ã‚Œã¦ã„ãªã„ãªã‚‰
 	if (CGameManager::GetInstance()->GetGameState() != GAME_STATE::TIME_UP &&
 		CGameManager::GetInstance()->GetGameState() != GAME_STATE::ZERO_HP)
 	{
-		// ’nŒ`‚Ì•`‰æ
+		// åœ°å½¢ã®æç”»
 		DrawTerrain();
 	}
-	// ŠeƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+	// å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
