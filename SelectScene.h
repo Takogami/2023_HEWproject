@@ -49,7 +49,7 @@ private:
 	// ステージの選択オブジェクトのリスト
 	std::vector<CGameObject*>StageList;
 	// ステージリストの数
-	const int listNum = 5;
+	const int listNum = 3;
 	// 動きの終了位置
 	std::vector<float> moveEndPos;
 	// 動きの開始管理フラグ

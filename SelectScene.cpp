@@ -42,8 +42,6 @@ SelectScene::SelectScene()
 	StageList[0] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::S1_SELECT_FLAME));
 	StageList[1] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
 	StageList[2] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
-	StageList[3] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
-	StageList[4] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
 
 	// 初期化
 	for (int i = 0; i < StageList.size(); i++)
@@ -63,7 +61,7 @@ SelectScene::SelectScene()
 
 	// プレビューのイージング
 	viewEase = new CEase;
-	viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 1.3f, 0, EASE::easeInOutCubic);
+	viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 0.7f, 0, EASE::easeInOutCubic);
 }
 
 SelectScene::~SelectScene()
@@ -92,6 +90,10 @@ void SelectScene::Update()
 	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
 	{
+		// ステージビューのイージングの初期化
+		StageView->materialDiffuse.w = 0.0f;
+		viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 0.7f, 0, EASE::easeInOutCubic);
+
 		//	サウンド再生
 		XA_Play(SOUND_LABEL_BOOKSE);
 
@@ -116,6 +118,10 @@ void SelectScene::Update()
 	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1))
 		&& stageNum < listNum && !selectMoveUp && !selectMoveDown)
 	{
+		// ステージビューのイージングの初期化
+		StageView->materialDiffuse.w = 0.0f;
+		viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 0.7f, 0, EASE::easeInOutCubic);
+
 		//	サウンド再生
 		XA_Play(SOUND_LABEL_BOOKSE);
 
@@ -155,13 +161,6 @@ void SelectScene::Update()
 			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_3, FADE_TYPE::ERASER);
 			break;
 
-		case STAGE_NUM::STAGE4:
-			CSceneManager::GetInstance()->ChangeScene(SCENE_ID::STAGE_4, FADE_TYPE::ERASER);
-			break;
-
-		case STAGE_NUM::STAGE5:
-			break;
-
 		default:
 			break;
 		}
@@ -188,23 +187,9 @@ void SelectScene::Update()
 			StageList[i]->materialDiffuse.w = 0.7f;
 		}
 
-		// プレビューの透明度変更イージングの設定
-		viewEase->Update();
-
 		// リストが移動中かどうかを判定
 		if (selectMoveUp)
 		{
-			if (viewEase->GetState() == STATE::END && !viewAlphaFlg)
-			{
-				viewEase->Init(&StageView->materialDiffuse.w, 0.0f, 1.3f, 0, EASE::easeInOutCubic);
-				viewAlphaFlg = true;
-			}
-			else if (viewEase->GetState() == STATE::END && viewAlphaFlg)
-			{
-				viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 1.3f, 0, EASE::easeInOutCubic);
-				viewAlphaFlg = false;
-			}
-			
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを上移動させる
@@ -221,16 +206,6 @@ void SelectScene::Update()
 		}
 		else if (selectMoveDown)
 		{
-			if (viewEase->GetState() == STATE::END && !viewAlphaFlg)
-			{
-				viewEase->Init(&StageView->materialDiffuse.w, 0.0f, 1.3f, 0, EASE::easeInOutCubic);
-				viewAlphaFlg = true;
-			}
-			else if (viewEase->GetState() == STATE::END && viewAlphaFlg)
-			{
-				viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 1.3f, 0, EASE::easeInOutCubic);
-				viewAlphaFlg = false;
-			}
 			// イージングの更新
 			selectEase[i]->Update();
 			// リストを下移動させる
@@ -246,6 +221,9 @@ void SelectScene::Update()
 			}
 		}
 	}
+
+	// プレビューの透明度変更イージングの更新
+	viewEase->Update();
 
 	// 各オブジェクトの描画
 	for (auto it = Objects.begin(); it != Objects.end(); it++)

@@ -55,7 +55,6 @@ CSceneManager::~CSceneManager()
 	RELEASE_SCENE(stage1);
 	RELEASE_SCENE(stage2);
 	RELEASE_SCENE(stage3);
-	RELEASE_SCENE(stage4);
 	RELEASE_SCENE(result);
 }
 
@@ -264,12 +263,6 @@ void CSceneManager::Update()
 		stage3->Draw();
 		break;
 
-		// ステージ04
-	case SCENE_ID::STAGE_4:
-		stage4->Update();
-		stage4->Draw();
-		break;
-
 	// リザルト
 	case SCENE_ID::RESULT:
 		result->Update();
@@ -342,12 +335,6 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			stage3 = nullptr;
 			break;
 
-		case SCENE_ID::STAGE_4:
-			// もし現在のシーンがSTAGE_4なら、STAGE_4シーンを解放する
-			delete stage4;
-			stage4 = nullptr;
-			break;
-
 		case SCENE_ID::RESULT:
 			// もし現在のシーンがRESULTなら、RESULTシーンを解放する
 			delete result;
@@ -394,14 +381,6 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
 			CGameManager::GetInstance()->SetStageNum(3);
-			break;
-
-		case SCENE_ID::STAGE_4:
-			// もし新しいシーンがTAGE_4なら、新しいSTAGE_4シーンを作成する
-			stage4 = new StageScene4();
-			// ゲームマネージャを初期化
-			CGameManager::GetInstance()->Init();
-			CGameManager::GetInstance()->SetStageNum(4);
 			break;
 
 		case SCENE_ID::RESULT:
