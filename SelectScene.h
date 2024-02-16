@@ -38,6 +38,13 @@ private:
 	// ステージのプレビュー
 	CGameObject* StagePreview;
 	CGameObject* StagePreview2;
+	// ステージの画像
+	CGameObject* StageView;
+
+	// 完全に透明になったかどうかのフラグ
+	bool viewAlphaFlg = false;
+	// 
+	CEase* viewEase;
 
 	// ステージの選択オブジェクトのリスト
 	std::vector<CGameObject*>StageList;
