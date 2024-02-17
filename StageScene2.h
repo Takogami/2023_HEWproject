@@ -18,8 +18,15 @@ private:
 
 	CGameObject* zyougi;
 	CGameObject* zyougi2;
+	CGameObject* zyougi3;
 	CGameObject* book;
+	CGameObject* book2;
+	CGameObject* book3;
+	CGameObject* book4;
+	CGameObject* book5;
 	CGameObject* pencil;
+	CGameObject* pencil2;
+	CGameObject* pencil3;
 
 	CPlayer* player;
 
