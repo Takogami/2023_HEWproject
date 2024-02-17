@@ -228,11 +228,6 @@ void CGameManager::UpdateUIhp()
 	}
 	if (playerHP <= 0)
 	{
-		//	サウンド停止
-		XA_Stop(SOUND_LABEL_STAGE1_BGM);
-		XA_Stop(SOUND_LABEL_STAGE2_BGM);
-		XA_Stop(SOUND_LABEL_STAGE3_BGM);
-
 		UI_hp[0]->TextureCutout(2, 0);
 		// ハーフハートが透明なら不透明に戻す
 		if (!heartAlpha_L[0])
@@ -356,6 +351,12 @@ void CGameManager::Update()
 		// プレイヤーのHPが0なら
 		if (playerHP <= 0)
 		{
+			//	サウンド停止
+			XA_Stop(SOUND_LABEL_STAGE1_BGM);
+			XA_Stop(SOUND_LABEL_STAGE2_BGM);
+			XA_Stop(SOUND_LABEL_STAGE3_BGM);
+			XA_Stop(SOUND_LABEL_FLY);
+
 			//サウンド再生
 			XA_Play(SOUND_LABEL_GAMEOVER_2);
 			// 状態をHP0に
@@ -366,6 +367,11 @@ void CGameManager::Update()
 		{
 			// 状態をタイムアップに
 			state = GAME_STATE::TIME_UP;
+			//	サウンド停止
+			XA_Stop(SOUND_LABEL_STAGE1_BGM);
+			XA_Stop(SOUND_LABEL_STAGE2_BGM);
+			XA_Stop(SOUND_LABEL_STAGE3_BGM);
+			XA_Stop(SOUND_LABEL_FLY);
 		}
 		// 現在のゲーム時間を受け取る
 		nowTime = (int)gameTime->GetTime();

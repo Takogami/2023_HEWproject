@@ -501,6 +501,8 @@ void CPlayer::Update()
 	{
 		dir.x = 0.0f;
 	}
+	// ダメージSEプレイ可能になるまでの時間を計測する
+	damageSEplayCount = damageSEplayCount < 60 ? damageSEplayCount + 1 : damageSEplayCount;
   
 	// ゲームマネージャから状態を取得して、ゲームオーバーならフラグを上げる
 	if ((CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
@@ -910,6 +912,12 @@ void CPlayer::Update()
 					break;
 
 				case OBJECT_TYPE::ENEMY:	//CSV 値66
+					//	再生可能ならサウンド再生
+					if (damageSEplayCount >= 30)
+					{
+						XA_Play(SOUND_LABEL_DAMAGEHIT);
+						damageSEplayCount = 0;
+					}
 					prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;

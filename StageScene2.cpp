@@ -44,13 +44,13 @@ StageScene2::StageScene2()
 	book2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ2));
 	book2->SetUseingCamera(Cam);
 	book2->transform.scale = { 0.6f, 0.3f, 1.0f };
-	book2->transform.position = { 11.0f, -0.69f, 0.3f };
+	book2->transform.position = { 11.05f, -0.69f, 0.3f };
 	Objects.push_back(book2);
 
 	book3 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ2));
 	book3->SetUseingCamera(Cam);
 	book3->transform.scale = { 0.6f, 0.3f, 1.0f };
-	book3->transform.position = { 11.0f, -0.39f, 0.3f };
+	book3->transform.position = { 11.05f, -0.39f, 0.3f };
 	Objects.push_back(book3);
 
 	book4 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ2));
@@ -98,15 +98,16 @@ StageScene2::StageScene2()
 	player->transform.position.z = -0.1f;
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.15f, 0.25f};
-	/*player->transform.position.x = -1.5f;*/
-	player->transform.position.x = 14.5f;
-	player->transform.position.y = 0.5f;
+	player->transform.position.x = -1.5f;
+	player->transform.position.y = -0.7f;
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 
 	// スムージングの実体化
 	camSmooth = new CSmoothing;
 	camSmooth->InitSmooth(&player->transform.position.x, &Cam->cameraPos.x, 0.1f);
+	camSmoothY = new CSmoothing;
+	camSmoothY->InitSmooth(&player->transform.position.y, &Cam->cameraPos.y, 0.1f);
 
 	// 構成するステージと使用するカメラのポインタを指定
 	CScene::CreateStage(TERRAIN_ID::STAGE_1, Cam);
@@ -129,6 +130,7 @@ StageScene2::~StageScene2()
 	// カメラオブジェクトの削除
 	delete Cam;
 	delete camSmooth;
+	delete camSmoothY;
 
 	// ステージの後片付け
 	CScene::DestroyStage();
@@ -136,11 +138,6 @@ StageScene2::~StageScene2()
 
 void StageScene2::Update()
 {
-	if (gInput->GetKeyTrigger(VK_DELETE))
-	{
-		CGameManager::GetInstance()->AddDamage(1);
-	}
-
 	// クリア、ゲームオーバーでシーン遷移
 	if (player->GetState() == PState::CLEAR_GAMEOVER && !changeSceneFlg)
 	{
@@ -165,10 +162,25 @@ void StageScene2::Update()
 	CGameManager::GetInstance()->Update();
 
 	camSmooth->Update();
+	camSmoothY->Update();
 	// カメラ移動の限界
+	// X
 	if (Cam->cameraPos.x < 0.0f)
 	{
 		Cam->cameraPos.x = 0.0f;
+	}
+	if (Cam->cameraPos.x > 15.3f)
+	{
+		Cam->cameraPos.x = 15.3f;
+	}
+	// Y
+	if (Cam->cameraPos.y < 0.0f)
+	{
+		Cam->cameraPos.y = 0.0f;
+	}
+	if (Cam->cameraPos.y > 0.3f)
+	{
+		Cam->cameraPos.y = 0.3f;
 	}
 
 	Cam->Update();
@@ -177,7 +189,7 @@ void StageScene2::Update()
 
 	// 背景追従
 	bg->transform.position.x = Cam->cameraPos.x;
-
+	bg->transform.position.y = Cam->cameraPos.y;
 }
 
 void StageScene2::Draw()

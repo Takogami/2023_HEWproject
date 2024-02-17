@@ -67,6 +67,7 @@ StageScene::StageScene()
 	// コライダーの設定
 	player->Bcol = { player->transform.position.x, player->transform.position.y, 0.13f, 0.3f };
 	player->transform.position.x = -1.5f;
+	player->transform.position.y = -0.7f;
 	// アニメーションの初期化
 	player->InitAnimParameter(true, 5, 10, ANIM_PATTERN::NO_ANIM, 0.2f);
 

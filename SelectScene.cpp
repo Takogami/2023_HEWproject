@@ -28,12 +28,13 @@ SelectScene::SelectScene()
 	StagePreview->transform.scale = { 693.0f * 0.003f, 900.0f * 0.003f};
 	StagePreview->InitAnimParameter(false, 5, 1, ANIM_PATTERN::BOOK, 0.2f);
 
-	StageView = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
+	StageView = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGE_VIEW), { 0.333333f, 1.0f });
 	Objects.push_back(StageView);
 	StageView->transform.position = { -0.95f, -0.13f, 0.15f };
 	StageView->transform.rotation = 1.4f;
 	StageView->transform.scale = { 1.2f, 1.2f };
 	StageView->materialDiffuse.w = 0.0f;
+	StageView->TextureCutout(0,0);
 
 	// 要素を拡張
 	StageList.resize(listNum);
@@ -167,6 +168,8 @@ void SelectScene::Update()
 			break;
 		}
 	}
+	// ステージプレビューの更新
+	StageView->TextureCutout(stageNum - 1, 0);
 
 	for(int i = 0; i < StageList.size(); i++)
 	{

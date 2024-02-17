@@ -35,6 +35,7 @@ private:
 
 	// カメラ追従のスムージング
 	CSmoothing* camSmooth;
+	CSmoothing* camSmoothY;
 
 	ID3D11Buffer* vertexBufferCharacter;
 	ID3D11Buffer* vertexBufferObject;

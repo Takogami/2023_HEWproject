@@ -104,6 +104,8 @@ private:
     bool gameOverFlg = false;
     // リザルトに遷移するまでの時間を測る
     int ResultShiftCount = 0;
+    // 次のダメージ音再生できるまでの時間を計測
+    int damageSEplayCount = 0;
 
 public:
     /* メンバ変数 */
