@@ -284,7 +284,14 @@ void CSceneManager::Update()
 void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 {
 	//	サウンド再生の停止
-	XA_Stop(SOUND_LABEL_TITLEBGM);
+	if (_inScene != SCENE_ID::TITLE && _inScene != SCENE_ID::SELECT)
+	{
+		XA_Stop(SOUND_LABEL_TITLEBGM);
+	}
+	XA_Stop(SOUND_LABEL_STAGE1_BGM);
+	XA_Stop(SOUND_LABEL_STAGE2_BGM);
+	XA_Stop(SOUND_LABEL_STAGE3_BGM);
+
 
 	if (NewScene != _inScene)
 	{
@@ -351,11 +358,14 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 		case SCENE_ID::TITLE:
 			// もし新しいシーンがTITLEなら、新しいTITLEシーンを作成する
 			title = new TitleScene();
+			//	サウンド再生
+			XA_Play(SOUND_LABEL_TITLEBGM);
 			break;
 
 		case SCENE_ID::SELECT:
 			// もし新しいシーンがSELECTなら、新しいSELECTシーンを作成する
 			select = new SelectScene();
+			//	サウンド再生
 			XA_Play(SOUND_LABEL_TITLEBGM);
 			break;
 
@@ -363,6 +373,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			// もし新しいシーンがSTAGE_01なら、新しいSTAGE_01シーンを作成する
 			stage1 = new StageScene();
 			// ゲームマネージャを初期化
+			XA_Play(SOUND_LABEL_STAGE1_BGM);
 			CGameManager::GetInstance()->Init();
 			CGameManager::GetInstance()->SetStageNum(1);
 			break;
@@ -371,6 +382,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			// もし新しいシーンがTAGE_2なら、新しいSTAGE_2シーンを作成する
 			stage2 = new StageScene2();
 			// ゲームマネージャを初期化
+			XA_Play(SOUND_LABEL_STAGE2_BGM);
 			CGameManager::GetInstance()->Init();
 			CGameManager::GetInstance()->SetStageNum(2);
 			break;
@@ -379,6 +391,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			// もし新しいシーンがTAGE_3なら、新しいSTAGE_3シーンを作成する
 			stage3 = new StageScene3();
 			// ゲームマネージャを初期化
+			XA_Play(SOUND_LABEL_STAGE3_BGM);
 			CGameManager::GetInstance()->Init();
 			CGameManager::GetInstance()->SetStageNum(3);
 			break;

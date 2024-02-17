@@ -731,6 +731,15 @@ void CPlayer::Update()
 				case OBJECT_TYPE::WIND_UP:	//CSV 値３
 					if (anim->GetIsAnimation() == false && this->GetState() == PState::FALL)
 					{
+						if (FlyCount == 0)
+						{
+							//	サウンド再生
+							XA_Play(SOUND_LABEL_FLY);
+						}
+
+						//	カウントを進めて再生しないようにする
+						FlyCount++;
+
 						SetAnimationPattern(ANIM_PATTERN::FLAYING);
 						// 上向きの風力を取得
 						receiveWindPower.y = ((CWind*)(*it))->GetWindStrengthY();
@@ -862,6 +871,7 @@ void CPlayer::Update()
 					// ゲームクリアの信号を送る
 					CGameManager::GetInstance()->SetGameClear();
 					SetAnimationPattern(ANIM_PATTERN::IDOL_R);// 動かないアニメーション再生
+					XA_Play(SOUND_LABEL_GAMECLEAR2);
 					// クリアフラグを上げる
 					clearFlg = true;
 					break;
@@ -904,6 +914,14 @@ void CPlayer::Update()
 					}
 				default:
 					break;
+				}
+
+				//	サウンドの停止（ごり押し作戦）
+				if (anim->GetIsAnimation() != false && this->GetState() != PState::FALL)
+				{
+					//	サウンドの停止
+					XA_Stop(SOUND_LABEL_FLY);
+					FlyCount = 0;
 				}
 			}
 		}

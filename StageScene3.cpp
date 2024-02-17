@@ -6,7 +6,6 @@ StageScene3::StageScene3()
 {
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
-	Cam->cameraPos.x = 6.0f;
 
 	// プレイヤーの実体化と初期化
 	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
@@ -111,7 +110,7 @@ void StageScene3::Update()
 
 	CGameManager::GetInstance()->Update();
 
-	//camSmooth->Update();
+	camSmooth->Update();
 	Cam->Update();
 
 	CScene::UpdateTerrain();

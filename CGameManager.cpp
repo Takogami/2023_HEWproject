@@ -228,6 +228,11 @@ void CGameManager::UpdateUIhp()
 	}
 	if (playerHP <= 0)
 	{
+		//	サウンド停止
+		XA_Stop(SOUND_LABEL_STAGE1_BGM);
+		XA_Stop(SOUND_LABEL_STAGE2_BGM);
+		XA_Stop(SOUND_LABEL_STAGE3_BGM);
+
 		UI_hp[0]->TextureCutout(2, 0);
 		// ハーフハートが透明なら不透明に戻す
 		if (!heartAlpha_L[0])
@@ -242,9 +247,6 @@ void CGameManager::UpdateUIhp()
 			UI_breakHeart_L[0]->materialDiffuse.w =
 				UI_breakHeart_L[0]->materialDiffuse.w > 0.0f ?
 				UI_breakHeart_L[0]->materialDiffuse.w -= 0.02f : UI_breakHeart_L[2]->materialDiffuse.w;
-
-			//サウンド再生
-			XA_Play(SOUND_LABEL_GAMEOVER_2);
 		}
 		// ハートのイージングの更新
 		breakHeart_L_ease[0]->Update();
@@ -354,9 +356,10 @@ void CGameManager::Update()
 		// プレイヤーのHPが0なら
 		if (playerHP <= 0)
 		{
+			//サウンド再生
+			XA_Play(SOUND_LABEL_GAMEOVER_2);
 			// 状態をHP0に
 			state = GAME_STATE::ZERO_HP;
-		
 		}
 		// タイムが0になったなら
 		else if (gameTime->GetTimerState() == TIMER_STATE::END)
@@ -380,14 +383,19 @@ void CGameManager::Update()
 		break;
 
 	case GAME_STATE::TIME_UP:
+		//サウンド再生
+		XA_Play(SOUND_LABEL_GAMEOVER_2);
 		break;
 
 	case GAME_STATE::ZERO_HP:
+		//サウンド再生
+		XA_Play(SOUND_LABEL_GAMEOVER_2);
 		break;
 
 	case GAME_STATE::CLEAR:
 		// タイマーのストップする
 		gameTime->PauseTimer();
+		XA_Play(SOUND_LABEL_GAMECLEAR);
 		break;
 
 	default:
