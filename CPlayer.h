@@ -126,6 +126,8 @@ public:
     float Jump();
     // 風を受けたときの処理
     void ReceiveWind();
+    // 起き上がれるかを判定
+    bool CheckStandCollision();
 
 public:
     /* メソッド */

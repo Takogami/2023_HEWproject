@@ -7,7 +7,7 @@ SelectScene::SelectScene()
 	Cam = new CCamera;
 
 	// 背景の設定
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TITLE_BG), { 1.0f ,1.0f });
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);

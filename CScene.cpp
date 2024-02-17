@@ -139,7 +139,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 22)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.33f }, OBJECT_TYPE::WIND_RIGHT));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.333333f }, OBJECT_TYPE::WIND_RIGHT));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -201,7 +201,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 33)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.33f }, OBJECT_TYPE::WIND_UP));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.3333333f }, OBJECT_TYPE::WIND_UP));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -289,7 +289,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			if (map_data[i][j] == 80)
 			{
 				// マップタイルを1つnewする
-				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.33f }, OBJECT_TYPE::WIND_LEFT));
+				map_object.push_back(new CWind(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::Senpuuki), { 0.5f ,0.333333f }, OBJECT_TYPE::WIND_LEFT));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
@@ -328,18 +328,19 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 			// ゴール
 			if (map_data[i][j] == 99)
 			{
+				// ※ゴールだけ大きさを変更しています
 				// マップタイルを1つnewする
-				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE), { 1.0f, 1.0f }, OBJECT_TYPE::GOAL));
+				map_object.push_back(new CGameObject(vertexBufferMap, CTextureLoader::GetInstance()->GetTex(TEX_ID::HATA), { 1.0f, 1.0f }, OBJECT_TYPE::GOAL));
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
-				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
-				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH * 1.5;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT * 2.5;
 				// タイルの位置をセットする
 				map_object.back()->transform.position.x = x_tile;
-				map_object.back()->transform.position.y = y_tile;
+				map_object.back()->transform.position.y = y_tile + 0.11f;
 				// コライダーの設定
-				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
+				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT * 2};
 			}
 		}
 		// 次の行へ移動するのでx方向を元に戻す
