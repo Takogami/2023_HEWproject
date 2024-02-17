@@ -106,8 +106,8 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// 使うカメラを設定
 				map_object.back()->SetUseingCamera(_useCamera);
 				// タイルのサイズをセットする
-				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH;
-				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT;
+				map_object.back()->transform.scale.x = map_object.back()->transform.scale.x * TILE_WIDTH * 1.5f;
+				map_object.back()->transform.scale.y = map_object.back()->transform.scale.y * TILE_HEIGHT * 1.5f;
 				// タイルの位置をセットする
 				map_object.back()->transform.position.x = x_tile;
 				map_object.back()->transform.position.y = y_tile;
