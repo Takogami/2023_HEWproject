@@ -143,9 +143,8 @@ void SelectScene::Update()
 	}
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
-		//	サウンド再生
-		XA_Play(SOUND_LABEL_CURSOR);
-
+		// サウンド再生
+		XA_Play(SOUND_LABEL::SOUND_LABEL_PRESS);
 		gInput->ControllerVibration(5, 40000);
 		switch (userSelect)
 		{

@@ -1,6 +1,7 @@
 #include "CCursor.h"
 #include "CInput.h"
 #include "CEase.h"
+#include "xa2.h"
 
 CCursor::CCursor(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, OBJECT_TYPE type) : CGameObject(vb, tex, uv, type)
 {
@@ -19,10 +20,14 @@ void CCursor::CursorInput()
 	// 移動入力
 	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN) || gInput->GetKeyTrigger(VK_DOWN)))
 	{
+		//	サウンド再生
+		XA_Play(SOUND_LABEL_CURSOR);
 		scene_count++;// 下に1つ進める
 	}
 	else if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_UP) || gInput->GetKeyTrigger(VK_UP))
 	{
+		//	サウンド再生
+		XA_Play(SOUND_LABEL_CURSOR);
 		scene_count += sceneNum - 1;// 上に1つ進める
 	}
 

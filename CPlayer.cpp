@@ -96,6 +96,8 @@ void CPlayer::PlayerInput()
 			}
 			if ((input_stickY < 0.0f) && prevFrameCorrect.y == 1 && (input_stickY2 < 0.0f))
 			{
+				// 倒れる効果音再生
+				XA_Play(SOUND_LABEL_FALL);
 				SetState(PState::FALL);// 倒れる
 				// 最後に入力された方向に応じてアニメーションを変更
 				if (FInput_dir.x == 1.0f)
@@ -114,6 +116,8 @@ void CPlayer::PlayerInput()
 		// 入力された、かつ起き上がれるなら起き上がる
 		if ((input_stickY > 0.0f) && (input_stickY2 > 0.0f) && (old_input_stickY >= 0.0f) && !CheckStandCollision())
 		{
+			// 起き上がる効果音再生
+			XA_Play(SOUND_LAVEL_GETUP);
 			SetState(PState::NORMAL);// 通常状態に戻す
 			// 最後に入力された方向に応じてアニメーションを変更
 			if (FInput_dir.x == 1.0f)
@@ -128,12 +132,16 @@ void CPlayer::PlayerInput()
 		}
 		if (input_stickX2 <= -1.0f && (old_input_stickX2 > -1.0f))
 		{
+			// 折れる音
+			XA_Play(SOUND_LAVEL_BREAK);
 			SetState(PState::BREAKLEFT);// 左に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 			anim->SetIsAnimation(true);
 		}
 		if (input_stickX2 >= 1.0f && (old_input_stickX2 < 1.0f))
 		{
+			// 折れる音
+			XA_Play(SOUND_LAVEL_BREAK);
 			SetState(PState::BREAKRIGHT);// 右に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
 			anim->SetIsAnimation(true);
@@ -141,6 +149,8 @@ void CPlayer::PlayerInput()
 		// Bボタン入力でとりあえずのジャンプ操作
 		if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_A) && jumpCount != 2)
 		{
+			// ジャンプ音
+			XA_Play(SOUND_LAVEL_JUMP);
 			isJump = true;
 			jumpStrength = ini_jumpStrength;
 			//ジャンプアニメーション

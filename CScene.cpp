@@ -373,7 +373,17 @@ void CScene::DrawTerrain()
 	for (auto it = map_object.begin(); it != map_object.end(); it++)
 	{
 		// “§–¾ƒ^ƒCƒ‹‚Í•`‰æ‚µ‚È‚¢
-		if ((*it)->GetObjectType() != OBJECT_TYPE::SKELETON_TILE)
+		// “G‚ÍŒã‚Å•`‰æ‚·‚é
+		if ((*it)->GetObjectType() != OBJECT_TYPE::SKELETON_TILE &&
+			(*it)->GetObjectType() != OBJECT_TYPE::ENEMY)
+		{
+			(*it)->Draw();
+		}
+	}
+	// “G‚Ì•`‰æ
+	for (auto it = map_object.begin(); it != map_object.end(); it++)
+	{
+		if ((*it)->GetObjectType() == OBJECT_TYPE::ENEMY)
 		{
 			(*it)->Draw();
 		}

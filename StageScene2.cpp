@@ -42,7 +42,6 @@ StageScene2::StageScene2()
 	pencil->transform.position = { 6.025f, -0.1f, 0.3f };
 	Objects.push_back(pencil);
 
-
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	// オブジェクトをリストに登録
