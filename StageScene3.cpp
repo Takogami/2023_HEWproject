@@ -107,6 +107,12 @@ void StageScene3::Update()
 	CGameManager::GetInstance()->Update();
 
 	camSmooth->Update();
+	// ƒJƒƒ‰ˆÚ“®‚ÌŒÀŠE
+	if (Cam->cameraPos.x < 0.0f)
+	{
+		Cam->cameraPos.x = 0.0f;
+	}
+
 	Cam->Update();
 
 	CScene::UpdateTerrain();

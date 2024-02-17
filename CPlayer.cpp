@@ -126,13 +126,13 @@ void CPlayer::PlayerInput()
 			}
 			anim->SetIsAnimation(true);
 		}
-		if (input_stickX2 >= 1.0f)
+		if (input_stickX2 <= -1.0f && (old_input_stickX2 > -1.0f))
 		{
 			SetState(PState::BREAKLEFT);// 左に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 			anim->SetIsAnimation(true);
 		}
-		if (input_stickX <= -1.0f)
+		if (input_stickX2 >= 1.0f && (old_input_stickX2 < 1.0f))
 		{
 			SetState(PState::BREAKRIGHT);// 右に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
@@ -153,12 +153,12 @@ void CPlayer::PlayerInput()
 		{
 			SetAnimationPattern(ANIM_PATTERN::FALL);
 		}
-		
+
 		break;
 	case PState::BREAKLEFT:// 左に折れた状態
 		if (anim->GetIsAnimation() == false)
 		{
-			if (input_stickX2 <= -1.0f)
+			if (input_stickX2 >= 1.0f && (old_input_stickX2 < 1.0f))
 			{
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
@@ -170,7 +170,7 @@ void CPlayer::PlayerInput()
 	case PState::BREAKRIGHT:// 右に折れた状態
 		if (anim->GetIsAnimation() == false)
 		{
-			if (input_stickX >= 1.0f)
+			if (input_stickX2 <= -1.0f && (old_input_stickX2 < -1.0f))
 			{
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生

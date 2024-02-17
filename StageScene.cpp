@@ -38,7 +38,7 @@ StageScene::StageScene()
 	book2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ1));
 	book2->SetUseingCamera(Cam);
 	book2->transform.scale = { 0.75f, 0.3f, 1.0f };
-	book2->transform.position = { 0.03f, 0.15f, -0.1f };
+	book2->transform.position = { 0.03f, 0.15f, 0.3f };
 	Objects.push_back(book2);
 
 	// è·äQï®

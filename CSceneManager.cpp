@@ -252,13 +252,13 @@ void CSceneManager::Update()
 		break;
 
 	// ステージ02
-	case SCENE_ID::STAGE_2:
+	case SCENE_ID::STAGE_3:
 		stage2->Update();
 		stage2->Draw();
 		break;
 
 		// ステージ03
-	case SCENE_ID::STAGE_3:
+	case SCENE_ID::STAGE_2:
 		stage3->Update();
 		stage3->Draw();
 		break;
@@ -323,13 +323,13 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			stage1 = nullptr;
 			break;
 
-		case SCENE_ID::STAGE_2:
+		case SCENE_ID::STAGE_3:
 			// もし現在のシーンがSTAGE_2なら、STAGE_2シーンを解放する
 			delete stage2;
 			stage2 = nullptr;
 			break;
 
-		case SCENE_ID::STAGE_3:
+		case SCENE_ID::STAGE_2:
 			// もし現在のシーンがSTAGE_3なら、STAGE_3シーンを解放する
 			delete stage3;
 			stage3 = nullptr;
@@ -367,20 +367,20 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			CGameManager::GetInstance()->SetStageNum(1);
 			break;
 
-		case SCENE_ID::STAGE_2:
+		case SCENE_ID::STAGE_3:
 			// もし新しいシーンがTAGE_2なら、新しいSTAGE_2シーンを作成する
 			stage2 = new StageScene2();
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
-			CGameManager::GetInstance()->SetStageNum(2);
+			CGameManager::GetInstance()->SetStageNum(3);
 			break;
 
-		case SCENE_ID::STAGE_3:
+		case SCENE_ID::STAGE_2:
 			// もし新しいシーンがTAGE_3なら、新しいSTAGE_3シーンを作成する
 			stage3 = new StageScene3();
 			// ゲームマネージャを初期化
 			CGameManager::GetInstance()->Init();
-			CGameManager::GetInstance()->SetStageNum(3);
+			CGameManager::GetInstance()->SetStageNum(2);
 			break;
 
 		case SCENE_ID::RESULT:

@@ -9,7 +9,7 @@ StageScene2::StageScene2()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG3), { 1.0f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG2), { 1.0f ,1.0f });
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
@@ -120,6 +120,12 @@ void StageScene2::Update()
 	CGameManager::GetInstance()->Update();
 
 	camSmooth->Update();
+	// カメラ移動の限界
+	if (Cam->cameraPos.x < 0.0f)
+	{
+		Cam->cameraPos.x = 0.0f;
+	}
+
 	Cam->Update();
 
 	CScene::UpdateTerrain();
