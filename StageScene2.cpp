@@ -9,11 +9,39 @@ StageScene2::StageScene2()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG3), { 1.0f ,1.0f });
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
 	bg->transform.position.z = 0.4f;
+
+	// 障害物
+	zyougi = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::RULER));
+	zyougi->SetUseingCamera(Cam);
+	zyougi->transform.scale = { 0.3f, 2.3f, 1.0f };
+	zyougi->transform.position = { -1.95f, 0.0f, 0.3f };
+	Objects.push_back(zyougi);
+
+	zyougi2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::RULER));
+	zyougi2->SetUseingCamera(Cam);
+	zyougi2->transform.scale = { 0.3f, 2.3f, 1.0f };
+	zyougi2->transform.position = { 10.2f, 0.0f, 0.3f };
+	Objects.push_back(zyougi2);
+
+	// 障害物
+	book = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ2));
+	book->SetUseingCamera(Cam);
+	book->transform.scale = { 0.6f, 0.3f, 1.0f };
+	book->transform.position = { 2.6f, -0.84f, 0.3f };
+	Objects.push_back(book);
+
+	// 障害物
+	pencil = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PENCIL));
+	pencil->SetUseingCamera(Cam);
+	pencil->transform.scale = { 0.13f, 1.0f, 1.0f };
+	pencil->transform.position = { 6.025f, -0.1f, 0.3f };
+	Objects.push_back(pencil);
+
 
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
