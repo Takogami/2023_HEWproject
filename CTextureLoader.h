@@ -74,6 +74,9 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	Senpuuki,
 	NOMAL_TILE,
 	DTILE_DOWN,
+	TITLE_BG,
+	HATA,
+	KANBAN,
 };
 
 // CTextureLoaderクラス
@@ -132,6 +135,9 @@ private:
 		L"asset/Senpuuki.png",
 		L"asset/nomal.png",
 		L"asset/gabyousita.png",
+		L"asset/titleBg.png",
+		L"asset/hata.png",
+		L"asset/kanban.png",
 	};
 
 	/* メソッド */

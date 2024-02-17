@@ -8,7 +8,7 @@ TitleScene::TitleScene()
 	// カメラオブジェクトの実体化
 	Cam = new CCamera;
 
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TITLE_BG), { 1.0f ,1.0f });
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
 

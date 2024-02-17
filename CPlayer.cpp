@@ -111,7 +111,8 @@ void CPlayer::PlayerInput()
 		}
 		break;
 	case PState::FALL:// 倒れた状態
-		if ((input_stickY > 0.0f) && (input_stickY2 > 0.0f) && (old_input_stickY >= 0.0f))
+		// 入力された、かつ起き上がれるなら起き上がる
+		if ((input_stickY > 0.0f) && (input_stickY2 > 0.0f) && (old_input_stickY >= 0.0f) && !CheckStandCollision())
 		{
 			SetState(PState::NORMAL);// 通常状態に戻す
 			// 最後に入力された方向に応じてアニメーションを変更
@@ -125,13 +126,13 @@ void CPlayer::PlayerInput()
 			}
 			anim->SetIsAnimation(true);
 		}
-		if (input_stickX2 <= -1.0f && (old_input_stickX2 > -1.0f))
+		if (input_stickX2 >= 1.0f)
 		{
 			SetState(PState::BREAKLEFT);// 左に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKLEFT);// 左に折れるアニメーション再生
 			anim->SetIsAnimation(true);
 		}
-		if (input_stickX >= 1.0f && (old_input_stickX < 1.0f))
+		if (input_stickX <= -1.0f)
 		{
 			SetState(PState::BREAKRIGHT);// 右に折れる
 			SetAnimationPattern(ANIM_PATTERN::BREAKRIGHT);// 右に折れるアニメーション再生
@@ -157,7 +158,7 @@ void CPlayer::PlayerInput()
 	case PState::BREAKLEFT:// 左に折れた状態
 		if (anim->GetIsAnimation() == false)
 		{
-			if (input_stickX2 >= 1.0f && (old_input_stickX2 < 1.0f))
+			if (input_stickX2 <= -1.0f)
 			{
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXLEFT);// 折れたのが直るアニメーション再生
@@ -169,7 +170,7 @@ void CPlayer::PlayerInput()
 	case PState::BREAKRIGHT:// 右に折れた状態
 		if (anim->GetIsAnimation() == false)
 		{
-			if (input_stickX < -1.0f && (old_input_stickX >= -1.0f))
+			if (input_stickX >= 1.0f)
 			{
 				SetState(PState::FALL);// 倒れた状態に戻す
 				SetAnimationPattern(ANIM_PATTERN::FIXRIGHT);// 折れたのが直るアニメーション再生
@@ -436,6 +437,29 @@ void CPlayer::ReceiveWind()
 	}
 }
 
+bool CPlayer::CheckStandCollision()
+{
+	// 起き上がり後のコライダーの位置
+	BoxCollider standBcol = this->Bcol;
+	// 起き上がれるかどうかのフラグ
+	bool notStand = false;
+	// 大きくなった分だけ上にコライダーをずらす
+	standBcol.centerY += 0.16f;
+	standBcol.sizeY -= 0.2f;
+	// 起き上がれるか判定
+	for (auto it = CScene::map_object.begin(); it != CScene::map_object.end(); it++)
+	{
+		// 起き上がった後当たっている、かつ当たっているオブジェクトが普通のタイルなら
+		if (CCollision::TestBoxCollision(standBcol, (*it)->Bcol) &&
+			((*it)->GetObjectType() == OBJECT_TYPE::NORMAL))
+		{
+			notStand = true;
+		}
+	}
+
+	return notStand;
+}
+
 void CPlayer::Update()
 {
 	// ダメージ時の透明度を元に戻す
@@ -656,11 +680,11 @@ void CPlayer::Update()
 						isJump = false;
 						jumpCount = 0;
 					}
-
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;
 					this->transform.position.y = this->Bcol.centerY;
 					break;
+
 				case OBJECT_TYPE::SKELETON_TILE:	//CSV 50(透明なタイル)
 					// コライダーの位置を補正し、補正した方向を受け取る
 					prevFrameCorrect = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
@@ -677,7 +701,6 @@ void CPlayer::Update()
 						isJump = false;
 						jumpCount = 0;
 					}
-
 					// オブジェクトの位置とコライダーの中心を合わせる
 					this->transform.position.x = this->Bcol.centerX;
 					this->transform.position.y = this->Bcol.centerY;

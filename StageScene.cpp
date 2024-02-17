@@ -21,17 +21,38 @@ StageScene::StageScene()
 	Objects.push_back(zyougi);
 
 	// áŠQ•¨
+	zyougi2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::RULER));
+	zyougi2->SetUseingCamera(Cam);
+	zyougi2->transform.scale = { 0.3f, 2.3f, 1.0f };
+	zyougi2->transform.position = { 21.0f, 0.0f, 0.3f };
+	zyougi2->transform.rotation = 180.0f;
+	Objects.push_back(zyougi2);
+
+	// áŠQ•¨
 	book = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ2));
 	book->SetUseingCamera(Cam);
 	book->transform.scale = { 0.6f, 0.3f, 1.0f };
-	book->transform.position = { 0.25f, -0.7f, 0.3f };
+	book->transform.position = { 6.4f, -0.7f, 0.3f };
 	Objects.push_back(book);
+
+	book2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ1));
+	book2->SetUseingCamera(Cam);
+	book2->transform.scale = { 0.75f, 0.3f, 1.0f };
+	book2->transform.position = { 0.03f, 0.15f, -0.1f };
+	Objects.push_back(book2);
+
+	// áŠQ•¨
+	eraser = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ERASER));
+	eraser->SetUseingCamera(Cam);
+	eraser->transform.scale = { 0.6f, 0.3f, 1.0f };
+	eraser->transform.position = { 18.25f, 0.2f, 0.3f };
+	Objects.push_back(eraser);
 
 	// áŠQ•¨
 	pencil = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PENCIL));
 	pencil->SetUseingCamera(Cam);
 	pencil->transform.scale = { 0.15f, 1.3f, 1.0f };
-	pencil->transform.position = { 6.76f, 0.85f, 0.3f };
+	pencil->transform.position = { 13.38f, 0.85f, 0.3f };
 	Objects.push_back(pencil);
 
 	// ƒvƒŒƒCƒ„[‚ÌŽÀ‘Ì‰»‚Æ‰Šú‰»
@@ -109,14 +130,16 @@ void StageScene::Update()
 
 	CGameManager::GetInstance()->Update();
 
+	// ƒJƒƒ‰‚ÌƒXƒ€[ƒWƒ“ƒO
 	camSmooth->Update();
+	// ƒJƒƒ‰ˆÚ“®‚ÌŒÀŠE
 	if (Cam->cameraPos.x < 0.0f)
 	{
 		Cam->cameraPos.x = 0.0f;
 	}
-	if (Cam->cameraPos.x > 21.0f)
+	if (Cam->cameraPos.x > 19.1f)
 	{
-		Cam->cameraPos.x = 21.0f;
+		Cam->cameraPos.x = 19.1f;
 	}
 
 	Cam->Update();
