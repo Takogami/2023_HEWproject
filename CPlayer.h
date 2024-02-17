@@ -64,6 +64,9 @@ private:
     bool isWindLeft = false;    //  左向き
     bool isWindUp = false;      //  上向き
 
+    //  フライアニメーション制御カウント
+    int FlyCount = 0;
+
     // 吹っ飛びのスムージング
     CSmoothing* smoothing;
 

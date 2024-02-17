@@ -11,6 +11,9 @@ PARAM sound_param[SOUND_LABEL_MAX] =
 	{"asset/SE/drumroll.wav", false },
 
 	{"asset/BGM/TitleBgm.wav", true},
+	{"asset/BGM/Stage1.wav", true},
+	{"asset/BGM/Stage2.wav", true},
+	{"asset/BGM/Stage3.wav", true},
 
 	{"asset/SE/FadeOut.wav", false },
 	{"asset/SE/FadeIn.wav", false },
@@ -18,6 +21,10 @@ PARAM sound_param[SOUND_LABEL_MAX] =
 	{"asset/SE/gameover2.wav", false},
 	{"asset/SE/ゲームオーバー.wav", false},
 	{"asset/SE/DamegeHit.wav", false},
+	{"asset/SE/fly.wav", false},
+	{"asset/SE/Cursor.wav", false},
+	{"asset/SE/GameClear.wav", false},
+	{"asset/SE/goal.wav", false},
 };
 
 #ifdef _XBOX //Big-Endian
