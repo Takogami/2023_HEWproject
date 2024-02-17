@@ -255,8 +255,8 @@ void ResultScene::UpdateClear()
 
 	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN)) && selectOK)
 	{
-		//	サウンド再生
-		XA_Play(SOUND_LABEL_CURSOR);
+		// サウンド再生
+		XA_Play(SOUND_LABEL_PRESS);
 
 		gInput->ControllerVibration(5, 40000);
 		// カーソルのポイント位置で遷移先のシーンを変更
@@ -385,7 +385,7 @@ void ResultScene::UpdateGameOver()
 	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN)) && selectOK)
 	{
 		//	サウンド再生
-		XA_Play(SOUND_LABEL_CURSOR);
+		XA_Play(SOUND_LABEL_PRESS);
 
 		gInput->ControllerVibration(5, 40000);
 		// カーソルのポイント位置で遷移先のシーンを変更

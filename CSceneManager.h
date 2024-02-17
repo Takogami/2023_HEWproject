@@ -65,6 +65,8 @@ private:
 	CGameObject* fadeObj_pencil;
 	// 折り返しフラグ
 	bool eraserReverse = true;
+	// タイトルBGM再生中か判定するフラグ
+	bool playTitleBGM = false;
 
 	CSceneManager();
 	~CSceneManager();

@@ -287,6 +287,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 	if (_inScene != SCENE_ID::TITLE && _inScene != SCENE_ID::SELECT)
 	{
 		XA_Stop(SOUND_LABEL_TITLEBGM);
+		playTitleBGM = false;
 	}
 	XA_Stop(SOUND_LABEL_STAGE1_BGM);
 	XA_Stop(SOUND_LABEL_STAGE2_BGM);
@@ -359,14 +360,22 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			// もし新しいシーンがTITLEなら、新しいTITLEシーンを作成する
 			title = new TitleScene();
 			//	サウンド再生
-			XA_Play(SOUND_LABEL_TITLEBGM);
+			if (!playTitleBGM)
+			{
+				XA_Play(SOUND_LABEL_TITLEBGM);
+				playTitleBGM = true;
+			}
 			break;
 
 		case SCENE_ID::SELECT:
 			// もし新しいシーンがSELECTなら、新しいSELECTシーンを作成する
 			select = new SelectScene();
 			//	サウンド再生
-			XA_Play(SOUND_LABEL_TITLEBGM);
+			if (!playTitleBGM)
+			{
+				XA_Play(SOUND_LABEL_TITLEBGM);
+				playTitleBGM = true;
+			}
 			break;
 
 		case SCENE_ID::STAGE_1:

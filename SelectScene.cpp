@@ -40,8 +40,8 @@ SelectScene::SelectScene()
 
 	// ステージのオブジェクトの生成
 	StageList[0] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::S1_SELECT_FLAME));
-	StageList[1] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
-	StageList[2] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::SELECT_FLAME));
+	StageList[1] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::S2_SELECT_FLAME));
+	StageList[2] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::S3_SELECT_FLAME));
 
 	// 初期化
 	for (int i = 0; i < StageList.size(); i++)
@@ -144,7 +144,7 @@ void SelectScene::Update()
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
 	{
 		// サウンド再生
-		XA_Play(SOUND_LABEL::SOUND_LABEL_PRESS);
+		XA_Play(SOUND_LABEL_PRESS);
 		gInput->ControllerVibration(5, 40000);
 		switch (userSelect)
 		{
