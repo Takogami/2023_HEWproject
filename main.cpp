@@ -8,7 +8,7 @@
 
 // マクロ定義
 #define CLASS_NAME    "DX21Smpl"// ウインドウクラスの名前
-#define WINDOW_NAME   "スケルトンプログラム"// ウィンドウの名前
+#define WINDOW_NAME   "かみぺったん"// ウィンドウの名前
 
 // 関数のプロトタイプ宣言
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -135,7 +135,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR IpCmdLine
 			if (nowTick >= oldTick + 1000) {
 
 				//fpsを表示する
-				wsprintfA(str, "FPS = %d", fpsCounter);
+				wsprintfA(str, "かみぺったん    FPS : %d", fpsCounter);
 				SetWindowTextA(hWnd, str);
 				//カウンターをリセット
 				fpsCounter = 0;

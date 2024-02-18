@@ -80,6 +80,10 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	STAGE_VIEW,
 	BG3,
 	KANBAN1,
+	KANBAN2,
+	KANBAN3,
+	KANBAN4,
+	KANBAN5,
 };
 
 // CTextureLoaderクラス
@@ -144,6 +148,10 @@ private:
 		L"asset/stagePreview.png",
 		L"asset/bg3.png",
 		L"asset/kanban1.png",
+		L"asset/kanban2.png",
+		L"asset/kanban3.png",
+		L"asset/kanban4.png",
+		L"asset/kanban5.png",
 	};
 
 	/* メソッド */

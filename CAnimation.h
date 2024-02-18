@@ -41,7 +41,7 @@ enum class ANIM_PATTERN
 	DAMAGE,
 	WIND_ANIM_UP_LEFT,
 	WIND_ANIM_RIGHT,
-	KANBAN1,
+	KANBAN,
 };
 
 class CAnimation
@@ -122,8 +122,8 @@ private:
 		{4, 3, 1, 0, ANIM_LOOP},
 		{0, 1, 3, 4, ANIM_LOOP},
 
-		// 看板１
-		{0, 1, 2, ANIM_LOOP},
+		// 看板
+		{0, 1, 2, 3, ANIM_LOOP},
 	};
 
 	// アニメーションスピード

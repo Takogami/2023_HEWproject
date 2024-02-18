@@ -41,6 +41,13 @@ StageScene::StageScene()
 	book2->transform.position = { 0.48f, 0.17f, 0.3f };
 	Objects.push_back(book2);
 
+	pencil2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CURSOR));
+	pencil2->SetUseingCamera(Cam);
+	pencil2->transform.scale = { 0.75f, 0.15f, 1.0f };
+	pencil2->transform.rotation = -45.0f;
+	pencil2->transform.position = { 11.58f, -0.11f, 0.3f };
+	Objects.push_back(pencil2);
+
 	// 障害物
 	eraser = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ERASER));
 	eraser->SetUseingCamera(Cam);
@@ -56,12 +63,38 @@ StageScene::StageScene()
 	Objects.push_back(pencil);
 
 	// 看板
-	kanban1 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN1), { 0.333333f, 1.0f });
+	kanban1 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN1), { 0.25f, 1.0f });
 	kanban1->SetUseingCamera(Cam);
 	kanban1->transform.scale = { 811.0f * 0.0015f, 924.0f * 0.0015f, 1.0f };
 	kanban1->transform.position = { -0.84f, -0.3f, 0.3f };
-	kanban1->InitAnimParameter(true, 3, 1, ANIM_PATTERN::KANBAN1, 0.005f);
+	kanban1->InitAnimParameter(true, 4, 1, ANIM_PATTERN::KANBAN, 0.005f);
 	Objects.push_back(kanban1);
+
+	kanban2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN2), { 1.0f, 1.0f });
+	kanban2->SetUseingCamera(Cam);
+	kanban2->transform.scale = { 811.0f * 0.0015f, 924.0f * 0.0015f, 1.0f };
+	kanban2->transform.position = { 1.72f, -0.3f, 0.3f };
+	Objects.push_back(kanban2);
+
+	kanban3 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN3), { 0.25f, 1.0f });
+	kanban3->SetUseingCamera(Cam);
+	kanban3->transform.scale = { 811.0f * 0.0015f, 924.0f * 0.0015f, 1.0f };
+	kanban3->transform.position = { 5.62f -0.84f, -0.3f, 0.3f };
+	kanban3->InitAnimParameter(true, 4, 1, ANIM_PATTERN::KANBAN, 0.005f);
+	Objects.push_back(kanban3);
+
+	kanban4 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN4), { 0.25f, 1.0f });
+	kanban4->SetUseingCamera(Cam);
+	kanban4->transform.scale = { 811.0f * 0.0015f, 924.0f * 0.0015f, 1.0f };
+	kanban4->transform.position = { 8.7f - 0.84f, -0.3f, 0.3f };
+	kanban4->InitAnimParameter(true, 4, 1, ANIM_PATTERN::KANBAN, 0.005f);
+	Objects.push_back(kanban4);
+
+	kanban5 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN5), { 1.0f, 1.0f });
+	kanban5->SetUseingCamera(Cam);
+	kanban5->transform.scale = { 811.0f * 0.0015f, 924.0f * 0.0015f, 1.0f };
+	kanban5->transform.position = { 14.55f, -0.3f, 0.3f };
+	Objects.push_back(kanban5);
 
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
@@ -111,11 +144,6 @@ StageScene::~StageScene()
 
 void StageScene::Update()
 {
-	if (gInput->GetKeyTrigger(VK_DELETE))
-	{
-		CGameManager::GetInstance()->AddDamage(1);
-	}
-
 	// セレクト画面に戻る
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
 	{
