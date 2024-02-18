@@ -17,6 +17,11 @@ private:
 
 	//	ゲームオブジェクト
 	CGameObject* book;
+	CGameObject* book2;
+	CGameObject* book3;
+	CGameObject* pencil;
+	CGameObject* pencil2;
+	CGameObject* pencil3;
 	CGameObject* ruler[3];
 
 	CPlayer* player;
