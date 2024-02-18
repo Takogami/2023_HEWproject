@@ -26,9 +26,24 @@ StageScene3::StageScene3()
 	ruler[1] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::RULER), { 1.0f,1.0f });
 	ruler[1]->SetUseingCamera(Cam);
 	ruler[1]->transform.scale = { 0.3f, 2.5f, 1.0f };
-	ruler[1]->transform.position = { 7.75f, 0.0f, 0.3f };
+	ruler[1]->transform.position = { 18.55f, 0.0f, 0.3f };
 	ruler[1]->transform.rotation = 180.0f;
 	Objects.push_back(ruler[1]);
+
+	// áŠQ•¨
+	pencil = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PENCIL));
+	pencil->SetUseingCamera(Cam);
+	pencil->transform.scale = { 0.07f, 0.5f, 1.0f };
+	pencil->transform.position = { 0.45f, -0.8f, 0.3f };
+	pencil->transform.rotation = { 50.0f };
+	Objects.push_back(pencil);
+
+	pencil3 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PENCIL));
+	pencil3->SetUseingCamera(Cam);
+	pencil3->transform.scale = { 0.13f, 0.6f, 1.0f };
+	pencil3->transform.position = { 10.98f, -0.525f, 0.3f };
+	pencil3->transform.rotation = { 180 };
+	Objects.push_back(pencil3);
 
 	// ƒvƒŒƒCƒ„[‚ÌŽÀ‘Ì‰»‚Æ‰Šú‰»
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
