@@ -412,6 +412,7 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			if (CGameManager::GetInstance()->GetGameState() == GAME_STATE::TIME_UP ||
 				CGameManager::GetInstance()->GetGameState() == GAME_STATE::ZERO_HP)
 			{
+				XA_Play(SOUND_LABEL_GAMEOVER);
 				// リトライで読み込むシーンをリザルトシーンに設定
 				result->SetPrevStage((int)retryLoadScene);
 				// ゲームオーバーをセット
@@ -420,6 +421,8 @@ void CSceneManager::ChangeScene(SCENE_ID _inScene, FADE_TYPE fadeType)
 			// クリアのときはクリア画面に遷移させる
 			else
 			{
+				// ゲームマネージャを初期化
+				XA_Play(SOUND_LABEL_GAMECLEAR);
 				// クリアをセット
 				result->SetResultState(RESULT_STATE::CLEAR);
 				// クリアタイムを渡す

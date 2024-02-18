@@ -113,8 +113,8 @@ ResultScene::ResultScene()
 
 	clearStringEaseX = new CEase;
 	clearStringEaseY = new CEase;
-	clearStringEaseX->Init(&clearString->transform.scale.x, 1355.0f * 0.0015f, 1.0f, 2, EASE::easeOutBack);
-	clearStringEaseY->Init(&clearString->transform.scale.y, 447.0f * 0.0015f, 1.0f, 2, EASE::easeOutBack);
+	clearStringEaseX->Init(&clearString->transform.scale.x, 1355.0f * 0.0015f, 1.0f, 1, EASE::easeOutBack);
+	clearStringEaseY->Init(&clearString->transform.scale.y, 447.0f * 0.0015f, 1.0f, 1, EASE::easeOutBack);
 
 	scoreBoardEase = new CEase;
 	scoreBoardEase->Init(&scoreBoard->transform.position.y, 0.2f, 1.5f, 2, EASE::easeOutSine);
@@ -220,18 +220,31 @@ void ResultScene::UpdateClear()
 	// スコアボードの移動が完了したならクリア時間のカウントを行う
 	if (scoreBoardEase->GetState() == STATE::END)
 	{
-		clearTimeCount = clearTimeCount < clearTime ? clearTimeCount + 1 : clearTimeCount;
-		// クリア文字列のイージングの更新
-		clearStringEaseX->Update();
-		clearStringEaseY->Update();
-		// イージングが終了したなら
-		if (clearStringEaseX->GetState() == STATE::END)
+		//  カウント効果音の再生
+		if (clearTimeCount == 0)
 		{
-			// 演出が終わったので選択肢を有効化する
-			c_goToSelect->SetActive(true);
-			c_goToTitle->SetActive(true);
-			c_cursor->SetActive(true);
-			selectOK = true;
+			XA_Play(SOUND_LABEL_SCORE_COUNT);
+		}
+		// スコアのカウントを行う
+		clearTimeCount = clearTimeCount < clearTime ? clearTimeCount + 1 : clearTimeCount;
+		// カウントが終了しているなら
+		if (clearTimeCount == clearTime)
+		{
+			// カウント効果音の停止
+			XA_Stop(SOUND_LABEL_SCORE_COUNT);
+			// クリア文字列のイージングの更新
+			clearStringEaseX->Update();
+			clearStringEaseY->Update();
+
+			// イージングが終了したなら
+			if (clearStringEaseX->GetState() == STATE::END)
+			{
+				// 演出が終わったので選択肢を有効化する
+				c_goToSelect->SetActive(true);
+				c_goToTitle->SetActive(true);
+				c_cursor->SetActive(true);
+				selectOK = true;
+			}
 		}
 	}
 

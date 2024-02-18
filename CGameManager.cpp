@@ -312,6 +312,7 @@ void CGameManager::Init()
 		heartAlpha_L[i] = false;
 		heartAlpha_R[i] = false;
 	}
+	soundFlameCounter = 0;
 }
 
 void CGameManager::Update()
@@ -356,9 +357,8 @@ void CGameManager::Update()
 			XA_Stop(SOUND_LABEL_STAGE2_BGM);
 			XA_Stop(SOUND_LABEL_STAGE3_BGM);
 			XA_Stop(SOUND_LABEL_FLY);
-
 			//サウンド再生
-			XA_Play(SOUND_LABEL_GAMEOVER_2);
+			XA_Play(SOUND_LABEL_DOWN);
 			// 状態をHP0に
 			state = GAME_STATE::ZERO_HP;
 		}
@@ -372,6 +372,8 @@ void CGameManager::Update()
 			XA_Stop(SOUND_LABEL_STAGE2_BGM);
 			XA_Stop(SOUND_LABEL_STAGE3_BGM);
 			XA_Stop(SOUND_LABEL_FLY);
+			//サウンド再生
+			XA_Play(SOUND_LABEL_DOWN);
 		}
 		// 現在のゲーム時間を受け取る
 		nowTime = (int)gameTime->GetTime();
@@ -389,19 +391,40 @@ void CGameManager::Update()
 		break;
 
 	case GAME_STATE::TIME_UP:
-		//サウンド再生
-		XA_Play(SOUND_LABEL_GAMEOVER_2);
+		// フレームをカウント
+		soundFlameCounter++;
+		// 170フレーム
+		if (soundFlameCounter == 170)
+		{
+			//倒れるサウンド再生
+			XA_Play(SOUND_LABEL_GETUP);
+		}
+		// 200フレーム
+		if (soundFlameCounter == 200)
+		{
+			XA_Play(SOUND_LABEL_GAMEOVER_2);
+		}
 		break;
 
 	case GAME_STATE::ZERO_HP:
-		//サウンド再生
-		XA_Play(SOUND_LABEL_GAMEOVER_2);
+		// フレームをカウント
+		soundFlameCounter++;
+		// 170フレーム
+		if (soundFlameCounter == 170)
+		{
+			//倒れるサウンド再生
+			XA_Play(SOUND_LABEL_GETUP);
+		}
+		// 200フレーム
+		if (soundFlameCounter == 200)
+		{
+			XA_Play(SOUND_LABEL_GAMEOVER_2);
+		}
 		break;
 
 	case GAME_STATE::CLEAR:
 		// タイマーのストップする
 		gameTime->PauseTimer();
-		XA_Play(SOUND_LABEL_GAMECLEAR);
 		break;
 
 	default:

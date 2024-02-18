@@ -68,6 +68,8 @@ private:
 	
 	// ステージの番号
 	int stageNumber = 1;
+	// 時間でサウンドを制御するためのフレームカウンター
+	int soundFlameCounter = 0;
 
 	// 唯一のインスタンス
 	static CGameManager* instance;
