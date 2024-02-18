@@ -39,6 +39,8 @@ private:
 	CGameObject* c_goToTitle;
 	CGameObject* clearString;
 	CGameObject* scoreBoard;
+	CGameObject* enemyObj;
+	CGameObject* enemyObj2;
 	/*-------------------クリア画面のオブジェクト---------------------------*/
 
 	// リザルト遷移前のステージが何だったか
@@ -66,6 +68,17 @@ private:
 	// スコアボード降下のイージング
 	CEase* scoreBoardEase;
 
+	// 敵出現のイージング
+	CEase* enemyEase;
+	CEase* enemyEase2;
+	// 敵の動きのイージング
+	CEase* enemyHappyEase;
+	bool enemyHappyEaseFlg = false;
+	CEase* enemyHappyEase2;
+	bool enemyHappyEaseFlg2 = false;
+	// 敵のジャンプ完了したかを判定
+	bool endJumpEnemy = false;
+
 	// セレクト可能にするかどうかのフラグ
 	bool selectOK = false;
 	// 選択ボタンが押されたかどうかを判定するフラグ
@@ -82,6 +95,10 @@ private:
 	int clearTime = 0;
 	// クリア時間のカウント
 	int clearTimeCount = 0;
+	// SEが再生されたかどうかのフラグ
+	bool sePlayFlg = false;
+	// SEを再生するまでの遅れを計測
+	int seFlameCounter = 0;
 
 	// クリア画面の更新
 	void UpdateClear();

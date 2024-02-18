@@ -38,7 +38,7 @@ StageScene::StageScene()
 	book2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK_OBJ1));
 	book2->SetUseingCamera(Cam);
 	book2->transform.scale = { 0.75f, 0.3f, 1.0f };
-	book2->transform.position = { 0.03f, 0.17f, 0.3f };
+	book2->transform.position = { 0.48f, 0.17f, 0.3f };
 	Objects.push_back(book2);
 
 	// 障害物
@@ -54,6 +54,14 @@ StageScene::StageScene()
 	pencil->transform.scale = { 0.15f, 1.3f, 1.0f };
 	pencil->transform.position = { 13.38f, 0.85f, 0.3f };
 	Objects.push_back(pencil);
+
+	// 看板
+	kanban1 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::KANBAN1), { 0.333333f, 1.0f });
+	kanban1->SetUseingCamera(Cam);
+	kanban1->transform.scale = { 811.0f * 0.0015f, 924.0f * 0.0015f, 1.0f };
+	kanban1->transform.position = { -0.84f, -0.3f, 0.3f };
+	kanban1->InitAnimParameter(true, 3, 1, ANIM_PATTERN::KANBAN1, 0.005f);
+	Objects.push_back(kanban1);
 
 	// プレイヤーの実体化と初期化
 	player = new CPlayer(vertexBufferCharacter, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
@@ -106,6 +114,12 @@ void StageScene::Update()
 	if (gInput->GetKeyTrigger(VK_DELETE))
 	{
 		CGameManager::GetInstance()->AddDamage(1);
+	}
+
+	// セレクト画面に戻る
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 	}
 
 	// クリア、ゲームオーバーでシーン遷移

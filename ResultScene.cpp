@@ -111,6 +111,27 @@ ResultScene::ResultScene()
 	clearString->transform.scale = { 0.0f, 0.0f, 1.0f };
 	clearString->SetActive(false);
 
+	enemyObj = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY),{ 0.333333f, 0.5f });
+	Objects.push_back(enemyObj);
+	enemyObj->transform.position = { -1.7f, -2.0f, -0.1f };
+	enemyObj->transform.rotation = 20.0f;
+	enemyObj->transform.scale = { 794.0f * 0.0013f, 793.0f * 0.0013f, 1.0f };
+	enemyObj->TextureCutout(1,1);
+	enemyEase = new CEase();
+	enemyEase->Init(&enemyObj->transform.position.y, -1.0f, 1.0f, 3, EASE::easeOutSine);
+
+	enemyObj2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::ENEMY), { 0.333333f, 0.5f });
+	Objects.push_back(enemyObj2);
+	enemyObj2->transform.position = { 0.1f, -2.0f, -0.1f };
+	enemyObj2->transform.rotation = -20.0f;
+	enemyObj2->transform.scale = { 794.0f * 0.0013f, 793.0f * 0.0013f, 1.0f };
+	enemyObj2->TextureCutout(1, 0);
+	enemyEase2 = new CEase();
+	enemyEase2->Init(&enemyObj2->transform.position.y, -1.0f, 1.0f, 4, EASE::easeOutSine);
+
+	enemyHappyEase = new CEase;
+	enemyHappyEase2 = new CEase;
+
 	clearStringEaseX = new CEase;
 	clearStringEaseY = new CEase;
 	clearStringEaseX->Init(&clearString->transform.scale.x, 1355.0f * 0.0015f, 1.0f, 1, EASE::easeOutBack);
@@ -169,6 +190,10 @@ ResultScene::~ResultScene()
 	delete clearStringEaseX;
 	delete clearStringEaseY;
 	delete scoreBoardEase;
+	delete enemyEase;
+	delete enemyEase2;
+	delete enemyHappyEase;
+	delete enemyHappyEase2;
 
 	// カメラオブジェクトの削除
 	delete Cam;
@@ -216,6 +241,9 @@ void ResultScene::UpdateClear()
 
 	// スコアボード降下のイージングの更新
 	scoreBoardEase->Update();
+	// 敵イージングの更新
+	enemyEase->Update();
+	enemyEase2->Update();
 
 	// スコアボードの移動が完了したならクリア時間のカウントを行う
 	if (scoreBoardEase->GetState() == STATE::END)
@@ -227,9 +255,22 @@ void ResultScene::UpdateClear()
 		}
 		// スコアのカウントを行う
 		clearTimeCount = clearTimeCount < clearTime ? clearTimeCount + 1 : clearTimeCount;
+
 		// カウントが終了しているなら
 		if (clearTimeCount == clearTime)
 		{
+			// 音を鳴らすまでのフレームを計算
+			seFlameCounter = seFlameCounter < 60 ? seFlameCounter + 1 : seFlameCounter;
+			// フラグが立っていないかつ60フレーム経過したならSEを再生
+			if (sePlayFlg == false && seFlameCounter == 60
+				&& enemyEase->GetState() == STATE::END && enemyEase2->GetState() == STATE::END)
+			{
+				// 同時にイージングの初期化を行う
+				enemyHappyEase->Init(&enemyObj->transform.position.y, -0.8f, 1.0f, 0, EASE::easeInBounce);
+				enemyHappyEase2->Init(&enemyObj2->transform.position.y, -0.8f, 1.0f, 0, EASE::easeInBounce);
+				XA_Play(SOUND_LABEL_CLEAR);
+				sePlayFlg = true;
+			}
 			// カウント効果音の停止
 			XA_Stop(SOUND_LABEL_SCORE_COUNT);
 			// クリア文字列のイージングの更新
@@ -244,6 +285,43 @@ void ResultScene::UpdateClear()
 				c_goToTitle->SetActive(true);
 				c_cursor->SetActive(true);
 				selectOK = true;
+
+				// 敵の喜びの動きのイージング
+				// 交互にジャンプさせる
+				if (!endJumpEnemy)
+				{
+					// 左の敵のイージングの更新
+					enemyHappyEase->Update();
+					if (enemyHappyEase->GetState() == STATE::END && enemyHappyEaseFlg)
+					{
+						enemyHappyEase->Init(&enemyObj->transform.position.y, -0.8f, 1.0f, 0, EASE::easeInBounce);
+						enemyHappyEaseFlg = false;
+						// 左の敵のイージングが完了したのでフラグを上げる
+						endJumpEnemy = true;
+					}
+					else if (enemyHappyEase->GetState() == STATE::END && !enemyHappyEaseFlg)
+					{
+						enemyHappyEase->Init(&enemyObj->transform.position.y, -1.0f, 0.3f, 0, EASE::easeInQuad);
+						enemyHappyEaseFlg = true;
+					}
+				}
+				else
+				{
+					// 右の敵のイージングの更新
+					enemyHappyEase2->Update();
+					if (enemyHappyEase2->GetState() == STATE::END && enemyHappyEaseFlg2)
+					{
+						enemyHappyEase2->Init(&enemyObj2->transform.position.y, -0.8f, 1.0f, 0, EASE::easeInBounce);
+						enemyHappyEaseFlg2 = false;
+						// 右の敵のイージングが完了したのでフラグを下げる
+						endJumpEnemy = false;
+					}
+					else if (enemyHappyEase2->GetState() == STATE::END && !enemyHappyEaseFlg2)
+					{
+						enemyHappyEase2->Init(&enemyObj2->transform.position.y, -1.0f, 0.3f, 0, EASE::easeInQuad);
+						enemyHappyEaseFlg2 = true;
+					}
+				}
 			}
 		}
 	}

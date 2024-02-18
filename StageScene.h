@@ -23,6 +23,7 @@ private:
 	CGameObject* book2;
 	CGameObject* eraser;
 	CGameObject* pencil;
+	CGameObject* kanban1;
 
 	// シーン遷移中か判定するフラグ
 	bool changeSceneFlg = false;

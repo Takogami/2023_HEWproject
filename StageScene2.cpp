@@ -138,6 +138,12 @@ StageScene2::~StageScene2()
 
 void StageScene2::Update()
 {
+	// セレクト画面に戻る
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
+	}
+
 	// クリア、ゲームオーバーでシーン遷移
 	if (player->GetState() == PState::CLEAR_GAMEOVER && !changeSceneFlg)
 	{

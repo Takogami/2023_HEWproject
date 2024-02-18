@@ -32,6 +32,7 @@ PARAM sound_param[SOUND_LABEL_MAX] =
 	{"asset/SE/break.wav", false},
 	{"asset/SE/down.wav", false},
 	{"asset/SE/scoreCount.wav", true},
+	{"asset/SE/clear.wav", false},
 };
 
 #ifdef _XBOX //Big-Endian

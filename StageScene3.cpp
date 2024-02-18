@@ -8,7 +8,7 @@ StageScene3::StageScene3()
 	Cam = new CCamera;
 
 	// プレイヤーの実体化と初期化
-	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG), { 1.0f ,1.0f });
+	bg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BG3), { 1.0f ,1.0f });
 	// 背景の設定
 	bg->SetUseingCamera(Cam);
 	bg->transform.scale = { 1920.0f * 0.0021f, 1080.0f * 0.0021f, 1.0f };
@@ -92,9 +92,10 @@ StageScene3::~StageScene3()
 
 void StageScene3::Update()
 {
-	if (gInput->GetKeyTrigger(VK_DELETE))
+	// セレクト画面に戻る
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
 	{
-		CGameManager::GetInstance()->AddDamage(1);
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 	}
 
 	// クリア、ゲームオーバーでシーン遷移
@@ -125,6 +126,10 @@ void StageScene3::Update()
 	if (Cam->cameraPos.x < 0.0f)
 	{
 		Cam->cameraPos.x = 0.0f;
+	}
+	if (Cam->cameraPos.x > 16.65f)
+	{
+		Cam->cameraPos.x = 16.65f;
 	}
 
 	Cam->Update();

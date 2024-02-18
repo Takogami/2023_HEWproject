@@ -87,6 +87,12 @@ SelectScene::~SelectScene()
 
 void SelectScene::Update()
 {
+	// ƒ^ƒCƒgƒ‹‰æ–Ê‚É–ß‚é
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
+	{
+		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::TITLE, FADE_TYPE::ERASER);
+	}
+
 	// ãˆÚ“®
 	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)

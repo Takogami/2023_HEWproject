@@ -283,8 +283,8 @@ void CGameManager::Init()
 	// スコアの初期化
 	score = 0;
 	// タイマーの初期化
-	gameTime->InitTimer(180, TIMER_MODE::COUNT_DOWN);
-	nowTime = 180;
+	gameTime->InitTimer(240, TIMER_MODE::COUNT_DOWN);
+	nowTime = 240;
 	// プレイヤーの体力を初期化
 	playerHP = PLAYER_HP;
 

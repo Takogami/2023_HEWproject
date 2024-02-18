@@ -111,7 +111,7 @@ void CScene::CreateStage(TERRAIN_ID _id, CCamera* _useCamera)
 				// タイルの位置をセットする
 				map_object.back()->transform.position.x = x_tile;
 				map_object.back()->transform.position.y = y_tile;
-				map_object.back()->transform.position.z = -0.1f;
+				map_object.back()->transform.position.z = -0.09f;
 				// コライダーの設定
 				map_object.back()->Bcol = { x_tile, y_tile, TILE_WIDTH, TILE_HEIGHT };
 			}

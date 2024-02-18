@@ -77,8 +77,9 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	DTILE_DOWN,
 	TITLE_BG,
 	HATA,
-	KANBAN,
 	STAGE_VIEW,
+	BG3,
+	KANBAN1,
 };
 
 // CTextureLoaderクラス
@@ -140,8 +141,9 @@ private:
 		L"asset/gabyousita.png",
 		L"asset/titleBg.png",
 		L"asset/hata.png",
-		L"asset/kanban.png",
 		L"asset/stagePreview.png",
+		L"asset/bg3.png",
+		L"asset/kanban1.png",
 	};
 
 	/* メソッド */
