@@ -22,6 +22,15 @@ SelectScene::SelectScene()
 	StageSelect->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
 	StageSelect->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.3f, 0.0f, 0.4f);
 
+	goToTitle = new CDrawString;
+	goToTitle->SetFont(FontID::UZURA);
+	goToTitle->SetString("start : タイトルへ");
+	goToTitle->SetPosition({ 80.0f, 780.0f });
+	goToTitle->SetFontSize(40.0f);
+	goToTitle->SetFontColor(0.0f, 0.0f, 0.0f);
+	goToTitle->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
+	goToTitle->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
+
 	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.2f, 1.0f });
 	Objects.push_back(StagePreview);
 	StagePreview->transform.position = { -0.97f, -0.07f, 0.2f };
@@ -59,6 +68,13 @@ SelectScene::SelectScene()
 	Objects.push_back(StagePreview2);
 	StagePreview2->transform.position = { -0.8f, 0.76f, 0.05f };
 	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f};
+	StagePreview2->materialDiffuse.w = 0.7f;
+
+	stringBg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
+	Objects.push_back(stringBg);
+	stringBg->transform.position = { -1.33f, -0.97f, 0.05f };
+	stringBg->transform.scale = { 700.0f * 0.00148f, 283.0f * 0.0007f };
+	stringBg->materialDiffuse.w = 0.85f;
 
 	// プレビューのイージング
 	viewEase = new CEase;
@@ -252,4 +268,5 @@ void SelectScene::Draw()
 	}
 
 	StageSelect->Draw();
+	goToTitle->Draw();
 }

@@ -93,7 +93,8 @@ StageScene3::~StageScene3()
 void StageScene3::Update()
 {
 	// ƒZƒŒƒNƒg‰æ–Ê‚É–ß‚é
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START) &&
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::START)
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 	}

@@ -29,6 +29,8 @@ private:
 
 	// 選択を促す文章
 	CDrawString* StageSelect;
+	// タイトルに戻る
+	CDrawString* goToTitle;
 
 	// 選択中のステージ番号
 	int stageNum = 1;
@@ -38,6 +40,7 @@ private:
 	// ステージのプレビュー
 	CGameObject* StagePreview;
 	CGameObject* StagePreview2;
+	CGameObject* stringBg;
 	// ステージの画像
 	CGameObject* StageView;
 

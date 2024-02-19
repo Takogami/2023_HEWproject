@@ -139,7 +139,8 @@ StageScene2::~StageScene2()
 void StageScene2::Update()
 {
 	// セレクト画面に戻る
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START) &&
+		CGameManager::GetInstance()->GetGameState() == GAME_STATE::START)
 	{
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 	}
