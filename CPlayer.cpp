@@ -486,16 +486,31 @@ void CPlayer::Update()
 	{
 		this->Bcol.sizeY = 0.14f;
 	}
+
 	// 風の影響を受けていないなら向きを戻す
 	if (dir_wind.x == 0.0f)
 	{
 		// 向きを戻す
 		dir.x = 0.0f;
 	}
+	 else if (dir_wind.x == 1.0f)
+	{
+		gInput->ControllerVibration(7, 10000);
+	}
+	 else if (dir_wind.x == -1.0f)
+	{
+		gInput->ControllerVibration(7, 10000);
+	}
+
+
 	if (dir_wind.y == 0.0f)
 	{
 		// 向きを戻す
 		dir.y = -1.0f;
+	}
+	else if (dir_wind.y == 1.0f)
+	{
+		gInput->ControllerVibration(7, 10000);
 	}
 	if (Ddir.x == 0.0f)
 	{
@@ -829,10 +844,10 @@ void CPlayer::Update()
 				// コライダーの位置を補正し、補正した方向を受け取る
 				prevFrameCorrectY = CCollision::CorrectPosition(this->Bcol, (*it)->Bcol);
 
-				// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
-				damageEffect->transform.position = { this->transform.position.x,this->transform.position.y - 0.15f, -0.3f };
-				// エフェクトをアクティブに
-				damageEffect->SetActive(true);
+				//// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+				//damageEffect->transform.position = { this->transform.position.x,this->transform.position.y - 0.15f, -0.3f };
+				//// エフェクトをアクティブに
+				//damageEffect->SetActive(true);
 
 				// 天井にぶつかっていたならジャンプ力を0にする
 				if (prevFrameCorrectY.y == -1)
@@ -851,6 +866,10 @@ void CPlayer::Update()
 						CGameManager::GetInstance()->AddDamage(1);
 						//プレイヤーの当たり判定を受けないようにするためにtrue;
 						//	サウンド再生
+						// ノックバックの前にエフェクトをプレイヤーの位置に移動させる
+						damageEffect->transform.position = { this->transform.position.x,this->transform.position.y - 0.15f, -0.3f };
+						// エフェクトをアクティブに
+						damageEffect->SetActive(true);
 						XA_Play(SOUND_LABEL_DAMAGEHIT);
 						nockT = true;
 					}
