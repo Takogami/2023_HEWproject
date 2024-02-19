@@ -43,6 +43,7 @@ private:
 	CGameObject* stringBg;
 	// ステージの画像
 	CGameObject* StageView;
+	CGameObject* kami;
 
 	// 完全に透明になったかどうかのフラグ
 	bool viewAlphaFlg = false;

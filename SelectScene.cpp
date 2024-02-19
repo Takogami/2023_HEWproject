@@ -76,6 +76,14 @@ SelectScene::SelectScene()
 	stringBg->transform.scale = { 700.0f * 0.00148f, 283.0f * 0.0007f };
 	stringBg->materialDiffuse.w = 0.85f;
 
+	kami = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
+	Objects.push_back(kami);
+	kami->transform.position = { 1.85f, -0.85f, -0.11f };
+	kami->transform.rotation = -20.0f;
+	kami->transform * 1.0f;
+	// アニメーションの初期化
+	kami->InitAnimParameter(true, 5, 10, ANIM_PATTERN::IDOL_L, 0.15f);
+
 	// プレビューのイージング
 	viewEase = new CEase;
 	viewEase->Init(&StageView->materialDiffuse.w, 1.0f, 0.7f, 0, EASE::easeInOutCubic);
