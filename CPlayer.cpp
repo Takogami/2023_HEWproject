@@ -31,6 +31,26 @@ CPlayer::CPlayer(ID3D11Buffer* vb, ID3D11ShaderResourceView* tex, FLOAT_XY uv, O
 	damageEffect->transform.scale = { 120.0f * 0.0025f, 120.0f * 0.0025f, 1.0f };
 	damageEffect->SetActive(false);
 
+	// クラッカー
+	kurakka_L = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::KURAKKA), { 0.125f, 1.0f });
+	kurakka_L->transform.position = { -1.0f, -1.8f, -0.11f };
+	kurakka_L->transform.scale = { 374.0f * 0.004f, 374.0f * 0.004f, 1.0f };
+	kurakka_L->InitAnimParameter(false, 8, 1, ANIM_PATTERN::KURAKKA_L, 0.25f);
+	kurakka_L->SetActive(false);
+	// クラッカーのイージング
+	kurakkaEase_L = new CEase;
+	kurakkaEase_L->Init(&kurakka_L->transform.position.y, -0.45f, 0.8f, 0, EASE::easeOutCubic);
+
+	// クラッカー右
+	kurakka_R = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::KURAKKA_REVERSE), { 0.125f, 1.0f });
+	kurakka_R->transform.position = { 1.0f, -1.8f, -0.11f };
+	kurakka_R->transform.scale = { 374.0f * 0.004f, 374.0f * 0.004f, 1.0f };
+	kurakka_R->InitAnimParameter(false, 8, 1, ANIM_PATTERN::KURAKKA_R, 0.25f);
+	kurakka_R->SetActive(false);
+	// クラッカー右のイージング
+	kurakkaEase_R = new CEase;
+	kurakkaEase_R->Init(&kurakka_R->transform.position.y, -0.45f, 0.8f, 0, EASE::easeOutCubic);
+
 	// ゲームオーバー演出用背景
 	gameoverBg = new CGameObject(vertexBufferEffect, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
 	gameoverBg->transform.scale = { 1920.0f * 0.003f, 1080.0f * 0.003f, 1.0f };
@@ -449,6 +469,12 @@ void CPlayer::ReceiveWind()
 
 bool CPlayer::CheckStandCollision()
 {
+	// 上向きの風を受けているときは戻れるようにする
+	if (dir_wind.y == 1.0f)
+	{
+		return false;
+	}
+
 	// 起き上がり後のコライダーの位置
 	BoxCollider standBcol = this->Bcol;
 	// 起き上がれるかどうかのフラグ
@@ -612,7 +638,7 @@ void CPlayer::Update()
 			this->materialDiffuse.w = 1.0f;
 		}
 		//flameCounteMK2で無敵の時間を決めています（６０フレーム）
-		if (flameCounter == 60 && nockT == true)
+		if (flameCounter == 120 && nockT == true)
 		{	
 			//nockTがfalseになるとプレイヤーの当たり判定が復活（縦軸）
 			nockT = false;
@@ -658,6 +684,19 @@ void CPlayer::Update()
 		// クリア時の処理
 		else if (clearFlg)
 		{
+			// クラッカーをアクティブに
+			kurakka_L->SetActive(true);
+			kurakka_R->SetActive(true);
+			// クラッカーのイージングを更新
+			kurakkaEase_L->Update();
+			kurakkaEase_R->Update();
+			// 60フレーム後に効果音とアニメーション再生
+			if (ResultShiftCount == 60)
+			{
+				XA_Play(SOUND_LABEL_KURAKKA);
+				kurakka_L->PlayAnimation();
+				kurakka_R->PlayAnimation();
+			}
 			// 180フレームたったら終了状態に設定
 			if (ResultShiftCount >= 180)
 			{
@@ -963,7 +1002,7 @@ void CPlayer::Update()
 						{
 							if (HitTy == true && prevFrameCorrect.x == 1.0f)
 							{
-								moveF = this->transform.position.x - 0.5f;
+								moveF = this->transform.position.x + 0.5f;
 								HitTy = false;
 							}
 						}
@@ -1003,6 +1042,9 @@ void CPlayer::Update()
 	// プレイヤーが使っているカメラを使い、エフェクトを更新
 	damageEffect->SetUseingCamera(this->useCamera);
 	damageEffect->Update();
+
+	kurakka_L->Update();
+	kurakka_R->Update();
 }
 
 PState CPlayer::GetState()
@@ -1025,6 +1067,10 @@ void CPlayer::Draw()
 
 	// エフェクトの描画
 	damageEffect->Draw();
+
+	// クラッカーの描画
+	kurakka_L->Draw();
+	kurakka_R->Draw();
 }
 
 CPlayer::~CPlayer()
@@ -1033,10 +1079,15 @@ CPlayer::~CPlayer()
 	SAFE_RELEASE(vertexBufferEffect);
 	delete damageEffect;
 	delete gameoverBg;
+	delete kurakka_L;
+	delete kurakka_R;
 
+	// イージングの解放
 	delete smoothing;
 	delete gameoverEaseX;
 	delete gameoverEaseY;
+	delete kurakkaEase_L;
+	delete kurakkaEase_R;
 
 	// 親クラスのコンストラクタを明示的に呼び出す
 	// 頂点バッファの解放を行う

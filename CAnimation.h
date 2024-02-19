@@ -42,6 +42,9 @@ enum class ANIM_PATTERN
 	WIND_ANIM_UP_LEFT,
 	WIND_ANIM_RIGHT,
 	KANBAN,
+	SELECT_IDOL,
+	KURAKKA_L,
+	KURAKKA_R,
 };
 
 class CAnimation
@@ -124,6 +127,13 @@ private:
 
 		// 看板
 		{0, 1, 2, 3, ANIM_LOOP},
+
+		{ 37, 37, 38, 38, 39, 39, 38, 38, 37, 37, 36, 36, ANIM_LOOP},		// 左立状態 セレクト画面用
+
+		// クラッカー左
+		{ 0, 1, 2, 3, 4, 5, 6, 7, ANIM_STOP},
+		// クラッカー右
+		{ 7, 6, 5, 4, 3, 2, 1, 0, ANIM_STOP},
 	};
 
 	// アニメーションスピード

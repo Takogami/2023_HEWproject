@@ -32,7 +32,10 @@ private:
 
     // プレイヤーのダメージエフェクト
     CGameObject* damageEffect;
-
+    // クラッカー左
+    CGameObject* kurakka_L;
+    // クラッカー右
+    CGameObject* kurakka_R;
     // ゲームオーバー背景
     CGameObject* gameoverBg;
     // プレイヤーの拡大率
@@ -42,6 +45,9 @@ private:
     // ゲームオーバー時のプレイヤー位置を戻すイージング
     CEase* gameoverEaseX;
     CEase* gameoverEaseY;
+    // クラッカー出現のイージング
+    CEase* kurakkaEase_L;
+    CEase* kurakkaEase_R;
 
     // プレイヤーのダメージエフェクト用頂点バッファ
     ID3D11Buffer* vertexBufferEffect;
@@ -72,6 +78,7 @@ private:
 
     bool nockf = false;
     bool nockT = false;
+    bool nockE = false;
     bool Aflame = false;
     bool HitTy = false;
     float moveF = 0.0f;

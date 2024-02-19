@@ -84,6 +84,8 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	KANBAN3,
 	KANBAN4,
 	KANBAN5,
+	KURAKKA,
+	KURAKKA_REVERSE,
 };
 
 // CTextureLoaderクラス
@@ -152,6 +154,8 @@ private:
 		L"asset/kanban3.png",
 		L"asset/kanban4.png",
 		L"asset/kanban5.png",
+		L"asset/kurakka.png",
+		L"asset/kurakka_reverse.png",
 	};
 
 	/* メソッド */

@@ -82,7 +82,7 @@ SelectScene::SelectScene()
 	kami->transform.rotation = -20.0f;
 	kami->transform * 1.0f;
 	// アニメーションの初期化
-	kami->InitAnimParameter(true, 5, 10, ANIM_PATTERN::IDOL_L, 0.15f);
+	kami->InitAnimParameter(true, 5, 10, ANIM_PATTERN::SELECT_IDOL, 0.17f);
 
 	// プレビューのイージング
 	viewEase = new CEase;
