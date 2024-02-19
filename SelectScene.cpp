@@ -68,7 +68,7 @@ SelectScene::SelectScene()
 	Objects.push_back(StagePreview2);
 	StagePreview2->transform.position = { -0.8f, 0.76f, 0.05f };
 	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f};
-	StagePreview2->materialDiffuse.w = 0.7f;
+	StagePreview2->materialDiffuse.w = 0.85f;
 
 	stringBg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
 	Objects.push_back(stringBg);
