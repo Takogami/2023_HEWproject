@@ -466,7 +466,6 @@ bool CPlayer::CheckStandCollision()
 			notStand = true;
 		}
 	}
-
 	return notStand;
 }
 
@@ -952,17 +951,29 @@ void CPlayer::Update()
 					{
 						if (prevFrameCorrect.y == 1.0f)
 						{
-							moveF = this->transform.position.x - 0.3f;
+							if (HitTy == true && prevFrameCorrect.y == 1.0f)
+							{
+								moveF = this->transform.position.x - 0.3f;
+								HitTy = false;
+							}
 						}
 						//吹っ飛ばす計算式（右）
 						if (prevFrameCorrect.x == 1.0f)
 						{
-							moveF = this->transform.position.x + 0.5f;
+							if (HitTy == true && prevFrameCorrect.x == 1.0f)
+							{
+								moveF = this->transform.position.x - 0.5f;
+								HitTy = false;
+							}
 						}
 						//吹っ飛ばす計算式（左）
 						if (prevFrameCorrect.x == -1.0f)
 						{
-							moveF = this->transform.position.x - 0.5f;
+							if (HitTy == true && prevFrameCorrect.x == -1.0f)
+							{
+								moveF = this->transform.position.x - 0.5f;
+								HitTy = false;
+							}
 						}
 						//追従カメラの初期化
 						smoothing->InitSmooth(&moveF, &this->transform.position.x, 0.05f);
@@ -987,6 +998,7 @@ void CPlayer::Update()
 		}
 	}
 
+	HitTy = true;
 	// プレイヤーが使っているカメラを使い、エフェクトを更新
 	damageEffect->SetUseingCamera(this->useCamera);
 	damageEffect->Update();
