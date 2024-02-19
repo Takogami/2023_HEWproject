@@ -478,6 +478,9 @@ void ResultScene::UpdateGameOver()
 		//	サウンド再生
 		XA_Play(SOUND_LABEL_PRESS);
 
+		//	サウンド停止
+		XA_Stop(SOUND_LABEL_GAMEOVER);
+
 		gInput->ControllerVibration(5, 40000);
 		// カーソルのポイント位置で遷移先のシーンを変更
 		switch (cursorPoint)

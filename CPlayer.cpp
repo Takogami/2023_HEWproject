@@ -882,8 +882,6 @@ void CPlayer::Update()
 				break;
 
 			case OBJECT_TYPE::DAMAGE_DOWN:
-				//	サウンド再生
-				XA_Play(SOUND_LABEL_DAMAGEHIT);
 				prevFrameCorrect = CCollision::DtestCorrectPosition(this->Bcol, (*it)->Bcol);
 				// オブジェクトの位置とコライダーの中心を合わせる
 				this->transform.position.x = this->Bcol.centerX;
@@ -897,6 +895,9 @@ void CPlayer::Update()
 				//プレイヤーのノックバックの処理
 				if (!nockf)
 				{
+					//	サウンド再生
+					XA_Play(SOUND_LABEL_DAMAGEHIT);
+
 					if (prevFrameCorrect.y == -1.0f)
 					{
 						moveF = this->transform.position.x - 0.5f;
@@ -977,7 +978,7 @@ void CPlayer::Update()
 				}
 
 				//	サウンドの停止（ごり押し作戦）
-				if (anim->GetIsAnimation() != false && this->GetState() != PState::FALL)
+				if ((anim->GetIsAnimation() != false && this->GetState() != PState::FALL) || (*it)->GetObjectType() == OBJECT_TYPE::DAMAGE_DOWN)
 				{
 					//	サウンドの停止
 					XA_Stop(SOUND_LABEL_FLY);

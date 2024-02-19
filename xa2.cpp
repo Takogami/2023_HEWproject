@@ -21,7 +21,7 @@ PARAM sound_param[SOUND_LABEL_MAX] =
 	{"asset/SE/gameover.wav", false},
 	{"asset/SE/gameover2.wav", false},
 	{"asset/SE/DamegeHit.wav", false},
-	{"asset/SE/fly.wav", false},
+	{"asset/SE/fly.wav", true},
 	{"asset/SE/Cursor.wav", false},
 	{"asset/SE/GameClear.wav", false},
 	{"asset/SE/goal.wav", false},
