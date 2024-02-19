@@ -14,7 +14,7 @@ CTerrainLoader::CTerrainLoader()
 	for (int i = 0; i < file_name.size(); i++)
 	{
 		// ƒpƒX‚ğŠ®¬‚³‚¹Apath”z—ñ‚ÉŠi”[
-		path.push_back(file_name[i].insert(0, "./stageTerrain_data/"));
+		path.push_back(file_name[i].insert(0, "./asset/stageTerrain_data/"));
 	}
 }
 

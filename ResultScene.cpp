@@ -344,7 +344,7 @@ void ResultScene::UpdateClear()
 	// CCursor‚Å‚Ì—ñ‹“Œ^‚ÌScene‚ğæ“¾‚·‚é
 	c_cursorPoint = (CCursor_PointClear)c_cursor->GetCursorPoint();
 
-	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN)) && selectOK)
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) && selectOK)
 	{
 		// ƒTƒEƒ“ƒhÄ¶
 		XA_Play(SOUND_LABEL_PRESS);

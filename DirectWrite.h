@@ -26,8 +26,6 @@ namespace FontList
 {
 	const std::wstring FontPath[] =
 	{
-		L"asset/font/851letrogo_007.ttf",
-		L"asset/font/karakaze-R.ttf",
 		L"asset/font/uzura.ttf",
 	};
 }
@@ -37,9 +35,7 @@ namespace FontList
 //=============================================================================
 enum class FontID
 {
-	LETROGO = 0,
-	KARAKAZE,
-	UZURA,
+	UZURA = 0,
 };
 
 //=============================================================================

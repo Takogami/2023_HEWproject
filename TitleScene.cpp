@@ -119,7 +119,7 @@ void TitleScene::Update()
 	//CCursor‚Å‚Ì—ñ‹“Œ^‚ÌScene‚ðŽæ“¾‚·‚é
 	cursorPoint = cursor->GetCursorPoint();
 
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B))
 	{
 		// ƒTƒEƒ“ƒhÄ¶
 		XA_Play(SOUND_LABEL::SOUND_LABEL_PRESS);

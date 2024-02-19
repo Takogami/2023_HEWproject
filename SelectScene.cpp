@@ -118,7 +118,7 @@ void SelectScene::Update()
 	}
 
 	// 上移動
-	if ((gInput->GetKeyTrigger(VK_UP) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1))
+	if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_UP, 90, 1)
 		&& stageNum > 1 && !selectMoveUp && !selectMoveDown)
 	{
 		// ステージビューのイージングの初期化
@@ -146,7 +146,7 @@ void SelectScene::Update()
 		StagePreview->PlayAnimation();
 	}
 	// 下移動
-	else if ((gInput->GetKeyTrigger(VK_DOWN) || gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1))
+	else if (gInput->IsControllerButtonRepeat(XINPUT_GAMEPAD_DPAD_DOWN, 90, 1)
 		&& stageNum < listNum && !selectMoveUp && !selectMoveDown)
 	{
 		// ステージビューのイージングの初期化
@@ -172,7 +172,7 @@ void SelectScene::Update()
 		StagePreview->ResetAnimation();
 		StagePreview->PlayAnimation();
 	}
-	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B) || gInput->GetKeyTrigger(VK_RETURN))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_B))
 	{
 		// サウンド再生
 		XA_Play(SOUND_LABEL_PRESS);

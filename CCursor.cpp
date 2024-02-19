@@ -18,13 +18,13 @@ void CCursor::CursorInput()
 	}
 
 	// 移動入力
-	if ((gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN) || gInput->GetKeyTrigger(VK_DOWN)))
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN))
 	{
 		//	サウンド再生
 		XA_Play(SOUND_LABEL_CURSOR);
 		scene_count++;// 下に1つ進める
 	}
-	else if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_UP) || gInput->GetKeyTrigger(VK_UP))
+	else if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_DPAD_UP))
 	{
 		//	サウンド再生
 		XA_Play(SOUND_LABEL_CURSOR);
