@@ -280,6 +280,17 @@ void CGameManager::Init()
 	// プレイヤーの体力を初期化
 	playerHP = PLAYER_HP;
 
+	// 位置調整フラグの初期化
+	for (int i = 0; i < 2; i++)
+	{
+		uiTimePositionSet[i] = false;
+	}
+	// 時間数字テクスチャの再表示
+	for (int i = 0; i < 3; i++)
+	{
+		timeNum[i]->SetActive(true);
+	}
+
 	// UIの初期化
 	for (int i = 0; i < 3; i++)
 	{
@@ -335,6 +346,29 @@ void CGameManager::Update()
 		timeNum[i]->TextureCutout(timeRankNum[i], 0);
 		// 次の桁に移動
 		temp /= 10;
+	}
+
+	// 桁の位置合わせ
+	if (timeRankNum[0] == 0 && timeRankNum[1] == 0)
+	{
+		timeNum[0]->SetActive(false);
+		timeNum[1]->SetActive(false);
+		if (!uiTimePositionSet[0])
+		{
+			timeNum[2]->transform.position.x = timeNum[2]->transform.position.x - 0.083f;
+			uiTimePositionSet[0] = true;
+		}
+	}
+	else if (timeRankNum[0] == 0)
+	{
+		timeNum[0]->SetActive(false);
+
+		if (!uiTimePositionSet[1])
+		{
+			timeNum[2]->transform.position.x = timeNum[2]->transform.position.x - 0.083f;
+			timeNum[1]->transform.position.x = timeNum[1]->transform.position.x - 0.083f;
+			uiTimePositionSet[1] = true;
+		}
 	}
 
 	// ゲームの進行状況に応じて更新処理を変更

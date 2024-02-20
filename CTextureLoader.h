@@ -86,9 +86,11 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	KANBAN5,
 	KURAKKA,
 	KURAKKA_REVERSE,
-	STAGE,
 	STAGESELECT,
 	STARTSELECT,
+	STR_STAGE,
+	CLEARTIME,
+	TIME,
 };
 
 // CTextureLoaderクラス
@@ -159,9 +161,11 @@ private:
 		L"asset/kanban5.png",
 		L"asset/kurakka.png",
 		L"asset/kurakka_reverse.png",
-		L"asset/stage.png",
 		L"asset/stageselect.png",
 		L"asset/starttitle.png",
+		L"asset/strStage.png",
+		L"asset/ClearTime.png",
+		L"asset/Time.png",
 	};
 
 	/* メソッド */

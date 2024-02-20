@@ -105,6 +105,16 @@ ResultScene::ResultScene()
 	scoreBoard->transform.scale = { 772.0f * 0.002f, 472.0f * 0.002f, 1.0f };
 	scoreBoard->SetActive(false);
 
+	// 時間数字テクスチャ
+	for (int i = 0; i < 3; i++)
+	{
+		timeNum[i] = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
+		timeNum[i]->transform.scale = { 0.2f, 0.25f, 1.0f };
+		timeNum[i]->transform.position = { 0.6f + (0.21f * i), 0.05f, -0.46f };
+		Objects.push_back(timeNum[i]);
+		timeNum[i]->SetActive(false);
+	}
+
 	clearString = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CLEAR_STRING));
 	Objects.push_back(clearString);
 	clearString->transform.position = { -0.8f, 0.6f, -0.11f };
@@ -141,46 +151,18 @@ ResultScene::ResultScene()
 	scoreBoardEase->Init(&scoreBoard->transform.position.y, 0.2f, 1.5f, 2, EASE::easeOutSine);
 
 	//	クリアタイム文字表示
-	ClearTime = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CLEARTIME));
-	Objects.push_back(ClearTime);
-	ClearTime->transform.position = { 1.0f, 0.35f, 0.1f };
-	ClearTime->transform.scale = { 985.0f * 0.001f, 163.0f * 0.001f, 0.0f };
-	ClearTime->SetActive(false);
+	strClearTime = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::CLEARTIME));
+	Objects.push_back(strClearTime);
+	strClearTime->transform.position = { 1.0f, 0.35f, 0.1f };
+	strClearTime->transform.scale = { 985.0f * 0.001f, 163.0f * 0.001f, 0.0f };
+	strClearTime->SetActive(false);
 
 	cTime = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TIME));
 	Objects.push_back(cTime);
-	cTime->transform.position = { 1.26f, 0.04f, 0.1f };
+	cTime->transform.position = { 1.36f, 0.04f, 0.1f };
 	cTime->transform.scale = { 314.0f * 0.0007f, 304.0f * 0.0007f, 0.0f };
 	cTime->SetActive(false);
 
-	//strClearTime = new CDrawString;
-	//strClearTime->SetFont(FontID::UZURA);
-	//strClearTime->SetString("クリアタイム");
-	//strClearTime->SetPosition({ 960.0f, 250.0f });
-	//strClearTime->SetFontSize(60.0f);
-	//strClearTime->SetFontColor(0.0f, 0.0f, 0.0f);
-	//strClearTime->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	//strClearTime->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
-
-	//strClearTimeNum = new CDrawString;
-	//strClearTimeNum->SetFont(FontID::UZURA);
-	//strClearTimeNum->SetString("");
-	//strClearTimeNum->SetPosition({ 990.0f, 340.0f });
-	//strClearTimeNum->SetFontSize(120.0f);
-	//strClearTimeNum->SetFontColor(1.0f, 0.3f, 0.0f);
-	//strClearTimeNum->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	//strClearTimeNum->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
-	//// テスト用
-	//clearTime = 100;
-
-	//strSecond = new CDrawString;
-	//strSecond->SetFont(FontID::UZURA);
-	//strSecond->SetString("秒");
-	//strSecond->SetPosition({ 1200.0f, 350.0f });
-	//strSecond->SetFontSize(100.0f);
-	//strSecond->SetFontColor(1.0f, 0.3f, 0.0f);
-	//strSecond->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	//strSecond->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
 	/*-------------------クリア画面のオブジェクト---------------------------*/
 }
 
@@ -207,7 +189,6 @@ ResultScene::~ResultScene()
 	delete enemyEase2;
 	delete enemyHappyEase;
 	delete enemyHappyEase2;
-	delete cTime;
 
 	// カメラオブジェクトの削除
 	delete Cam;
@@ -262,7 +243,52 @@ void ResultScene::UpdateClear()
 	// スコアボードの移動が完了したならクリア時間のカウントを行う
 	if (scoreBoardEase->GetState() == STATE::END)
 	{
-		ClearTime->SetActive(true);
+		// 時間を位ごとに格納する
+		int temp = clearTimeCount;
+		for (int i = 2; i >= 0; i--)
+		{
+			// 上の桁の数から順番に桁の値を格納していく
+			int digit = temp % 10;
+			timeRankNum[i] = digit;
+			// 格納した数値と同じテクスチャを切り抜く
+			timeNum[i]->SetActive(true);
+			timeNum[i]->TextureCutout(timeRankNum[i], 0);
+			// 次の桁に移動
+			temp /= 10;
+		}
+
+		if (timeRankNum[0] == 0 && timeRankNum[1] == 0)
+		{
+			timeNum[0]->SetActive(false);
+			timeNum[1]->SetActive(false);
+			if (!uiTimePositionSet[0])
+			{
+				timeNum[2]->transform.position.x = timeNum[2]->transform.position.x - 0.2f;
+				uiTimePositionSet[0] = true;
+			}
+		}
+		else if(timeRankNum[0] == 0)
+		{
+			timeNum[0]->SetActive(false);
+
+			if (!uiTimePositionSet[1])
+			{
+				timeNum[2]->transform.position.x = timeNum[2]->transform.position.x + 0.1f;
+				timeNum[1]->transform.position.x = timeNum[1]->transform.position.x - 0.1f;
+				uiTimePositionSet[1] = true;
+			}
+		}
+		else
+		{
+			if (!uiTimePositionSet[2])
+			{
+				timeNum[2]->transform.position.x = timeNum[2]->transform.position.x + 0.1f;
+				timeNum[1]->transform.position.x = timeNum[1]->transform.position.x + 0.1f;
+				uiTimePositionSet[2] = true;
+			}
+		}
+
+		strClearTime->SetActive(true);
 		cTime->SetActive(true);
 
 		//  カウント効果音の再生
@@ -642,13 +668,5 @@ void ResultScene::Draw()
 	for (auto it = Objects.begin(); it != Objects.end(); it++)
 	{
 		(*it)->Draw();
-	}
-
-	// 文字列の描画
-	if (scoreBoardEase->GetState() == STATE::END)
-	{
-		/*strClearTime->Draw();
-		strClearTimeNum->Draw();
-		strSecond->Draw();*/
 	}
 }

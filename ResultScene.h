@@ -41,8 +41,15 @@ private:
 	CGameObject* scoreBoard;
 	CGameObject* enemyObj;
 	CGameObject* enemyObj2;
-	CGameObject* ClearTime;
+	CGameObject* strClearTime;
 	CGameObject* cTime;
+
+	// 各桁のテクスチャ
+	CGameObject* timeNum[3];
+	// 各桁の値
+	int timeRankNum[3];
+	// 位置セットのフラグ
+	bool uiTimePositionSet[3] = { false };
 	/*-------------------クリア画面のオブジェクト---------------------------*/
 
 	// リザルト遷移前のステージが何だったか
@@ -87,11 +94,6 @@ private:
 	bool selectFlg = false;
 	// 選択されたときのイージングが完了しているか判定するフラグ
 	bool selectEnd = false;
-
-	// クリアタイムの描画
-	/*CDrawString* strClearTime;
-	CDrawString* strClearTimeNum;
-	CDrawString* strSecond;*/
 
 	// 受け取ったクリアタイムを保存
 	int clearTime = 0;

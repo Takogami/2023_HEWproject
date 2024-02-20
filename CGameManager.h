@@ -60,6 +60,8 @@ private:
 	CGameObject* strStage;
 	CGameObject* stageNum;
 	CGameObject* timeNum[3];
+	// 位置セットのフラグ
+	bool uiTimePositionSet[2] = { false };
 
 	// オブジェクトのリスト
 	std::list<CGameObject*> Objects;

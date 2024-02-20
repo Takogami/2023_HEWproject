@@ -39,7 +39,6 @@ private:
 
 	// ステージのプレビュー
 	CGameObject* StagePreview;
-	CGameObject* StagePreview2;
 	CGameObject* stringBg;
 	// ステージの画像
 	CGameObject* StageView;

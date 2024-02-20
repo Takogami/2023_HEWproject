@@ -29,13 +29,13 @@ SelectScene::SelectScene()
 	// 文字列の設定
 	StageSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGESELECT), { 1.0f ,1.0f });
 	Objects.push_back(StageSelect);
-	StageSelect->transform.position = { -0.8f, 0.8f ,0.05f };
-	StageSelect->transform.scale = { 700.0f * 0.003f, 250.0f * 0.003f };
+	StageSelect->transform.position = { -0.9f, 0.8f ,0.05f };
+	StageSelect->transform.scale = { 700.0f * 0.0033f, 250.0f * 0.003f };
 
 	goToTitle = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STARTSELECT), { 1.0f ,1.0f });
 	Objects.push_back(goToTitle);
-	goToTitle->transform.position = { -1.2f, -1.0f ,0.05f };
-	goToTitle->transform.scale = { 350.0f * 0.003f, 140.0f * 0.003f };
+	goToTitle->transform.position = { -1.3f, -1.0f ,0.05f };
+	goToTitle->transform.scale = { 350.0f * 0.0033f, 140.0f * 0.003f };
 
 	// 要素を拡張
 	StageList.resize(listNum);
@@ -55,18 +55,6 @@ SelectScene::SelectScene()
 		// ステージの数だけイージングを作る
 		selectEase.push_back(new CEase);
 	}
-
-	StagePreview2 = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
-	Objects.push_back(StagePreview2);
-	StagePreview2->transform.position = { -0.8f, 0.76f, 0.05f };
-	StagePreview2->transform.scale = { 700.0f * 0.0035f, 283.0f * 0.002f};
-	StagePreview2->materialDiffuse.w = 0.85f;
-
-	stringBg = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STRING_BG));
-	Objects.push_back(stringBg);
-	stringBg->transform.position = { -1.33f, -0.97f, 0.05f };
-	stringBg->transform.scale = { 700.0f * 0.00148f, 283.0f * 0.0007f };
-	stringBg->materialDiffuse.w = 0.85f;
 
 	kami = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::PLAYER), { 0.2f ,0.1f });
 	Objects.push_back(kami);
@@ -266,7 +254,4 @@ void SelectScene::Draw()
 	{
 		(*it)->Draw();
 	}
-
-	//StageSelect->Draw();
-	//goToTitle->Draw();
 }
