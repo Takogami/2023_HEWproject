@@ -11,7 +11,7 @@
 #include "CTerrainLoader.h"
 #include "CTextureLoader.h"
 #include "CInput.h"
-#include "CDrawString.h"
+//#include "CDrawString.h"
 #include "CEase.h"
 #include "CTimer.h"
 #include "CGameManager.h"
