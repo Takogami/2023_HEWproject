@@ -28,9 +28,9 @@ private:
 	ID3D11Buffer* vertexBufferObject;
 
 	// 選択を促す文章
-	CDrawString* StageSelect;
-	// タイトルに戻る
-	CDrawString* goToTitle;
+	CGameObject* StageSelect;
+	//// タイトルに戻る
+	CGameObject* goToTitle;
 
 	// 選択中のステージ番号
 	int stageNum = 1;

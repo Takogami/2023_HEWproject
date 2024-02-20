@@ -87,9 +87,9 @@ private:
 	bool selectEnd = false;
 
 	// クリアタイムの描画
-	CDrawString* strClearTime;
-	CDrawString* strClearTimeNum;
-	CDrawString* strSecond;
+	//CDrawString* strClearTime;
+	//CDrawString* strClearTimeNum;
+	//CDrawString* strSecond;
 
 	// 受け取ったクリアタイムを保存
 	int clearTime = 0;

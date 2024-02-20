@@ -140,34 +140,34 @@ ResultScene::ResultScene()
 	scoreBoardEase = new CEase;
 	scoreBoardEase->Init(&scoreBoard->transform.position.y, 0.2f, 1.5f, 2, EASE::easeOutSine);
 
-	strClearTime = new CDrawString;
+	/*strClearTime = new CDrawString;
 	strClearTime->SetFont(FontID::UZURA);
 	strClearTime->SetString("クリアタイム");
 	strClearTime->SetPosition({ 960.0f, 250.0f });
 	strClearTime->SetFontSize(60.0f);
 	strClearTime->SetFontColor(0.0f, 0.0f, 0.0f);
 	strClearTime->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	strClearTime->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
+	strClearTime->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);*/
 
-	strClearTimeNum = new CDrawString;
-	strClearTimeNum->SetFont(FontID::UZURA);
-	strClearTimeNum->SetString("");
-	strClearTimeNum->SetPosition({ 990.0f, 340.0f });
-	strClearTimeNum->SetFontSize(120.0f);
-	strClearTimeNum->SetFontColor(1.0f, 0.3f, 0.0f);
-	strClearTimeNum->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	strClearTimeNum->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
-	// テスト用
-	clearTime = 100;
+	//strClearTimeNum = new CDrawString;
+	//strClearTimeNum->SetFont(FontID::UZURA);
+	//strClearTimeNum->SetString("");
+	//strClearTimeNum->SetPosition({ 990.0f, 340.0f });
+	//strClearTimeNum->SetFontSize(120.0f);
+	//strClearTimeNum->SetFontColor(1.0f, 0.3f, 0.0f);
+	//strClearTimeNum->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
+	//strClearTimeNum->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
+	//// テスト用
+	//clearTime = 100;
 
-	strSecond = new CDrawString;
-	strSecond->SetFont(FontID::UZURA);
-	strSecond->SetString("秒");
-	strSecond->SetPosition({ 1200.0f, 350.0f });
-	strSecond->SetFontSize(100.0f);
-	strSecond->SetFontColor(1.0f, 0.3f, 0.0f);
-	strSecond->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	strSecond->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
+	//strSecond = new CDrawString;
+	//strSecond->SetFont(FontID::UZURA);
+	//strSecond->SetString("秒");
+	//strSecond->SetPosition({ 1200.0f, 350.0f });
+	//strSecond->SetFontSize(100.0f);
+	//strSecond->SetFontColor(1.0f, 0.3f, 0.0f);
+	//strSecond->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
+	//strSecond->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
 	/*-------------------クリア画面のオブジェクト---------------------------*/
 }
 
@@ -332,11 +332,11 @@ void ResultScene::UpdateClear()
 	// 時間を文字列型に変換
 	comvartStrTime = std::to_string(clearTimeCount);
 	// 時間の文字列をセット
-	strClearTimeNum->SetString(comvartStrTime);
+	//strClearTimeNum->SetString(comvartStrTime);
 	// 文字列の長さから桁数を取得
 	digit_rank = comvartStrTime.length();
 	// 桁数に応じて表示位置を変更する
-	strClearTimeNum->SetPosition({ 980.0f + (56 / digit_rank), 340.0f });
+	//strClearTimeNum->SetPosition({ 980.0f + (56 / digit_rank), 340.0f });
 
 	// カーソルの入力処理を実行
 	c_cursor->CursorInput();
@@ -630,8 +630,8 @@ void ResultScene::Draw()
 	// 文字列の描画
 	if (scoreBoardEase->GetState() == STATE::END)
 	{
-		strClearTime->Draw();
-		strClearTimeNum->Draw();
-		strSecond->Draw();
+		//strClearTime->Draw();
+		//strClearTimeNum->Draw();
+		//strSecond->Draw();
 	}
 }

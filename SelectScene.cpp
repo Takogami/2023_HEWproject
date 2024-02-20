@@ -12,25 +12,6 @@ SelectScene::SelectScene()
 	// オブジェクトをリストに登録
 	Objects.push_back(bg);
 
-	// 文字列の設定
-	StageSelect = new CDrawString;
-	StageSelect->SetFont(FontID::UZURA);
-	StageSelect->SetString("ステージを選んでね");
-	StageSelect->SetPosition({ 80.0f, 100.0f });
-	StageSelect->SetFontSize(80.0f);
-	StageSelect->SetFontColor(0.0f, 0.0f, 0.0f);
-	StageSelect->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	StageSelect->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.3f, 0.0f, 0.4f);
-
-	goToTitle = new CDrawString;
-	goToTitle->SetFont(FontID::UZURA);
-	goToTitle->SetString("start : タイトルへ");
-	goToTitle->SetPosition({ 80.0f, 780.0f });
-	goToTitle->SetFontSize(40.0f);
-	goToTitle->SetFontColor(0.0f, 0.0f, 0.0f);
-	goToTitle->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	goToTitle->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
-
 	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.2f, 1.0f });
 	Objects.push_back(StagePreview);
 	StagePreview->transform.position = { -0.97f, -0.07f, 0.2f };
@@ -44,6 +25,17 @@ SelectScene::SelectScene()
 	StageView->transform.scale = { 1.2f, 1.2f };
 	StageView->materialDiffuse.w = 0.0f;
 	StageView->TextureCutout(0,0);
+
+	// 文字列の設定
+	StageSelect = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STAGESELECT), { 1.0f ,1.0f });
+	Objects.push_back(StageSelect);
+	StageSelect->transform.position = { -0.8f, 0.8f ,0.05f };
+	StageSelect->transform.scale = { 700.0f * 0.003f, 250.0f * 0.003f };
+
+	goToTitle = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::STARTSELECT), { 1.0f ,1.0f });
+	Objects.push_back(goToTitle);
+	goToTitle->transform.position = { -1.2f, -1.0f ,0.05f };
+	goToTitle->transform.scale = { 350.0f * 0.003f, 140.0f * 0.003f };
 
 	// 要素を拡張
 	StageList.resize(listNum);
@@ -275,6 +267,6 @@ void SelectScene::Draw()
 		(*it)->Draw();
 	}
 
-	StageSelect->Draw();
-	goToTitle->Draw();
+	//StageSelect->Draw();
+	//goToTitle->Draw();
 }
