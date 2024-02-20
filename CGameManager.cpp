@@ -4,7 +4,6 @@
 #include "CGameObject.h"
 #include "CTextureLoader.h"
 #include "CEase.h"
-#include "CDrawString.h"
 #include "CSceneManager.h"
 
 // インスタンスの初期化
@@ -46,27 +45,15 @@ CGameManager::CGameManager()
 		UI_breakHeart_L[i]->transform.scale = { 161.0f * 0.00065f, 252.0f * 0.00065f, 1.0f };
 	}
 
-	strTime = new CDrawString;
-	strTime->SetFont(FontID::UZURA);
-	strTime->SetPosition({ 1355.0f, 65.0f });
-	strTime->SetFontSize(100.0f);
-	strTime->SetFontColor(1.0f, 0.3f, 0.0f);
-	strTime->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	strTime->SetShadow({ -3.0f, -2.0f }, 1.0f, 1.0f, 1.0f, 1.0f);
-
-	strStage = new CDrawString;
-	strStage->SetFont(FontID::UZURA);
-	strStage->SetString("ステージ");
-	strStage->SetPosition({ 625.0f, 50.0f });
-	strStage->SetFontSize(50.0f);
-	strStage->SetFontColor(0.0f, 0.0f, 0.0f);
-	strStage->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	strStage->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
-
 	strBg = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOARD));
 	Objects.push_back(strBg);
 	strBg->transform.position = { 0.0f, 0.93f, -0.44f };
 	strBg->transform.scale = { 772.0f * 0.0013f, 472.0f * 0.0007f, 1.0f };
+
+	strStage = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::STR_STAGE));
+	Objects.push_back(strStage);
+	strStage->transform.position = { -0.11f, 0.93f, -0.45f };
+	strStage->transform.scale = { 700.0f * 0.00085f, 283.0f * 0.00085f, 1.0f };
 
 	stageNum = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
 	// オブジェクトをリストに登録
@@ -75,6 +62,15 @@ CGameManager::CGameManager()
 	stageNum->transform * 0.18f;
 	stageNum->transform.rotation = -10.0f;
 	stageNum->transform.position = { 0.285f, 0.93f, -0.45f };
+	
+	// 時間数字テクスチャ
+	for (int i = 0; i < 3; i++)
+	{
+		timeNum[i] = new CGameObject(vertexBufferUI, CTextureLoader::GetInstance()->GetTex(TEX_ID::NUM), { 0.1f ,1.0f });
+		timeNum[i]->transform.scale = { 0.15f, 0.2f, 1.0f };
+		timeNum[i]->transform.position = { 1.59f + (0.151f * i), 0.82f, -0.46f};
+		Objects.push_back(timeNum[i]);
+	}
 
 	// 実体化の後、初期化を行う
 	this->Init();
@@ -84,10 +80,6 @@ CGameManager::~CGameManager()
 {
 	// タイマーの解放
 	delete gameTime;
-
-	// 文字列描画の解放
-	delete strTime;
-	delete strStage;
 
 	// 頂点バッファの解放
 	SAFE_RELEASE(vertexBufferUI);
@@ -288,8 +280,6 @@ void CGameManager::Init()
 	// プレイヤーの体力を初期化
 	playerHP = PLAYER_HP;
 
-	strTime->SetPosition({ 1355.0f, 65.0f });
-
 	// UIの初期化
 	for (int i = 0; i < 3; i++)
 	{
@@ -323,12 +313,29 @@ void CGameManager::Update()
 	// タイマーの更新
 	gameTime->Update();
 
+	// スタートが押されたらタイマーを停止
+	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START))
+	{
+		gameTime->PauseTimer();
+	}
+
 	// 体力UIの管理
 	UpdateUIhp();
 
-	// 時間描画用の一時変数を宣言
-	std::string comvartStrTime;	// 文字列に変換した時間を格納
-	int digit_rank;				// 現在の時間の桁数を格納
+	// 時間
+	nowTime = (int)gameTime->GetTime();
+	// 時間を位ごとに格納する
+	int temp = nowTime;
+	for (int i = 2; i >= 0; i--)
+	{
+		// 上の桁の数から順番に桁の値を格納していく
+		int digit = temp % 10;
+		timeRankNum[i] = digit;
+		// 格納した数値と同じテクスチャを切り抜く
+		timeNum[i]->TextureCutout(timeRankNum[i], 0);
+		// 次の桁に移動
+		temp /= 10;
+	}
 
 	// ゲームの進行状況に応じて更新処理を変更
 	switch (state)
@@ -342,10 +349,6 @@ void CGameManager::Update()
 			// ゲームステートの変更
 			state = GAME_STATE::START;
 		}
-		// 時間を文字列型に変換
-		comvartStrTime = std::to_string(nowTime);
-		// 時間の文字列をセット
-		strTime->SetString(comvartStrTime);
 		break;
 
 	case GAME_STATE::START:
@@ -361,6 +364,8 @@ void CGameManager::Update()
 			XA_Play(SOUND_LABEL_DOWN);
 			// 状態をHP0に
 			state = GAME_STATE::ZERO_HP;
+			// タイマーのストップする
+			gameTime->PauseTimer();
 		}
 		// タイムが0になったなら
 		else if (gameTime->GetTimerState() == TIMER_STATE::END)
@@ -374,19 +379,6 @@ void CGameManager::Update()
 			XA_Stop(SOUND_LABEL_FLY);
 			//サウンド再生
 			XA_Play(SOUND_LABEL_DOWN);
-		}
-		// 現在のゲーム時間を受け取る
-		nowTime = (int)gameTime->GetTime();
-		// 時間を文字列型に変換
-		comvartStrTime = std::to_string(nowTime);
-		// 時間の文字列をセット
-		strTime->SetString(comvartStrTime);
-		// 文字列の長さから桁数を取得
-		digit_rank = comvartStrTime.length();
-		// 桁数に応じて表示位置を変更する
-		if (digit_rank <= 2)
-		{
-			strTime->SetPosition({ 1355.0f + (50 / digit_rank), 65.0f });
 		}
 		break;
 
@@ -445,10 +437,6 @@ void CGameManager::Draw()
 	{
 		(*it)->Draw();
 	}
-
-	// 文字の描画
-	strTime->Draw();
-	strStage->Draw();
 }
 
 void CGameManager::AddScore(int addScore)
