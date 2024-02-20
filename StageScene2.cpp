@@ -142,6 +142,8 @@ void StageScene2::Update()
 	if (gInput->IsControllerButtonTrigger(XINPUT_GAMEPAD_START) &&
 		CGameManager::GetInstance()->GetGameState() == GAME_STATE::START)
 	{
+		//	サウンドの停止
+		XA_Stop(SOUND_LABEL_FLY);
 		CSceneManager::GetInstance()->ChangeScene(SCENE_ID::SELECT, FADE_TYPE::ERASER);
 	}
 

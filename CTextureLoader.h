@@ -86,6 +86,10 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	KANBAN5,
 	KURAKKA,
 	KURAKKA_REVERSE,
+
+	//	追加
+	CLEARTIME,
+	TIME,
 };
 
 // CTextureLoaderクラス
@@ -156,6 +160,10 @@ private:
 		L"asset/kanban5.png",
 		L"asset/kurakka.png",
 		L"asset/kurakka_reverse.png",
+
+		//	追加
+		L"asset/ClearTime.png",
+		L"asset/Time.png",
 	};
 
 	/* メソッド */
