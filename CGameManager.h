@@ -9,7 +9,6 @@
 class CTimer;
 class CGameObject;
 class CEase;
-class CDrawString;
 
 // ゲームの進行状態
 enum class GAME_STATE
@@ -50,18 +49,17 @@ private:
 	bool heartAlpha_R[3] = { false };
 	bool heartAlpha_L[3] = { false };
 
-	// 時間表示文字列
-	CDrawString* strTime;
 	// 制限時間
 	int nowTime = 0;
+	int timeRankNum[3];
 	// ゲームの時間管理
 	CTimer* gameTime;
 
-	// ステージ表示文字列
-	CDrawString* strStage;
-
+	// 時間や文字のオブジェクト
 	CGameObject* strBg;
+	CGameObject* strStage;
 	CGameObject* stageNum;
+	CGameObject* timeNum[3];
 
 	// オブジェクトのリスト
 	std::list<CGameObject*> Objects;
