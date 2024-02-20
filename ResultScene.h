@@ -42,7 +42,7 @@ private:
 	CGameObject* enemyObj;
 	CGameObject* enemyObj2;
 	CGameObject* ClearTime;
-	CGameObject* Time;
+	CGameObject* cTime;
 	/*-------------------クリア画面のオブジェクト---------------------------*/
 
 	// リザルト遷移前のステージが何だったか

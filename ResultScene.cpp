@@ -147,11 +147,11 @@ ResultScene::ResultScene()
 	ClearTime->transform.scale = { 985.0f * 0.001f, 163.0f * 0.001f, 0.0f };
 	ClearTime->SetActive(false);
 
-	Time = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TIME));
-	Objects.push_back(Time);
-	Time->transform.position = { 1.26f, 0.04f, 0.1f };
-	Time->transform.scale = { 314.0f * 0.0007f, 304.0f * 0.0007f, 0.0f };
-	Time->SetActive(false);
+	cTime = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::TIME));
+	Objects.push_back(cTime);
+	cTime->transform.position = { 1.26f, 0.04f, 0.1f };
+	cTime->transform.scale = { 314.0f * 0.0007f, 304.0f * 0.0007f, 0.0f };
+	cTime->SetActive(false);
 
 	//strClearTime = new CDrawString;
 	//strClearTime->SetFont(FontID::UZURA);
@@ -207,8 +207,7 @@ ResultScene::~ResultScene()
 	delete enemyEase2;
 	delete enemyHappyEase;
 	delete enemyHappyEase2;
-	delete ClearTime;
-	delete Time;
+	delete cTime;
 
 	// カメラオブジェクトの削除
 	delete Cam;
@@ -264,7 +263,7 @@ void ResultScene::UpdateClear()
 	if (scoreBoardEase->GetState() == STATE::END)
 	{
 		ClearTime->SetActive(true);
-		Time->SetActive(true);
+		cTime->SetActive(true);
 
 		//  カウント効果音の再生
 		if (clearTimeCount == 0)

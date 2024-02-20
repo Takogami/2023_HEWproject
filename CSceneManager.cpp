@@ -11,7 +11,7 @@ CSceneManager* CSceneManager::instance = nullptr;
 CSceneManager::CSceneManager()
 {
 	// デフォルトのシーンを初期化します
-	ChangeScene(SCENE_ID::RESULT);
+	ChangeScene(SCENE_ID::TITLE);
 
 	// フェード用オブジェクトの実体化
 	fade = new CGameObject(vertexBuffer, CTextureLoader::GetInstance()->GetTex(TEX_ID::FADE));
