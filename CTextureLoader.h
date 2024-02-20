@@ -87,6 +87,8 @@ enum class TEX_ID	// テクスチャ識別子列挙型
 	KURAKKA,
 	KURAKKA_REVERSE,
 	STR_STAGE,
+	CLEARTIME,
+	TIME,
 };
 
 // CTextureLoaderクラス
@@ -158,6 +160,8 @@ private:
 		L"asset/kurakka.png",
 		L"asset/kurakka_reverse.png",
 		L"asset/strStage.png",
+		L"asset/ClearTime.png",
+		L"asset/Time.png",
 	};
 
 	/* メソッド */

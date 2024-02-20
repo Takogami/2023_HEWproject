@@ -13,7 +13,7 @@ SelectScene::SelectScene()
 	Objects.push_back(bg);
 
 	// 文字列の設定
-	StageSelect = new CDrawString;
+	/*StageSelect = new CDrawString;
 	StageSelect->SetFont(FontID::UZURA);
 	StageSelect->SetString("ステージを選んでね");
 	StageSelect->SetPosition({ 80.0f, 100.0f });
@@ -29,7 +29,7 @@ SelectScene::SelectScene()
 	goToTitle->SetFontSize(40.0f);
 	goToTitle->SetFontColor(0.0f, 0.0f, 0.0f);
 	goToTitle->SetFontWeight(FONT_WEIGHT::ULTRA_BOLD);
-	goToTitle->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);
+	goToTitle->SetShadow({ -3.0f, -2.0f }, 1.0f, 0.7f, 0.0f, 1.0f);*/
 
 	StagePreview = new CGameObject(vertexBufferObject, CTextureLoader::GetInstance()->GetTex(TEX_ID::BOOK), { 0.2f, 1.0f });
 	Objects.push_back(StagePreview);
@@ -275,6 +275,6 @@ void SelectScene::Draw()
 		(*it)->Draw();
 	}
 
-	StageSelect->Draw();
-	goToTitle->Draw();
+	/*StageSelect->Draw();
+	goToTitle->Draw();*/
 }

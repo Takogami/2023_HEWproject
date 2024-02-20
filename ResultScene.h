@@ -41,6 +41,8 @@ private:
 	CGameObject* scoreBoard;
 	CGameObject* enemyObj;
 	CGameObject* enemyObj2;
+	CGameObject* ClearTime;
+	CGameObject* Time;
 	/*-------------------クリア画面のオブジェクト---------------------------*/
 
 	// リザルト遷移前のステージが何だったか
@@ -87,9 +89,9 @@ private:
 	bool selectEnd = false;
 
 	// クリアタイムの描画
-	CDrawString* strClearTime;
+	/*CDrawString* strClearTime;
 	CDrawString* strClearTimeNum;
-	CDrawString* strSecond;
+	CDrawString* strSecond;*/
 
 	// 受け取ったクリアタイムを保存
 	int clearTime = 0;
