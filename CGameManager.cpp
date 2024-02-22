@@ -289,6 +289,7 @@ void CGameManager::Init()
 	for (int i = 0; i < 3; i++)
 	{
 		timeNum[i]->SetActive(true);
+		timeNum[i]->transform.position = { 1.59f + (0.151f * i), 0.82f, -0.46f };
 	}
 
 	// UI‚Ì‰Šú‰»
